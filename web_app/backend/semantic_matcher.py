@@ -22,6 +22,11 @@ _use_semantic = False
 def get_model_path():
     """Get the path to the trained model files."""
     current_dir = Path(__file__).parent
+    # First try local path (same directory as this file)
+    local_model_dir = current_dir / 'description_model'
+    if local_model_dir.exists():
+        return local_model_dir
+    # Fallback to original path (for local development)
     model_dir = current_dir.parent.parent / 'models' / 'description'
     return model_dir
 
@@ -31,6 +36,9 @@ def is_model_available():
     model_dir = get_model_path()
     embeddings_file = model_dir / 'species_embeddings.npz'
     index_file = model_dir / 'species_index.json'
+    print(f"DEBUG: Checking model at: {model_dir}")
+    print(f"DEBUG: Embeddings file exists: {embeddings_file.exists()}")
+    print(f"DEBUG: Index file exists: {index_file.exists()}")
     return embeddings_file.exists() and index_file.exists()
 
 
