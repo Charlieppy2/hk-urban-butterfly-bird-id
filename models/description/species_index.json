@@ -1,0 +1,3935 @@
+{
+  "model_name": "all-MiniLM-L6-v2",
+  "num_species": 300,
+  "num_embeddings": 3804,
+  "embedding_dim": 384,
+  "species": {
+    "001.Black_footed_Albatross": {
+      "key": "001.Black_footed_Albatross",
+      "common_name": "Black footed Albatross",
+      "scientific_name": "Phoebastria nigripes",
+      "type": "bird",
+      "image_path": "data/raw/001.Black_footed_Albatross/Black_Footed_Albatross_0001_796111.jpg",
+      "colors": [
+        "black",
+        "white",
+        "brown",
+        "dark"
+      ],
+      "description": "A large seabird with dark brown to black plumage, white around the base of the bill and under the eye. Has a large wingspan and is an excellent glider."
+    },
+    "002.Laysan_Albatross": {
+      "key": "002.Laysan_Albatross",
+      "common_name": "Laysan Albatross",
+      "scientific_name": "Phoebastria immutabilis",
+      "type": "bird",
+      "image_path": "data/raw/002.Laysan_Albatross/Laysan_Albatross_0001_545.jpg",
+      "colors": [
+        "white",
+        "dark"
+      ],
+      "description": "Large seabird with white head and body, dark back and wings. Has distinctive dark eye patch."
+    },
+    "003.Sooty_Albatross": {
+      "key": "003.Sooty_Albatross",
+      "common_name": "Sooty Albatross",
+      "scientific_name": "Phoebetria fusca",
+      "type": "bird",
+      "image_path": "data/raw/003.Sooty_Albatross/Sooty_Albatross_0001_1071.jpg",
+      "colors": [
+        "black",
+        "white",
+        "brown",
+        "dark"
+      ],
+      "description": "Large seabird with dark sooty-brown to blackish plumage. Has white crescent behind eye."
+    },
+    "004.Groove_billed_Ani": {
+      "key": "004.Groove_billed_Ani",
+      "common_name": "Groove billed Ani",
+      "scientific_name": "Crotophaga sulcirostris",
+      "type": "bird",
+      "image_path": "data/raw/004.Groove_billed_Ani/Groove_Billed_Ani_0002_1670.jpg",
+      "colors": [
+        "black",
+        "iridescent"
+      ],
+      "description": "Large black bird with long tail, grooved bill, and iridescent black plumage."
+    },
+    "005.Crested_Auklet": {
+      "key": "005.Crested_Auklet",
+      "common_name": "Crested Auklet",
+      "scientific_name": "Aethia cristatella",
+      "type": "bird",
+      "image_path": "data/raw/005.Crested_Auklet/Crested_Auklet_0001_794941.jpg",
+      "colors": [
+        "black",
+        "white"
+      ],
+      "description": "Small seabird with black body, white belly, and distinctive forward-curving crest on forehead."
+    },
+    "006.Least_Auklet": {
+      "key": "006.Least_Auklet",
+      "common_name": "Least Auklet",
+      "scientific_name": "Aethia pusilla",
+      "type": "bird",
+      "image_path": "data/raw/006.Least_Auklet/Least_Auklet_0004_795112.jpg",
+      "colors": [
+        "black",
+        "white"
+      ],
+      "description": "Very small seabird, smallest auklet. Black above, white below, with white facial plumes in breeding season."
+    },
+    "007.Parakeet_Auklet": {
+      "key": "007.Parakeet_Auklet",
+      "common_name": "Parakeet Auklet",
+      "scientific_name": "Aethia psittacula",
+      "type": "bird",
+      "image_path": "data/raw/007.Parakeet_Auklet/Parakeet_Auklet_0001_795972.jpg",
+      "colors": [
+        "white",
+        "red",
+        "gray",
+        "dark"
+      ],
+      "description": "Small seabird with dark gray body, white belly, and distinctive upturned red bill."
+    },
+    "008.Rhinoceros_Auklet": {
+      "key": "008.Rhinoceros_Auklet",
+      "common_name": "Rhinoceros Auklet",
+      "scientific_name": "Cerorhinca monocerata",
+      "type": "bird",
+      "image_path": "data/raw/008.Rhinoceros_Auklet/Rhinoceros_Auklet_0001_797538.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "gray",
+        "dark"
+      ],
+      "description": "Medium-sized seabird with dark gray-brown body, white belly, and distinctive horn-like projection on bill during breeding."
+    },
+    "009.Brewer_Blackbird": {
+      "key": "009.Brewer_Blackbird",
+      "common_name": "Brewer Blackbird",
+      "scientific_name": "Euphagus cyanocephalus",
+      "type": "bird",
+      "image_path": "data/raw/009.Brewer_Blackbird/Brewer_Blackbird_0002_2278.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "blue",
+        "purple",
+        "dark"
+      ],
+      "description": "Medium-sized blackbird. Males are black with purple-blue iridescence. Females are brown with dark eyes."
+    },
+    "010.Red_winged_Blackbird": {
+      "key": "010.Red_winged_Blackbird",
+      "common_name": "Red winged Blackbird",
+      "scientific_name": "Agelaius phoeniceus",
+      "type": "bird",
+      "image_path": "data/raw/010.Red_winged_Blackbird/Red_Winged_Blackbird_0001_3695.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "red",
+        "yellow"
+      ],
+      "description": "Medium-sized blackbird. Males are black with red and yellow shoulder patches. Females are streaked brown and black."
+    },
+    "011.Rusty_Blackbird": {
+      "key": "011.Rusty_Blackbird",
+      "common_name": "Rusty Blackbird",
+      "scientific_name": "Euphagus carolinus",
+      "type": "bird",
+      "image_path": "data/raw/011.Rusty_Blackbird/Rusty_Blackbird_0001_6548.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "green",
+        "rusty"
+      ],
+      "description": "Medium-sized blackbird. Breeding males are black with greenish iridescence. Females are brown with rusty edges."
+    },
+    "012.Yellow_headed_Blackbird": {
+      "key": "012.Yellow_headed_Blackbird",
+      "common_name": "Yellow headed Blackbird",
+      "scientific_name": "Xanthocephalus xanthocephalus",
+      "type": "bird",
+      "image_path": "data/raw/012.Yellow_headed_Blackbird/Yellow_Headed_Blackbird_0003_8337.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "yellow",
+        "bright"
+      ],
+      "description": "Medium-sized blackbird. Males are black with bright yellow head and chest. Females are brown with yellow throat."
+    },
+    "013.Bobolink": {
+      "key": "013.Bobolink",
+      "common_name": "Bobolink",
+      "scientific_name": "Dolichonyx oryzivorus",
+      "type": "bird",
+      "image_path": "data/raw/013.Bobolink/Bobolink_0001_9261.jpg",
+      "colors": [
+        "black",
+        "white",
+        "brown",
+        "yellow"
+      ],
+      "description": "Medium-sized songbird. Breeding males are black with white back and yellow nape. Females and winter males are streaked brown."
+    },
+    "014.Indigo_Bunting": {
+      "key": "014.Indigo_Bunting",
+      "common_name": "Indigo Bunting",
+      "scientific_name": "Passerina cyanea",
+      "type": "bird",
+      "image_path": "data/raw/014.Indigo_Bunting/Indigo_Bunting_0001_12469.jpg",
+      "colors": [
+        "brown",
+        "blue"
+      ],
+      "description": "Small songbird. Breeding males are brilliant blue all over. Females and winter males are brown with blue tinges."
+    },
+    "015.Lazuli_Bunting": {
+      "key": "015.Lazuli_Bunting",
+      "common_name": "Lazuli Bunting",
+      "scientific_name": "Passerina amoena",
+      "type": "bird",
+      "image_path": "data/raw/015.Lazuli_Bunting/Lazuli_Bunting_0001_14916.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "blue",
+        "orange",
+        "bright"
+      ],
+      "description": "Small songbird. Males have bright blue head and back, orange breast, white belly. Females are brown with blue tinges."
+    },
+    "016.Painted_Bunting": {
+      "key": "016.Painted_Bunting",
+      "common_name": "Painted Bunting",
+      "scientific_name": "Passerina ciris",
+      "type": "bird",
+      "image_path": "data/raw/016.Painted_Bunting/Painted_Bunting_0001_16585.jpg",
+      "colors": [
+        "red",
+        "blue",
+        "green",
+        "yellow",
+        "bright"
+      ],
+      "description": "Small, colorful songbird. Males are brightly colored with blue head, green back, red underparts. Females are green above, yellow-green below."
+    },
+    "017.Cardinal": {
+      "key": "017.Cardinal",
+      "common_name": "Cardinal",
+      "scientific_name": "Cardinalis cardinalis",
+      "type": "bird",
+      "image_path": "data/raw/017.Cardinal/Cardinal_0001_17057.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "red",
+        "bright"
+      ],
+      "description": "Medium-sized songbird. Males are bright red with black face mask and crested head. Females are brown with red tinges."
+    },
+    "018.Spotted_Catbird": {
+      "key": "018.Spotted_Catbird",
+      "common_name": "Spotted Catbird",
+      "scientific_name": "Ailuroedus maculosus",
+      "type": "bird",
+      "image_path": "data/raw/018.Spotted_Catbird/Spotted_Catbird_0001_796797.jpg",
+      "colors": [
+        "white",
+        "green",
+        "olive"
+      ],
+      "description": "Medium-sized bird with olive-green plumage and white spots. Has distinctive cat-like call."
+    },
+    "019.Gray_Catbird": {
+      "key": "019.Gray_Catbird",
+      "common_name": "Gray Catbird",
+      "scientific_name": "Dumetella carolinensis",
+      "type": "bird",
+      "image_path": "data/raw/019.Gray_Catbird/Gray_Catbird_0001_20695.jpg",
+      "colors": [
+        "black",
+        "gray",
+        "chestnut"
+      ],
+      "description": "Medium-sized songbird. Slate gray overall with black cap and chestnut undertail coverts."
+    },
+    "020.Yellow_breasted_Chat": {
+      "key": "020.Yellow_breasted_Chat",
+      "common_name": "Yellow breasted Chat",
+      "scientific_name": "Icteria virens",
+      "type": "bird",
+      "image_path": "data/raw/020.Yellow_breasted_Chat/Yellow_Breasted_Chat_0001_21928.jpg",
+      "colors": [
+        "white",
+        "green",
+        "yellow",
+        "bright",
+        "olive"
+      ],
+      "description": "Large warbler with bright yellow breast, olive-green back, white spectacles, and long tail."
+    },
+    "021.Eastern_Towhee": {
+      "key": "021.Eastern_Towhee",
+      "common_name": "Eastern Towhee",
+      "scientific_name": "Pipilo erythrophthalmus",
+      "type": "bird",
+      "image_path": "data/raw/021.Eastern_Towhee/Eastern_Towhee_0001_22314.jpg",
+      "colors": [
+        "black",
+        "white",
+        "brown"
+      ],
+      "description": "Large sparrow. Males are black above with white spots, rufous sides, and white belly. Females are brown where males are black."
+    },
+    "022.Chuck_will_Widow": {
+      "key": "022.Chuck_will_Widow",
+      "common_name": "Chuck will Widow",
+      "scientific_name": "Antrostomus carolinensis",
+      "type": "bird",
+      "image_path": "data/raw/022.Chuck_will_Widow/Chuck_Will_Widow_0001_796975.jpg",
+      "colors": [
+        "brown",
+        "gray"
+      ],
+      "description": "Large nightjar with mottled brown and gray plumage, large eyes, and wide mouth."
+    },
+    "023.Brandt_Cormorant": {
+      "key": "023.Brandt_Cormorant",
+      "common_name": "Brandt Cormorant",
+      "scientific_name": "Urile penicillatus",
+      "type": "bird",
+      "image_path": "data/raw/023.Brandt_Cormorant/Brandt_Cormorant_0001_23398.jpg",
+      "colors": [
+        "black",
+        "blue"
+      ],
+      "description": "Large seabird with black body, blue throat patch in breeding season, and long tail."
+    },
+    "024.Red_faced_Cormorant": {
+      "key": "024.Red_faced_Cormorant",
+      "common_name": "Red faced Cormorant",
+      "scientific_name": "Urile urile",
+      "type": "bird",
+      "image_path": "data/raw/024.Red_faced_Cormorant/Red_Faced_Cormorant_0001_796327.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red"
+      ],
+      "description": "Large seabird with black body, red face in breeding season, and white flank patches."
+    },
+    "025.Pelagic_Cormorant": {
+      "key": "025.Pelagic_Cormorant",
+      "common_name": "Pelagic Cormorant",
+      "scientific_name": "Urile pelagicus",
+      "type": "bird",
+      "image_path": "data/raw/025.Pelagic_Cormorant/Pelagic_Cormorant_0001_23538.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red"
+      ],
+      "description": "Medium-sized seabird with black body, white flank patches, and red face in breeding season."
+    },
+    "026.Bronzed_Cowbird": {
+      "key": "026.Bronzed_Cowbird",
+      "common_name": "Bronzed Cowbird",
+      "scientific_name": "Molothrus aeneus",
+      "type": "bird",
+      "image_path": "data/raw/026.Bronzed_Cowbird/Bronzed_Cowbird_0001_796219.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "red"
+      ],
+      "description": "Medium-sized blackbird. Males are black with bronzy iridescence and red eyes. Females are brown."
+    },
+    "027.Shiny_Cowbird": {
+      "key": "027.Shiny_Cowbird",
+      "common_name": "Shiny Cowbird",
+      "scientific_name": "Molothrus bonariensis",
+      "type": "bird",
+      "image_path": "data/raw/027.Shiny_Cowbird/Shiny_Cowbird_0001_796860.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "blue",
+        "purple"
+      ],
+      "description": "Small blackbird. Males are black with purple-blue iridescence. Females are brown."
+    },
+    "028.Brown_Creeper": {
+      "key": "028.Brown_Creeper",
+      "common_name": "Brown Creeper",
+      "scientific_name": "Certhia americana",
+      "type": "bird",
+      "image_path": "data/raw/028.Brown_Creeper/Brown_Creeper_0001_24449.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Small bird with brown mottled upperparts, white underparts, and curved bill. Climbs up tree trunks."
+    },
+    "029.American_Crow": {
+      "key": "029.American_Crow",
+      "common_name": "American Crow",
+      "scientific_name": "Corvus brachyrhynchos",
+      "type": "bird",
+      "image_path": "data/raw/029.American_Crow/American_Crow_0001_25053.jpg",
+      "colors": [
+        "black"
+      ],
+      "description": "Large, all-black bird with thick bill and fan-shaped tail."
+    },
+    "030.Fish_Crow": {
+      "key": "030.Fish_Crow",
+      "common_name": "Fish Crow",
+      "scientific_name": "Corvus ossifragus",
+      "type": "bird",
+      "image_path": "data/raw/030.Fish_Crow/Fish_Crow_0001_26031.jpg",
+      "colors": [
+        "black"
+      ],
+      "description": "Medium-sized, all-black bird similar to American Crow but smaller with higher-pitched call."
+    },
+    "031.Black_billed_Cuckoo": {
+      "key": "031.Black_billed_Cuckoo",
+      "common_name": "Black billed Cuckoo",
+      "scientific_name": "Coccyzus erythropthalmus",
+      "type": "bird",
+      "image_path": "data/raw/031.Black_billed_Cuckoo/Black_Billed_Cuckoo_0001_26242.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Medium-sized bird with brown upperparts, white underparts, and long tail with white spots."
+    },
+    "032.Mangrove_Cuckoo": {
+      "key": "032.Mangrove_Cuckoo",
+      "common_name": "Mangrove Cuckoo",
+      "scientific_name": "Coccyzus minor",
+      "type": "bird",
+      "image_path": "data/raw/032.Mangrove_Cuckoo/Mangrove_Cuckoo_0001_794601.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "buff"
+      ],
+      "description": "Medium-sized bird with brown upperparts, buff underparts, and long tail with white spots."
+    },
+    "033.Yellow_billed_Cuckoo": {
+      "key": "033.Yellow_billed_Cuckoo",
+      "common_name": "Yellow billed Cuckoo",
+      "scientific_name": "Coccyzus americanus",
+      "type": "bird",
+      "image_path": "data/raw/033.Yellow_billed_Cuckoo/Yellow_Billed_Cuckoo_0002_26715.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Medium-sized bird with brown upperparts, white underparts, and long tail with large white spots."
+    },
+    "034.Gray_crowned_Rosy_Finch": {
+      "key": "034.Gray_crowned_Rosy_Finch",
+      "common_name": "Gray crowned Rosy Finch",
+      "scientific_name": "Leucosticte tephrocotis",
+      "type": "bird",
+      "image_path": "data/raw/034.Gray_crowned_Rosy_Finch/Gray_Crowned_Rosy_Finch_0001_27211.jpg",
+      "colors": [
+        "brown",
+        "yellow",
+        "gray",
+        "dark",
+        "pink"
+      ],
+      "description": "Medium-sized finch with gray crown, brown body, and pink patches on wings and rump. Bill is yellow in summer, dark in winter."
+    },
+    "035.Purple_Finch": {
+      "key": "035.Purple_Finch",
+      "common_name": "Purple Finch",
+      "scientific_name": "Haemorhous purpureus",
+      "type": "bird",
+      "image_path": "data/raw/035.Purple_Finch/Purple_Finch_0001_27571.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "red"
+      ],
+      "description": "Medium-sized finch. Males are raspberry-red on head, breast, and back. Females are streaked brown with white eyebrow."
+    },
+    "036.Northern_Flicker": {
+      "key": "036.Northern_Flicker",
+      "common_name": "Northern Flicker",
+      "scientific_name": "Colaptes auratus",
+      "type": "bird",
+      "image_path": "data/raw/036.Northern_Flicker/Northern_Flicker_0004_28854.jpg",
+      "colors": [
+        "black",
+        "white",
+        "brown",
+        "red",
+        "yellow"
+      ],
+      "description": "Large woodpecker. Brown with black bars, white rump, and yellow or red under wings. Has black crescent on chest."
+    },
+    "037.Acadian_Flycatcher": {
+      "key": "037.Acadian_Flycatcher",
+      "common_name": "Acadian Flycatcher",
+      "scientific_name": "Empidonax virescens",
+      "type": "bird",
+      "image_path": "data/raw/037.Acadian_Flycatcher/Acadian_Flycatcher_0003_29094.jpg",
+      "colors": [
+        "white",
+        "green",
+        "olive"
+      ],
+      "description": "Small flycatcher with olive-green upperparts, white underparts, and two white wing bars."
+    },
+    "038.Great_Crested_Flycatcher": {
+      "key": "038.Great_Crested_Flycatcher",
+      "common_name": "Great Crested Flycatcher",
+      "scientific_name": "Myiarchus crinitus",
+      "type": "bird",
+      "image_path": "data/raw/038.Great_Crested_Flycatcher/Great_Crested_Flycatcher_0004_29701.jpg",
+      "colors": [
+        "brown",
+        "yellow",
+        "gray",
+        "olive"
+      ],
+      "description": "Large flycatcher with gray head, olive-brown back, yellow belly, and rufous tail."
+    },
+    "039.Least_Flycatcher": {
+      "key": "039.Least_Flycatcher",
+      "common_name": "Least Flycatcher",
+      "scientific_name": "Empidonax minimus",
+      "type": "bird",
+      "image_path": "data/raw/039.Least_Flycatcher/Least_Flycatcher_0001_30221.jpg",
+      "colors": [
+        "white",
+        "gray",
+        "olive"
+      ],
+      "description": "Small flycatcher with olive-gray upperparts, white underparts, and two white wing bars."
+    },
+    "040.Olive_sided_Flycatcher": {
+      "key": "040.Olive_sided_Flycatcher",
+      "common_name": "Olive sided Flycatcher",
+      "scientific_name": "Contopus cooperi",
+      "type": "bird",
+      "image_path": "data/raw/040.Olive_sided_Flycatcher/Olive_Sided_Flycatcher_0001_30669.jpg",
+      "colors": [
+        "white",
+        "gray",
+        "dark",
+        "olive"
+      ],
+      "description": "Large flycatcher with dark olive-gray upperparts, white underparts with dark sides, and white tufts on back."
+    },
+    "041.Scissor_tailed_Flycatcher": {
+      "key": "041.Scissor_tailed_Flycatcher",
+      "common_name": "Scissor tailed Flycatcher",
+      "scientific_name": "Tyrannus forficatus",
+      "type": "bird",
+      "image_path": "data/raw/041.Scissor_tailed_Flycatcher/Scissor_Tailed_Flycatcher_0002_41762.jpg",
+      "colors": [
+        "white",
+        "gray",
+        "pink"
+      ],
+      "description": "Medium-sized flycatcher with gray head, white underparts, salmon-pink sides, and very long forked tail."
+    },
+    "042.Vermilion_Flycatcher": {
+      "key": "042.Vermilion_Flycatcher",
+      "common_name": "Vermilion Flycatcher",
+      "scientific_name": "Pyrocephalus rubinus",
+      "type": "bird",
+      "image_path": "data/raw/042.Vermilion_Flycatcher/Vermilion_Flycatcher_0002_42390.jpg",
+      "colors": [
+        "brown",
+        "red",
+        "dark",
+        "bright"
+      ],
+      "description": "Small flycatcher. Males are bright red with dark brown back and wings. Females are brown with red underparts."
+    },
+    "043.Yellow_bellied_Flycatcher": {
+      "key": "043.Yellow_bellied_Flycatcher",
+      "common_name": "Yellow bellied Flycatcher",
+      "scientific_name": "Empidonax flaviventris",
+      "type": "bird",
+      "image_path": "data/raw/043.Yellow_bellied_Flycatcher/Yellow_Bellied_Flycatcher_0001_795488.jpg",
+      "colors": [
+        "white",
+        "green",
+        "yellow",
+        "olive"
+      ],
+      "description": "Small flycatcher with olive-green upperparts, yellow underparts, and two white wing bars."
+    },
+    "044.Frigatebird": {
+      "key": "044.Frigatebird",
+      "common_name": "Frigatebird",
+      "scientific_name": "Fregata magnificens",
+      "type": "bird",
+      "image_path": "data/raw/044.Frigatebird/Frigatebird_0001_43101.jpg",
+      "colors": [
+        "black",
+        "red"
+      ],
+      "description": "Very large seabird with black body, long pointed wings, deeply forked tail, and red throat pouch (males)."
+    },
+    "045.Northern_Fulmar": {
+      "key": "045.Northern_Fulmar",
+      "common_name": "Northern Fulmar",
+      "scientific_name": "Fulmarus glacialis",
+      "type": "bird",
+      "image_path": "data/raw/045.Northern_Fulmar/Northern_Fulmar_0001_43749.jpg",
+      "colors": [
+        "white",
+        "gray"
+      ],
+      "description": "Medium-sized seabird with gray and white plumage, thick bill, and tube-like nostrils."
+    },
+    "046.Gadwall": {
+      "key": "046.Gadwall",
+      "common_name": "Gadwall",
+      "scientific_name": "Mareca strepera",
+      "type": "bird",
+      "image_path": "data/raw/046.Gadwall/Gadwall_0001_31235.jpg",
+      "colors": [
+        "black",
+        "white",
+        "brown",
+        "gray"
+      ],
+      "description": "Medium-sized dabbling duck. Males are gray with black rear, white speculum. Females are mottled brown."
+    },
+    "047.American_Goldfinch": {
+      "key": "047.American_Goldfinch",
+      "common_name": "American Goldfinch",
+      "scientific_name": "Spinus tristis",
+      "type": "bird",
+      "image_path": "data/raw/047.American_Goldfinch/American_Goldfinch_0001_32306.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "yellow",
+        "light",
+        "bright",
+        "olive"
+      ],
+      "description": "Small finch. Breeding males are bright yellow with black cap, wings, and tail. Females and winter males are duller, olive-brown with yellow highlights."
+    },
+    "048.European_Goldfinch": {
+      "key": "048.European_Goldfinch",
+      "common_name": "European Goldfinch",
+      "scientific_name": "Carduelis carduelis",
+      "type": "bird",
+      "image_path": "data/raw/048.European_Goldfinch/European_Goldfinch_0003_33066.jpg",
+      "colors": [
+        "black",
+        "white",
+        "brown",
+        "red",
+        "yellow"
+      ],
+      "description": "Small finch with red face, black and white head, brown back, and yellow wing patches."
+    },
+    "049.Boat_tailed_Grackle": {
+      "key": "049.Boat_tailed_Grackle",
+      "common_name": "Boat tailed Grackle",
+      "scientific_name": "Quiscalus major",
+      "type": "bird",
+      "image_path": "data/raw/049.Boat_tailed_Grackle/Boat_Tailed_Grackle_0004_33858.jpg",
+      "colors": [
+        "black",
+        "yellow",
+        "iridescent"
+      ],
+      "description": "Large blackbird with long tail, iridescent black plumage, and yellow eyes."
+    },
+    "050.Eared_Grebe": {
+      "key": "050.Eared_Grebe",
+      "common_name": "Eared Grebe",
+      "scientific_name": "Podiceps nigricollis",
+      "type": "bird",
+      "image_path": "data/raw/050.Eared_Grebe/Eared_Grebe_0001_34433.jpg",
+      "colors": [
+        "black",
+        "red",
+        "golden"
+      ],
+      "description": "Small grebe with black head and neck, golden ear tufts in breeding season, and red eyes."
+    },
+    "051.Horned_Grebe": {
+      "key": "051.Horned_Grebe",
+      "common_name": "Horned Grebe",
+      "scientific_name": "Podiceps auritus",
+      "type": "bird",
+      "image_path": "data/raw/051.Horned_Grebe/Horned_Grebe_0001_34723.jpg",
+      "colors": [
+        "black",
+        "red",
+        "golden",
+        "chestnut"
+      ],
+      "description": "Small grebe with black head, golden ear tufts, red eyes, and chestnut neck in breeding season."
+    },
+    "052.Pied_billed_Grebe": {
+      "key": "052.Pied_billed_Grebe",
+      "common_name": "Pied billed Grebe",
+      "scientific_name": "Podilymbus podiceps",
+      "type": "bird",
+      "image_path": "data/raw/052.Pied_billed_Grebe/Pied_Billed_Grebe_0004_35808.jpg",
+      "colors": [
+        "black",
+        "brown"
+      ],
+      "description": "Small grebe with brown body, black ring around bill in breeding season, and short tail."
+    },
+    "053.Western_Grebe": {
+      "key": "053.Western_Grebe",
+      "common_name": "Western Grebe",
+      "scientific_name": "Aechmophorus occidentalis",
+      "type": "bird",
+      "image_path": "data/raw/053.Western_Grebe/Western_Grebe_0001_36481.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red"
+      ],
+      "description": "Large grebe with long neck, black cap, white face and neck, and red eyes."
+    },
+    "054.Blue_Grosbeak": {
+      "key": "054.Blue_Grosbeak",
+      "common_name": "Blue Grosbeak",
+      "scientific_name": "Passerina caerulea",
+      "type": "bird",
+      "image_path": "data/raw/054.Blue_Grosbeak/Blue_Grosbeak_0002_36648.jpg",
+      "colors": [
+        "brown",
+        "blue",
+        "chestnut"
+      ],
+      "description": "Medium-sized songbird. Males are deep blue with chestnut wing bars. Females are brown with blue tinges."
+    },
+    "055.Evening_Grosbeak": {
+      "key": "055.Evening_Grosbeak",
+      "common_name": "Evening Grosbeak",
+      "scientific_name": "Coccothraustes vespertinus",
+      "type": "bird",
+      "image_path": "data/raw/055.Evening_Grosbeak/Evening_Grosbeak_0001_37437.jpg",
+      "colors": [
+        "black",
+        "yellow",
+        "gray",
+        "light"
+      ],
+      "description": "Large finch. Males are yellow with black head, wings, and tail. Females are gray with yellow highlights."
+    },
+    "056.Pine_Grosbeak": {
+      "key": "056.Pine_Grosbeak",
+      "common_name": "Pine Grosbeak",
+      "scientific_name": "Pinicola enucleator",
+      "type": "bird",
+      "image_path": "data/raw/056.Pine_Grosbeak/Pine_Grosbeak_0002_38214.jpg",
+      "colors": [
+        "red",
+        "yellow",
+        "orange",
+        "gray",
+        "light"
+      ],
+      "description": "Large finch. Males are rose-red with gray wings and tail. Females are gray with yellow-orange highlights."
+    },
+    "057.Rose_breasted_Grosbeak": {
+      "key": "057.Rose_breasted_Grosbeak",
+      "common_name": "Rose breasted Grosbeak",
+      "scientific_name": "Pheucticus ludovicianus",
+      "type": "bird",
+      "image_path": "data/raw/057.Rose_breasted_Grosbeak/Rose_Breasted_Grosbeak_0001_39801.jpg",
+      "colors": [
+        "black",
+        "white",
+        "brown",
+        "red"
+      ],
+      "description": "Medium-sized songbird. Males are black and white with rose-red breast. Females are streaked brown."
+    },
+    "058.Pigeon_Guillemot": {
+      "key": "058.Pigeon_Guillemot",
+      "common_name": "Pigeon Guillemot",
+      "scientific_name": "Cepphus columba",
+      "type": "bird",
+      "image_path": "data/raw/058.Pigeon_Guillemot/Pigeon_Guillemot_0003_39986.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red"
+      ],
+      "description": "Medium-sized seabird with black body, white wing patches, and red feet."
+    },
+    "059.California_Gull": {
+      "key": "059.California_Gull",
+      "common_name": "California Gull",
+      "scientific_name": "Larus californicus",
+      "type": "bird",
+      "image_path": "data/raw/059.California_Gull/California_Gull_0001_40786.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red",
+        "yellow",
+        "gray"
+      ],
+      "description": "Medium-sized gull with white head and body, gray back, yellow bill with black and red spots, and yellow legs."
+    },
+    "060.Glaucous_winged_Gull": {
+      "key": "060.Glaucous_winged_Gull",
+      "common_name": "Glaucous winged Gull",
+      "scientific_name": "Larus glaucescens",
+      "type": "bird",
+      "image_path": "data/raw/060.Glaucous_winged_Gull/Glaucous_Winged_Gull_0002_44612.jpg",
+      "colors": [
+        "black",
+        "white",
+        "gray",
+        "pale"
+      ],
+      "description": "Large gull with white head and body, gray back, and pale gray wings (no black tips)."
+    },
+    "061.Heermann_Gull": {
+      "key": "061.Heermann_Gull",
+      "common_name": "Heermann Gull",
+      "scientific_name": "Larus heermanni",
+      "type": "bird",
+      "image_path": "data/raw/061.Heermann_Gull/Heermann_Gull_0001_45472.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red",
+        "gray",
+        "dark"
+      ],
+      "description": "Medium-sized gull with dark gray body, white head, and red bill with black tip."
+    },
+    "062.Herring_Gull": {
+      "key": "062.Herring_Gull",
+      "common_name": "Herring Gull",
+      "scientific_name": "Larus argentatus",
+      "type": "bird",
+      "image_path": "data/raw/062.Herring_Gull/Herring_Gull_0001_48205.jpg",
+      "colors": [
+        "white",
+        "red",
+        "yellow",
+        "gray",
+        "pink"
+      ],
+      "description": "Large gull with white head and body, gray back, yellow bill with red spot, and pink legs."
+    },
+    "063.Ivory_Gull": {
+      "key": "063.Ivory_Gull",
+      "common_name": "Ivory Gull",
+      "scientific_name": "Pagophila eburnea",
+      "type": "bird",
+      "image_path": "data/raw/063.Ivory_Gull/Ivory_Gull_0002_49788.jpg",
+      "colors": [
+        "black",
+        "white",
+        "yellow"
+      ],
+      "description": "Medium-sized gull with entirely white plumage, black legs, and yellow-tipped bill."
+    },
+    "064.Ring_billed_Gull": {
+      "key": "064.Ring_billed_Gull",
+      "common_name": "Ring billed Gull",
+      "scientific_name": "Larus delawarensis",
+      "type": "bird",
+      "image_path": "data/raw/064.Ring_billed_Gull/Ring_Billed_Gull_0001_51416.jpg",
+      "colors": [
+        "black",
+        "white",
+        "yellow",
+        "gray"
+      ],
+      "description": "Medium-sized gull with white head and body, gray back, yellow bill with black ring, and yellow legs."
+    },
+    "065.Slaty_backed_Gull": {
+      "key": "065.Slaty_backed_Gull",
+      "common_name": "Slaty backed Gull",
+      "scientific_name": "Larus schistisagus",
+      "type": "bird",
+      "image_path": "data/raw/065.Slaty_backed_Gull/Slaty_Backed_Gull_0002_53238.jpg",
+      "colors": [
+        "white",
+        "gray",
+        "dark",
+        "pink"
+      ],
+      "description": "Very large gull with white head and body, dark slate-gray back, and pink legs."
+    },
+    "066.Western_Gull": {
+      "key": "066.Western_Gull",
+      "common_name": "Western Gull",
+      "scientific_name": "Larus occidentalis",
+      "type": "bird",
+      "image_path": "data/raw/066.Western_Gull/Western_Gull_0002_54825.jpg",
+      "colors": [
+        "white",
+        "red",
+        "yellow",
+        "gray",
+        "dark",
+        "pink"
+      ],
+      "description": "Large gull with white head and body, dark gray back, yellow bill with red spot, and pink legs."
+    },
+    "067.Anna_Hummingbird": {
+      "key": "067.Anna_Hummingbird",
+      "common_name": "Anna Hummingbird",
+      "scientific_name": "Calypte anna",
+      "type": "bird",
+      "image_path": "data/raw/067.Anna_Hummingbird/Anna_Hummingbird_0001_56960.jpg",
+      "colors": [
+        "red",
+        "green",
+        "gray",
+        "iridescent"
+      ],
+      "description": "Medium-sized hummingbird. Males have iridescent rose-red crown and throat. Females are green above, gray below with red spots on throat."
+    },
+    "068.Ruby_throated_Hummingbird": {
+      "key": "068.Ruby_throated_Hummingbird",
+      "common_name": "Ruby throated Hummingbird",
+      "scientific_name": "Archilochus colubris",
+      "type": "bird",
+      "image_path": "data/raw/068.Ruby_throated_Hummingbird/Ruby_Throated_Hummingbird_0001_58162.jpg",
+      "colors": [
+        "white",
+        "red",
+        "green",
+        "iridescent"
+      ],
+      "description": "Small hummingbird. Males have iridescent red throat, green back, and white underparts. Females lack red throat."
+    },
+    "069.Rufous_Hummingbird": {
+      "key": "069.Rufous_Hummingbird",
+      "common_name": "Rufous Hummingbird",
+      "scientific_name": "Selasphorus rufus",
+      "type": "bird",
+      "image_path": "data/raw/069.Rufous_Hummingbird/Rufous_Hummingbird_0002_58387.jpg",
+      "colors": [
+        "brown",
+        "red",
+        "green",
+        "iridescent"
+      ],
+      "description": "Small hummingbird. Males are rufous (reddish-brown) overall with iridescent red throat. Females are green above, rufous below."
+    },
+    "070.Green_Violetear": {
+      "key": "070.Green_Violetear",
+      "common_name": "Green Violetear",
+      "scientific_name": "Colibri thalassinus",
+      "type": "bird",
+      "image_path": "data/raw/070.Green_Violetear/Green_Violetear_0002_795699.jpg",
+      "colors": [
+        "blue",
+        "green",
+        "violet"
+      ],
+      "description": "Medium-sized hummingbird with green body, violet ear patches, and blue tail."
+    },
+    "071.Long_tailed_Jaeger": {
+      "key": "071.Long_tailed_Jaeger",
+      "common_name": "Long tailed Jaeger",
+      "scientific_name": "Stercorarius longicaudus",
+      "type": "bird",
+      "image_path": "data/raw/071.Long_tailed_Jaeger/Long_Tailed_Jaeger_0001_797061.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "gray"
+      ],
+      "description": "Medium-sized seabird with gray-brown body, long pointed tail, and white underparts."
+    },
+    "072.Pomarine_Jaeger": {
+      "key": "072.Pomarine_Jaeger",
+      "common_name": "Pomarine Jaeger",
+      "scientific_name": "Stercorarius pomarinus",
+      "type": "bird",
+      "image_path": "data/raw/072.Pomarine_Jaeger/Pomarine_Jaeger_0001_795772.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "dark"
+      ],
+      "description": "Large seabird with dark brown body, white wing flashes, and twisted tail streamers."
+    },
+    "073.Blue_Jay": {
+      "key": "073.Blue_Jay",
+      "common_name": "Blue Jay",
+      "scientific_name": "Cyanocitta cristata",
+      "type": "bird",
+      "image_path": "data/raw/073.Blue_Jay/Blue_Jay_0002_62657.jpg",
+      "colors": [
+        "black",
+        "white",
+        "blue"
+      ],
+      "description": "Large songbird with blue upperparts, white face and underparts, black collar, and crested head."
+    },
+    "074.Florida_Jay": {
+      "key": "074.Florida_Jay",
+      "common_name": "Florida Jay",
+      "scientific_name": "Aphelocoma coerulescens",
+      "type": "bird",
+      "image_path": "data/raw/074.Florida_Jay/Florida_Jay_0002_64476.jpg",
+      "colors": [
+        "white",
+        "blue",
+        "gray"
+      ],
+      "description": "Medium-sized jay with blue head, wings, and tail, gray back, and white underparts."
+    },
+    "075.Green_Jay": {
+      "key": "075.Green_Jay",
+      "common_name": "Green Jay",
+      "scientific_name": "Cyanocorax yncas",
+      "type": "bird",
+      "image_path": "data/raw/075.Green_Jay/Green_Jay_0003_65767.jpg",
+      "colors": [
+        "black",
+        "blue",
+        "green",
+        "yellow"
+      ],
+      "description": "Medium-sized jay with green upperparts, yellow underparts, blue head, and black throat."
+    },
+    "076.Dark_eyed_Junco": {
+      "key": "076.Dark_eyed_Junco",
+      "common_name": "Dark eyed Junco",
+      "scientific_name": "Junco hyemalis",
+      "type": "bird",
+      "image_path": "data/raw/076.Dark_eyed_Junco/Dark_Eyed_Junco_0005_68813.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "gray",
+        "pink"
+      ],
+      "description": "Medium-sized sparrow. Slate-gray or brown above, white below, with pink bill. Several color variations."
+    },
+    "077.Tropical_Kingbird": {
+      "key": "077.Tropical_Kingbird",
+      "common_name": "Tropical Kingbird",
+      "scientific_name": "Tyrannus melancholicus",
+      "type": "bird",
+      "image_path": "data/raw/077.Tropical_Kingbird/Tropical_Kingbird_0001_69958.jpg",
+      "colors": [
+        "yellow",
+        "gray",
+        "olive"
+      ],
+      "description": "Large flycatcher with gray head, olive back, yellow underparts, and notched tail."
+    },
+    "078.Gray_Kingbird": {
+      "key": "078.Gray_Kingbird",
+      "common_name": "Gray Kingbird",
+      "scientific_name": "Tyrannus dominicensis",
+      "type": "bird",
+      "image_path": "data/raw/078.Gray_Kingbird/Gray_Kingbird_0001_70224.jpg",
+      "colors": [
+        "white",
+        "gray"
+      ],
+      "description": "Large flycatcher with gray head and back, white underparts, and notched tail."
+    },
+    "079.Belted_Kingfisher": {
+      "key": "079.Belted_Kingfisher",
+      "common_name": "Belted Kingfisher",
+      "scientific_name": "Megaceryle alcyon",
+      "type": "bird",
+      "image_path": "data/raw/079.Belted_Kingfisher/Belted_Kingfisher_0005_70389.jpg",
+      "colors": [
+        "white",
+        "blue",
+        "gray"
+      ],
+      "description": "Large kingfisher with blue-gray upperparts, white underparts, and shaggy crest. Females have rufous belly band."
+    },
+    "080.Green_Kingfisher": {
+      "key": "080.Green_Kingfisher",
+      "common_name": "Green Kingfisher",
+      "scientific_name": "Chloroceryle americana",
+      "type": "bird",
+      "image_path": "data/raw/080.Green_Kingfisher/Green_Kingfisher_0001_71138.jpg",
+      "colors": [
+        "white",
+        "green"
+      ],
+      "description": "Small kingfisher with green upperparts, white underparts with green spots, and long bill."
+    },
+    "081.Pied_Kingfisher": {
+      "key": "081.Pied_Kingfisher",
+      "common_name": "Pied Kingfisher",
+      "scientific_name": "Ceryle rudis",
+      "type": "bird",
+      "image_path": "data/raw/081.Pied_Kingfisher/Pied_Kingfisher_0002_71698.jpg",
+      "colors": [
+        "black",
+        "white"
+      ],
+      "description": "Medium-sized kingfisher with black and white plumage, crested head, and long bill."
+    },
+    "082.Ringed_Kingfisher": {
+      "key": "082.Ringed_Kingfisher",
+      "common_name": "Ringed Kingfisher",
+      "scientific_name": "Megaceryle torquata",
+      "type": "bird",
+      "image_path": "data/raw/082.Ringed_Kingfisher/Ringed_Kingfisher_0001_73048.jpg",
+      "colors": [
+        "white",
+        "blue",
+        "gray"
+      ],
+      "description": "Very large kingfisher with blue-gray upperparts, white collar, rufous underparts, and shaggy crest."
+    },
+    "083.White_breasted_Kingfisher": {
+      "key": "083.White_breasted_Kingfisher",
+      "common_name": "White breasted Kingfisher",
+      "scientific_name": "Halcyon smyrnensis",
+      "type": "bird",
+      "image_path": "data/raw/083.White_breasted_Kingfisher/White_Breasted_Kingfisher_0002_73491.jpg",
+      "colors": [
+        "white",
+        "red",
+        "blue",
+        "bright"
+      ],
+      "description": "Large kingfisher with bright blue back, white breast, rufous head, and long red bill."
+    },
+    "084.Red_legged_Kittiwake": {
+      "key": "084.Red_legged_Kittiwake",
+      "common_name": "Red legged Kittiwake",
+      "scientific_name": "Rissa brevirostris",
+      "type": "bird",
+      "image_path": "data/raw/084.Red_legged_Kittiwake/Red_Legged_Kittiwake_0001_795394.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red",
+        "gray"
+      ],
+      "description": "Small gull with white head and body, gray back, black wing tips, and red legs."
+    },
+    "085.Horned_Lark": {
+      "key": "085.Horned_Lark",
+      "common_name": "Horned Lark",
+      "scientific_name": "Eremophila alpestris",
+      "type": "bird",
+      "image_path": "data/raw/085.Horned_Lark/Horned_Lark_0001_73835.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "pale"
+      ],
+      "description": "Small lark with brown upperparts, pale underparts, black face mask, and small black 'horns' on head."
+    },
+    "086.Pacific_Loon": {
+      "key": "086.Pacific_Loon",
+      "common_name": "Pacific Loon",
+      "scientific_name": "Gavia pacifica",
+      "type": "bird",
+      "image_path": "data/raw/086.Pacific_Loon/Pacific_Loon_0001_75521.jpg",
+      "colors": [
+        "black",
+        "white",
+        "gray"
+      ],
+      "description": "Large loon with black head and neck, white underparts, and gray back with white spots."
+    },
+    "087.Mallard": {
+      "key": "087.Mallard",
+      "common_name": "Mallard",
+      "scientific_name": "Anas platyrhynchos",
+      "type": "bird",
+      "image_path": "data/raw/087.Mallard/Mallard_0004_76958.jpg",
+      "colors": [
+        "brown",
+        "green",
+        "yellow",
+        "gray"
+      ],
+      "description": "Large dabbling duck. Males have green head, yellow bill, brown breast, and gray body. Females are mottled brown."
+    },
+    "088.Western_Meadowlark": {
+      "key": "088.Western_Meadowlark",
+      "common_name": "Western Meadowlark",
+      "scientific_name": "Sturnella neglecta",
+      "type": "bird",
+      "image_path": "data/raw/088.Western_Meadowlark/Western_Meadowlark_0001_78676.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "yellow"
+      ],
+      "description": "Medium-sized songbird with yellow underparts, black V on breast, and brown streaked back."
+    },
+    "089.Hooded_Merganser": {
+      "key": "089.Hooded_Merganser",
+      "common_name": "Hooded Merganser",
+      "scientific_name": "Lophodytes cucullatus",
+      "type": "bird",
+      "image_path": "data/raw/089.Hooded_Merganser/Hooded_Merganser_0002_796781.jpg",
+      "colors": [
+        "black",
+        "white",
+        "brown"
+      ],
+      "description": "Small diving duck. Males have black and white crested head, brown sides, and white breast. Females have brown crested head."
+    },
+    "090.Red_breasted_Merganser": {
+      "key": "090.Red_breasted_Merganser",
+      "common_name": "Red breasted Merganser",
+      "scientific_name": "Mergus serrator",
+      "type": "bird",
+      "image_path": "data/raw/090.Red_breasted_Merganser/Red_Breasted_Merganser_0001_79199.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "green",
+        "dark",
+        "rusty"
+      ],
+      "description": "Medium-sized diving duck. Males have dark green head, white collar, and rusty breast. Females have brown crested head."
+    },
+    "091.Mockingbird": {
+      "key": "091.Mockingbird",
+      "common_name": "Mockingbird",
+      "scientific_name": "Mimus polyglottos",
+      "type": "bird",
+      "image_path": "data/raw/091.Mockingbird/Mockingbird_0001_79812.jpg",
+      "colors": [
+        "white",
+        "gray"
+      ],
+      "description": "Medium-sized songbird. Gray above, white below, with white wing patches and long tail."
+    },
+    "092.Nighthawk": {
+      "key": "092.Nighthawk",
+      "common_name": "Nighthawk",
+      "scientific_name": "Chordeiles minor",
+      "type": "bird",
+      "image_path": "data/raw/092.Nighthawk/Nighthawk_0003_82827.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "gray"
+      ],
+      "description": "Medium-sized nightjar with mottled gray and brown plumage, white wing patches, and large eyes."
+    },
+    "093.Clark_Nutcracker": {
+      "key": "093.Clark_Nutcracker",
+      "common_name": "Clark Nutcracker",
+      "scientific_name": "Nucifraga columbiana",
+      "type": "bird",
+      "image_path": "data/raw/093.Clark_Nutcracker/Clark_Nutcracker_0003_85296.jpg",
+      "colors": [
+        "black",
+        "white",
+        "gray"
+      ],
+      "description": "Large songbird with gray body, black wings with white patches, and long pointed bill."
+    },
+    "094.White_breasted_Nuthatch": {
+      "key": "094.White_breasted_Nuthatch",
+      "common_name": "White breasted Nuthatch",
+      "scientific_name": "Sitta carolinensis",
+      "type": "bird",
+      "image_path": "data/raw/094.White_breasted_Nuthatch/White_Breasted_Nuthatch_0002_86287.jpg",
+      "colors": [
+        "black",
+        "white",
+        "blue",
+        "gray"
+      ],
+      "description": "Medium-sized nuthatch with blue-gray upperparts, white face and underparts, and black cap."
+    },
+    "095.Baltimore_Oriole": {
+      "key": "095.Baltimore_Oriole",
+      "common_name": "Baltimore Oriole",
+      "scientific_name": "Icterus galbula",
+      "type": "bird",
+      "image_path": "data/raw/095.Baltimore_Oriole/Baltimore_Oriole_0006_89935.jpg",
+      "colors": [
+        "black",
+        "yellow",
+        "orange",
+        "dark",
+        "bright"
+      ],
+      "description": "Medium-sized songbird. Males are bright orange with black head, back, and wings. Females are orange-yellow with dark wings."
+    },
+    "096.Hooded_Oriole": {
+      "key": "096.Hooded_Oriole",
+      "common_name": "Hooded Oriole",
+      "scientific_name": "Icterus cucullatus",
+      "type": "bird",
+      "image_path": "data/raw/096.Hooded_Oriole/Hooded_Oriole_0002_91034.jpg",
+      "colors": [
+        "black",
+        "yellow",
+        "orange",
+        "olive"
+      ],
+      "description": "Medium-sized oriole. Males are orange-yellow with black face, throat, and back. Females are yellow-olive."
+    },
+    "097.Orchard_Oriole": {
+      "key": "097.Orchard_Oriole",
+      "common_name": "Orchard Oriole",
+      "scientific_name": "Icterus spurius",
+      "type": "bird",
+      "image_path": "data/raw/097.Orchard_Oriole/Orchard_Oriole_0004_91275.jpg",
+      "colors": [
+        "black",
+        "yellow",
+        "dark",
+        "chestnut",
+        "olive"
+      ],
+      "description": "Small oriole. Males are dark chestnut with black head and throat. Females are olive-yellow with dark wings."
+    },
+    "098.Scott_Oriole": {
+      "key": "098.Scott_Oriole",
+      "common_name": "Scott Oriole",
+      "scientific_name": "Icterus parisorum",
+      "type": "bird",
+      "image_path": "data/raw/098.Scott_Oriole/Scott_Oriole_0001_795826.jpg",
+      "colors": [
+        "black",
+        "yellow",
+        "olive"
+      ],
+      "description": "Medium-sized oriole. Males are black with yellow head, breast, and rump. Females are olive-yellow."
+    },
+    "099.Ovenbird": {
+      "key": "099.Ovenbird",
+      "common_name": "Ovenbird",
+      "scientific_name": "Seiurus aurocapilla",
+      "type": "bird",
+      "image_path": "data/raw/099.Ovenbird/Ovenbird_0003_92910.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "orange",
+        "dark",
+        "olive"
+      ],
+      "description": "Large warbler with olive-brown upperparts, white underparts with dark streaks, and orange crown stripe."
+    },
+    "100.Brown_Pelican": {
+      "key": "100.Brown_Pelican",
+      "common_name": "Brown Pelican",
+      "scientific_name": "Pelecanus occidentalis",
+      "type": "bird",
+      "image_path": "data/raw/100.Brown_Pelican/Brown_Pelican_0002_94773.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Large seabird with brown body, white head and neck, and huge bill with expandable pouch."
+    },
+    "101.White_Pelican": {
+      "key": "101.White_Pelican",
+      "common_name": "White Pelican",
+      "scientific_name": "Pelecanus erythrorhynchos",
+      "type": "bird",
+      "image_path": "data/raw/101.White_Pelican/White_Pelican_0003_96691.jpg",
+      "colors": [
+        "black",
+        "white"
+      ],
+      "description": "Very large white bird with black wing tips, huge bill, and expandable pouch."
+    },
+    "102.Western_Wood_Pewee": {
+      "key": "102.Western_Wood_Pewee",
+      "common_name": "Western Wood Pewee",
+      "scientific_name": "Contopus sordidulus",
+      "type": "bird",
+      "image_path": "data/raw/102.Western_Wood_Pewee/Western_Wood_Pewee_0001_98045.jpg",
+      "colors": [
+        "white",
+        "gray",
+        "olive"
+      ],
+      "description": "Medium-sized flycatcher with olive-gray upperparts, white underparts, and two white wing bars."
+    },
+    "103.Sayornis": {
+      "key": "103.Sayornis",
+      "common_name": "Sayornis",
+      "scientific_name": "Sayornis phoebe",
+      "type": "bird",
+      "image_path": "data/raw/103.Sayornis/Sayornis_0002_98596.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "gray",
+        "dark"
+      ],
+      "description": "Medium-sized flycatcher with brown-gray upperparts, white underparts, and dark head."
+    },
+    "104.American_Pipit": {
+      "key": "104.American_Pipit",
+      "common_name": "American Pipit",
+      "scientific_name": "Anthus rubescens",
+      "type": "bird",
+      "image_path": "data/raw/104.American_Pipit/American_Pipit_0001_100225.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Small bird with streaked brown upperparts, white underparts with streaks, and white outer tail feathers."
+    },
+    "105.Whip_poor_Will": {
+      "key": "105.Whip_poor_Will",
+      "common_name": "Whip poor Will",
+      "scientific_name": "Antrostomus vociferus",
+      "type": "bird",
+      "image_path": "data/raw/105.Whip_poor_Will/Whip_Poor_Will_0001_796411.jpg",
+      "colors": [
+        "brown",
+        "gray"
+      ],
+      "description": "Medium-sized nightjar with mottled brown and gray plumage, large eyes, and wide mouth."
+    },
+    "106.Horned_Puffin": {
+      "key": "106.Horned_Puffin",
+      "common_name": "Horned Puffin",
+      "scientific_name": "Fratercula corniculata",
+      "type": "bird",
+      "image_path": "data/raw/106.Horned_Puffin/Horned_Puffin_0001_100973.jpg",
+      "colors": [
+        "black",
+        "white",
+        "yellow"
+      ],
+      "description": "Medium-sized seabird with black body, white face, large colorful bill, and yellow horn-like projections above eyes."
+    },
+    "107.Common_Raven": {
+      "key": "107.Common_Raven",
+      "common_name": "Common Raven",
+      "scientific_name": "Corvus corax",
+      "type": "bird",
+      "image_path": "data/raw/107.Common_Raven/Common_Raven_0001_101213.jpg",
+      "colors": [
+        "black"
+      ],
+      "description": "Very large, all-black bird with thick bill, shaggy throat feathers, and wedge-shaped tail."
+    },
+    "108.White_necked_Raven": {
+      "key": "108.White_necked_Raven",
+      "common_name": "White necked Raven",
+      "scientific_name": "Corvus albicollis",
+      "type": "bird",
+      "image_path": "data/raw/108.White_necked_Raven/White_Necked_Raven_0001_797384.jpg",
+      "colors": [
+        "black",
+        "white"
+      ],
+      "description": "Large, all-black bird with white patch on back of neck, thick bill, and wedge-shaped tail."
+    },
+    "109.American_Redstart": {
+      "key": "109.American_Redstart",
+      "common_name": "American Redstart",
+      "scientific_name": "Setophaga ruticilla",
+      "type": "bird",
+      "image_path": "data/raw/109.American_Redstart/American_Redstart_0002_103723.jpg",
+      "colors": [
+        "black",
+        "yellow",
+        "orange",
+        "gray"
+      ],
+      "description": "Small warbler. Males are black with orange patches on wings, tail, and sides. Females are gray with yellow patches."
+    },
+    "110.Geococcyx": {
+      "key": "110.Geococcyx",
+      "common_name": "Geococcyx",
+      "scientific_name": "Geococcyx californianus",
+      "type": "bird",
+      "image_path": "data/raw/110.Geococcyx/Geococcyx_0005_104187.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Large ground-dwelling bird with brown and white streaked plumage, long tail, and strong legs."
+    },
+    "111.Loggerhead_Shrike": {
+      "key": "111.Loggerhead_Shrike",
+      "common_name": "Loggerhead Shrike",
+      "scientific_name": "Lanius ludovicianus",
+      "type": "bird",
+      "image_path": "data/raw/111.Loggerhead_Shrike/Loggerhead_Shrike_0002_105195.jpg",
+      "colors": [
+        "black",
+        "white",
+        "gray"
+      ],
+      "description": "Medium-sized songbird with gray head and back, white underparts, black mask, and hooked bill."
+    },
+    "112.Great_Grey_Shrike": {
+      "key": "112.Great_Grey_Shrike",
+      "common_name": "Great Grey Shrike",
+      "scientific_name": "Lanius excubitor",
+      "type": "bird",
+      "image_path": "data/raw/112.Great_Grey_Shrike/Great_Grey_Shrike_0003_106552.jpg",
+      "colors": [
+        "black",
+        "white",
+        "gray"
+      ],
+      "description": "Large shrike with gray head and back, white underparts, black mask, and hooked bill."
+    },
+    "113.Baird_Sparrow": {
+      "key": "113.Baird_Sparrow",
+      "common_name": "Baird Sparrow",
+      "scientific_name": "Centronyx bairdii",
+      "type": "bird",
+      "image_path": "data/raw/113.Baird_Sparrow/Baird_Sparrow_0001_794578.jpg",
+      "colors": [
+        "brown",
+        "buff"
+      ],
+      "description": "Small sparrow with streaked brown back, buffy underparts with fine streaks, and central crown stripe."
+    },
+    "114.Black_throated_Sparrow": {
+      "key": "114.Black_throated_Sparrow",
+      "common_name": "Black throated Sparrow",
+      "scientific_name": "Amphispiza bilineata",
+      "type": "bird",
+      "image_path": "data/raw/114.Black_throated_Sparrow/Black_Throated_Sparrow_0001_107233.jpg",
+      "colors": [
+        "black",
+        "white",
+        "gray"
+      ],
+      "description": "Small sparrow with black throat, white eyebrow, and gray body."
+    },
+    "115.Brewer_Sparrow": {
+      "key": "115.Brewer_Sparrow",
+      "common_name": "Brewer Sparrow",
+      "scientific_name": "Spizella breweri",
+      "type": "bird",
+      "image_path": "data/raw/115.Brewer_Sparrow/Brewer_Sparrow_0001_796718.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "gray"
+      ],
+      "description": "Small sparrow with gray head, brown back with streaks, and white underparts."
+    },
+    "116.Chipping_Sparrow": {
+      "key": "116.Chipping_Sparrow",
+      "common_name": "Chipping Sparrow",
+      "scientific_name": "Spizella passerina",
+      "type": "bird",
+      "image_path": "data/raw/116.Chipping_Sparrow/Chipping_Sparrow_0001_108638.jpg",
+      "colors": [
+        "brown",
+        "gray"
+      ],
+      "description": "Small sparrow with rufous cap, gray face, and brown streaked back."
+    },
+    "117.Clay_colored_Sparrow": {
+      "key": "117.Clay_colored_Sparrow",
+      "common_name": "Clay colored Sparrow",
+      "scientific_name": "Spizella pallida",
+      "type": "bird",
+      "image_path": "data/raw/117.Clay_colored_Sparrow/Clay_Colored_Sparrow_0001_110632.jpg",
+      "colors": [
+        "brown",
+        "gray",
+        "pale",
+        "buff"
+      ],
+      "description": "Small sparrow with gray head with brown crown stripe, pale brown back, and buff underparts."
+    },
+    "118.House_Sparrow": {
+      "key": "118.House_Sparrow",
+      "common_name": "House Sparrow",
+      "scientific_name": "Passer domesticus",
+      "type": "bird",
+      "image_path": "data/raw/118.House_Sparrow/House_Sparrow_0002_112905.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "gray",
+        "chestnut"
+      ],
+      "description": "Small, chunky bird. Males have gray crown, black bib, and chestnut nape. Females are streaked brown and gray."
+    },
+    "119.Field_Sparrow": {
+      "key": "119.Field_Sparrow",
+      "common_name": "Field Sparrow",
+      "scientific_name": "Spizella pusilla",
+      "type": "bird",
+      "image_path": "data/raw/119.Field_Sparrow/Field_Sparrow_0006_113839.jpg",
+      "colors": [
+        "brown",
+        "gray",
+        "pink"
+      ],
+      "description": "Small sparrow with pink bill, gray head with rufous crown, and brown streaked back."
+    },
+    "120.Fox_Sparrow": {
+      "key": "120.Fox_Sparrow",
+      "common_name": "Fox Sparrow",
+      "scientific_name": "Passerella iliaca",
+      "type": "bird",
+      "image_path": "data/raw/120.Fox_Sparrow/Fox_Sparrow_0009_114796.jpg",
+      "colors": [
+        "brown",
+        "gray",
+        "spotted"
+      ],
+      "description": "Large sparrow with heavily streaked brown and gray plumage, rufous tail, and spotted breast."
+    },
+    "121.Grasshopper_Sparrow": {
+      "key": "121.Grasshopper_Sparrow",
+      "common_name": "Grasshopper Sparrow",
+      "scientific_name": "Ammodramus savannarum",
+      "type": "bird",
+      "image_path": "data/raw/121.Grasshopper_Sparrow/Grasshopper_Sparrow_0001_115938.jpg",
+      "colors": [
+        "buff"
+      ],
+      "description": "Small sparrow with flat head, short tail, and buffy underparts with fine streaks."
+    },
+    "122.Harris_Sparrow": {
+      "key": "122.Harris_Sparrow",
+      "common_name": "Harris Sparrow",
+      "scientific_name": "Zonotrichia querula",
+      "type": "bird",
+      "image_path": "data/raw/122.Harris_Sparrow/Harris_Sparrow_0001_116398.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "pink"
+      ],
+      "description": "Large sparrow with black face and bib, pink bill, and brown streaked back."
+    },
+    "123.Henslow_Sparrow": {
+      "key": "123.Henslow_Sparrow",
+      "common_name": "Henslow Sparrow",
+      "scientific_name": "Centronyx henslowii",
+      "type": "bird",
+      "image_path": "data/raw/123.Henslow_Sparrow/Henslow_Sparrow_0002_116930.jpg",
+      "colors": [
+        "brown",
+        "buff",
+        "olive"
+      ],
+      "description": "Small sparrow with olive head, brown streaked back, and buffy underparts with streaks."
+    },
+    "124.Le_Conte_Sparrow": {
+      "key": "124.Le_Conte_Sparrow",
+      "common_name": "Le Conte Sparrow",
+      "scientific_name": "Ammospiza leconteii",
+      "type": "bird",
+      "image_path": "data/raw/124.Le_Conte_Sparrow/Le_Conte_Sparrow_0003_795175.jpg",
+      "colors": [
+        "orange",
+        "gray",
+        "buff"
+      ],
+      "description": "Small sparrow with orange face, gray crown with central stripe, and buffy underparts with fine streaks."
+    },
+    "125.Lincoln_Sparrow": {
+      "key": "125.Lincoln_Sparrow",
+      "common_name": "Lincoln Sparrow",
+      "scientific_name": "Melospiza lincolnii",
+      "type": "bird",
+      "image_path": "data/raw/125.Lincoln_Sparrow/Lincoln_Sparrow_0009_117535.jpg",
+      "colors": [
+        "brown",
+        "gray",
+        "buff"
+      ],
+      "description": "Small sparrow with gray face with brown crown, buffy breast with fine streaks, and brown streaked back."
+    },
+    "126.Nelson_Sharp_tailed_Sparrow": {
+      "key": "126.Nelson_Sharp_tailed_Sparrow",
+      "common_name": "Nelson Sharp tailed Sparrow",
+      "scientific_name": "Ammospiza nelsoni",
+      "type": "bird",
+      "image_path": "data/raw/126.Nelson_Sharp_tailed_Sparrow/Nelson_Sharp_Tailed_Sparrow_0001_796931.jpg",
+      "colors": [
+        "orange",
+        "gray",
+        "buff"
+      ],
+      "description": "Small sparrow with orange face, gray crown, and buffy underparts with fine streaks."
+    },
+    "127.Savannah_Sparrow": {
+      "key": "127.Savannah_Sparrow",
+      "common_name": "Savannah Sparrow",
+      "scientific_name": "Passerculus sandwichensis",
+      "type": "bird",
+      "image_path": "data/raw/127.Savannah_Sparrow/Savannah_Sparrow_0001_118956.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "yellow"
+      ],
+      "description": "Small sparrow with yellow eyebrow, streaked brown back, and white underparts with streaks."
+    },
+    "128.Seaside_Sparrow": {
+      "key": "128.Seaside_Sparrow",
+      "common_name": "Seaside Sparrow",
+      "scientific_name": "Ammospiza maritima",
+      "type": "bird",
+      "image_path": "data/raw/128.Seaside_Sparrow/Seaside_Sparrow_0001_120720.jpg",
+      "colors": [
+        "white",
+        "gray",
+        "dark",
+        "olive"
+      ],
+      "description": "Medium-sized sparrow with gray head, olive back, and white underparts with dark streaks."
+    },
+    "129.Song_Sparrow": {
+      "key": "129.Song_Sparrow",
+      "common_name": "Song Sparrow",
+      "scientific_name": "Melospiza melodia",
+      "type": "bird",
+      "image_path": "data/raw/129.Song_Sparrow/Song_Sparrow_0001_122169.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "dark"
+      ],
+      "description": "Medium-sized sparrow with streaked brown back, white underparts with dark central spot, and brown streaks."
+    },
+    "130.Tree_Sparrow": {
+      "key": "130.Tree_Sparrow",
+      "common_name": "Tree Sparrow",
+      "scientific_name": "Spizelloides arborea",
+      "type": "bird",
+      "image_path": "data/raw/130.Tree_Sparrow/Tree_Sparrow_0005_122949.jpg",
+      "colors": [
+        "brown",
+        "gray",
+        "dark"
+      ],
+      "description": "Small sparrow with rufous crown, gray face with dark spot, and brown streaked back."
+    },
+    "131.Vesper_Sparrow": {
+      "key": "131.Vesper_Sparrow",
+      "common_name": "Vesper Sparrow",
+      "scientific_name": "Pooecetes gramineus",
+      "type": "bird",
+      "image_path": "data/raw/131.Vesper_Sparrow/Vesper_Sparrow_0002_125454.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Medium-sized sparrow with streaked brown back, white outer tail feathers, and white eye ring."
+    },
+    "132.White_crowned_Sparrow": {
+      "key": "132.White_crowned_Sparrow",
+      "common_name": "White crowned Sparrow",
+      "scientific_name": "Zonotrichia leucophrys",
+      "type": "bird",
+      "image_path": "data/raw/132.White_crowned_Sparrow/White_Crowned_Sparrow_0001_127115.jpg",
+      "colors": [
+        "black",
+        "white",
+        "brown",
+        "gray",
+        "striped"
+      ],
+      "description": "Large sparrow with black and white striped crown, gray face, and brown streaked back."
+    },
+    "133.White_throated_Sparrow": {
+      "key": "133.White_throated_Sparrow",
+      "common_name": "White throated Sparrow",
+      "scientific_name": "Zonotrichia albicollis",
+      "type": "bird",
+      "image_path": "data/raw/133.White_throated_Sparrow/White_Throated_Sparrow_0002_129057.jpg",
+      "colors": [
+        "black",
+        "white",
+        "yellow",
+        "striped"
+      ],
+      "description": "Large sparrow with black and white striped crown, white throat, and yellow spot between eye and bill."
+    },
+    "134.Cape_Glossy_Starling": {
+      "key": "134.Cape_Glossy_Starling",
+      "common_name": "Cape Glossy Starling",
+      "scientific_name": "Lamprotornis nitens",
+      "type": "bird",
+      "image_path": "data/raw/134.Cape_Glossy_Starling/Cape_Glossy_Starling_0002_129310.jpg",
+      "colors": [
+        "blue",
+        "green",
+        "yellow",
+        "iridescent"
+      ],
+      "description": "Medium-sized starling with iridescent blue-green plumage, yellow eyes, and long tail."
+    },
+    "135.Bank_Swallow": {
+      "key": "135.Bank_Swallow",
+      "common_name": "Bank Swallow",
+      "scientific_name": "Riparia riparia",
+      "type": "bird",
+      "image_path": "data/raw/135.Bank_Swallow/Bank_Swallow_0001_129516.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Small swallow with brown upperparts, white underparts, and brown breast band."
+    },
+    "136.Barn_Swallow": {
+      "key": "136.Barn_Swallow",
+      "common_name": "Barn Swallow",
+      "scientific_name": "Hirundo rustica",
+      "type": "bird",
+      "image_path": "data/raw/136.Barn_Swallow/Barn_Swallow_0002_130551.jpg",
+      "colors": [
+        "blue"
+      ],
+      "description": "Medium-sized swallow with blue upperparts, rufous underparts, and deeply forked tail."
+    },
+    "137.Cliff_Swallow": {
+      "key": "137.Cliff_Swallow",
+      "common_name": "Cliff Swallow",
+      "scientific_name": "Petrochelidon pyrrhonota",
+      "type": "bird",
+      "image_path": "data/raw/137.Cliff_Swallow/Cliff_Swallow_0003_133496.jpg",
+      "colors": [
+        "white",
+        "blue",
+        "buff"
+      ],
+      "description": "Medium-sized swallow with blue upperparts, buff rump, white underparts, and square tail."
+    },
+    "138.Tree_Swallow": {
+      "key": "138.Tree_Swallow",
+      "common_name": "Tree Swallow",
+      "scientific_name": "Tachycineta bicolor",
+      "type": "bird",
+      "image_path": "data/raw/138.Tree_Swallow/Tree_Swallow_0002_136792.jpg",
+      "colors": [
+        "white",
+        "blue",
+        "green",
+        "light"
+      ],
+      "description": "Medium-sized swallow with blue-green upperparts, white underparts, and slightly forked tail."
+    },
+    "139.Scarlet_Tanager": {
+      "key": "139.Scarlet_Tanager",
+      "common_name": "Scarlet Tanager",
+      "scientific_name": "Piranga olivacea",
+      "type": "bird",
+      "image_path": "data/raw/139.Scarlet_Tanager/Scarlet_Tanager_0003_137724.jpg",
+      "colors": [
+        "black",
+        "red",
+        "yellow",
+        "bright",
+        "olive"
+      ],
+      "description": "Medium-sized songbird. Breeding males are bright red with black wings and tail. Females are olive-yellow."
+    },
+    "140.Summer_Tanager": {
+      "key": "140.Summer_Tanager",
+      "common_name": "Summer Tanager",
+      "scientific_name": "Piranga rubra",
+      "type": "bird",
+      "image_path": "data/raw/140.Summer_Tanager/Summer_Tanager_0001_139289.jpg",
+      "colors": [
+        "red",
+        "yellow",
+        "orange",
+        "olive"
+      ],
+      "description": "Medium-sized songbird. Males are entirely red. Females are olive-yellow with orange tinges."
+    },
+    "141.Artic_Tern": {
+      "key": "141.Artic_Tern",
+      "common_name": "Artic Tern",
+      "scientific_name": "Sterna paradisaea",
+      "type": "bird",
+      "image_path": "data/raw/141.Artic_Tern/Artic_Tern_0011_143355.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red",
+        "gray"
+      ],
+      "description": "Medium-sized tern with white body, gray wings, black cap, and red bill and legs."
+    },
+    "142.Black_Tern": {
+      "key": "142.Black_Tern",
+      "common_name": "Black Tern",
+      "scientific_name": "Chlidonias niger",
+      "type": "bird",
+      "image_path": "data/raw/142.Black_Tern/Black_Tern_0004_143881.jpg",
+      "colors": [
+        "black",
+        "white",
+        "gray"
+      ],
+      "description": "Small tern. Breeding adults are black with gray wings. Non-breeding adults are white with black cap."
+    },
+    "143.Caspian_Tern": {
+      "key": "143.Caspian_Tern",
+      "common_name": "Caspian Tern",
+      "scientific_name": "Hydroprogne caspia",
+      "type": "bird",
+      "image_path": "data/raw/143.Caspian_Tern/Caspian_Tern_0005_145929.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red",
+        "gray"
+      ],
+      "description": "Very large tern with white body, gray wings, black cap, and large red bill."
+    },
+    "144.Common_Tern": {
+      "key": "144.Common_Tern",
+      "common_name": "Common Tern",
+      "scientific_name": "Sterna hirundo",
+      "type": "bird",
+      "image_path": "data/raw/144.Common_Tern/Common_Tern_0001_149721.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red",
+        "gray"
+      ],
+      "description": "Medium-sized tern with white body, gray wings, black cap, and red bill with black tip."
+    },
+    "145.Elegant_Tern": {
+      "key": "145.Elegant_Tern",
+      "common_name": "Elegant Tern",
+      "scientific_name": "Thalasseus elegans",
+      "type": "bird",
+      "image_path": "data/raw/145.Elegant_Tern/Elegant_Tern_0004_150948.jpg",
+      "colors": [
+        "black",
+        "white",
+        "orange",
+        "gray"
+      ],
+      "description": "Medium-sized tern with white body, gray wings, black cap, and long orange bill."
+    },
+    "146.Forsters_Tern": {
+      "key": "146.Forsters_Tern",
+      "common_name": "Forsters Tern",
+      "scientific_name": "Sterna forsteri",
+      "type": "bird",
+      "image_path": "data/raw/146.Forsters_Tern/Forsters_Tern_0001_152174.jpg",
+      "colors": [
+        "black",
+        "white",
+        "orange",
+        "gray"
+      ],
+      "description": "Medium-sized tern with white body, gray wings, black cap, and orange bill with black tip."
+    },
+    "147.Least_Tern": {
+      "key": "147.Least_Tern",
+      "common_name": "Least Tern",
+      "scientific_name": "Sternula antillarum",
+      "type": "bird",
+      "image_path": "data/raw/147.Least_Tern/Least_Tern_0006_153921.jpg",
+      "colors": [
+        "black",
+        "white",
+        "yellow",
+        "gray"
+      ],
+      "description": "Very small tern with white body, gray wings, black cap, and yellow bill with black tip."
+    },
+    "148.Green_tailed_Towhee": {
+      "key": "148.Green_tailed_Towhee",
+      "common_name": "Green tailed Towhee",
+      "scientific_name": "Pipilo chlorurus",
+      "type": "bird",
+      "image_path": "data/raw/148.Green_tailed_Towhee/Green_Tailed_Towhee_0001_797412.jpg",
+      "colors": [
+        "white",
+        "green",
+        "gray"
+      ],
+      "description": "Large sparrow with green tail, rufous cap, white throat, and gray body."
+    },
+    "149.Brown_Thrasher": {
+      "key": "149.Brown_Thrasher",
+      "common_name": "Brown Thrasher",
+      "scientific_name": "Toxostoma rufum",
+      "type": "bird",
+      "image_path": "data/raw/149.Brown_Thrasher/Brown_Thrasher_0001_155380.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "red"
+      ],
+      "description": "Large songbird with reddish-brown upperparts, streaked white underparts, long tail, and curved bill."
+    },
+    "150.Sage_Thrasher": {
+      "key": "150.Sage_Thrasher",
+      "common_name": "Sage Thrasher",
+      "scientific_name": "Oreoscoptes montanus",
+      "type": "bird",
+      "image_path": "data/raw/150.Sage_Thrasher/Sage_Thrasher_0002_155455.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "gray",
+        "dark"
+      ],
+      "description": "Medium-sized songbird with gray-brown upperparts, white underparts with dark streaks, and long tail."
+    },
+    "151.Black_capped_Vireo": {
+      "key": "151.Black_capped_Vireo",
+      "common_name": "Black capped Vireo",
+      "scientific_name": "Vireo atricapilla",
+      "type": "bird",
+      "image_path": "data/raw/151.Black_capped_Vireo/Black_Capped_Vireo_0002_797466.jpg",
+      "colors": [
+        "black",
+        "white",
+        "yellow",
+        "olive"
+      ],
+      "description": "Small vireo with black cap, white eye ring, and olive-yellow body."
+    },
+    "152.Blue_headed_Vireo": {
+      "key": "152.Blue_headed_Vireo",
+      "common_name": "Blue headed Vireo",
+      "scientific_name": "Vireo solitarius",
+      "type": "bird",
+      "image_path": "data/raw/152.Blue_headed_Vireo/Blue_Headed_Vireo_0002_156241.jpg",
+      "colors": [
+        "white",
+        "blue",
+        "yellow",
+        "gray",
+        "olive"
+      ],
+      "description": "Small vireo with blue-gray head, white spectacles, olive back, and yellow sides."
+    },
+    "153.Philadelphia_Vireo": {
+      "key": "153.Philadelphia_Vireo",
+      "common_name": "Philadelphia Vireo",
+      "scientific_name": "Vireo philadelphicus",
+      "type": "bird",
+      "image_path": "data/raw/153.Philadelphia_Vireo/Philadelphia_Vireo_0001_156554.jpg",
+      "colors": [
+        "white",
+        "yellow",
+        "gray",
+        "olive"
+      ],
+      "description": "Small vireo with olive upperparts, yellow underparts, gray head, and white eyebrow stripe."
+    },
+    "154.Red_eyed_Vireo": {
+      "key": "154.Red_eyed_Vireo",
+      "common_name": "Red eyed Vireo",
+      "scientific_name": "Vireo olivaceus",
+      "type": "bird",
+      "image_path": "data/raw/154.Red_eyed_Vireo/Red_Eyed_Vireo_0002_156470.jpg",
+      "colors": [
+        "white",
+        "red",
+        "green",
+        "gray",
+        "olive"
+      ],
+      "description": "Medium-sized vireo with olive-green upperparts, white underparts, gray crown, and red eyes."
+    },
+    "155.Warbling_Vireo": {
+      "key": "155.Warbling_Vireo",
+      "common_name": "Warbling Vireo",
+      "scientific_name": "Vireo gilvus",
+      "type": "bird",
+      "image_path": "data/raw/155.Warbling_Vireo/Warbling_Vireo_0001_158397.jpg",
+      "colors": [
+        "white",
+        "gray",
+        "olive"
+      ],
+      "description": "Small vireo with gray head, olive back, white underparts, and faint eye stripe."
+    },
+    "156.White_eyed_Vireo": {
+      "key": "156.White_eyed_Vireo",
+      "common_name": "White eyed Vireo",
+      "scientific_name": "Vireo griseus",
+      "type": "bird",
+      "image_path": "data/raw/156.White_eyed_Vireo/White_Eyed_Vireo_0001_159237.jpg",
+      "colors": [
+        "white",
+        "yellow",
+        "gray",
+        "olive"
+      ],
+      "description": "Small vireo with gray head, yellow spectacles, white eyes, and olive-yellow body."
+    },
+    "157.Yellow_throated_Vireo": {
+      "key": "157.Yellow_throated_Vireo",
+      "common_name": "Yellow throated Vireo",
+      "scientific_name": "Vireo flavifrons",
+      "type": "bird",
+      "image_path": "data/raw/157.Yellow_throated_Vireo/Yellow_Throated_Vireo_0002_159625.jpg",
+      "colors": [
+        "yellow",
+        "gray",
+        "olive"
+      ],
+      "description": "Medium-sized vireo with yellow throat and breast, gray head, and olive back."
+    },
+    "158.Bay_breasted_Warbler": {
+      "key": "158.Bay_breasted_Warbler",
+      "common_name": "Bay breasted Warbler",
+      "scientific_name": "Setophaga castanea",
+      "type": "bird",
+      "image_path": "data/raw/158.Bay_breasted_Warbler/Bay_Breasted_Warbler_0005_159739.jpg",
+      "colors": [
+        "black",
+        "yellow",
+        "chestnut"
+      ],
+      "description": "Small warbler. Breeding males have chestnut crown and sides, black face, and yellow nape."
+    },
+    "159.Black_and_white_Warbler": {
+      "key": "159.Black_and_white_Warbler",
+      "common_name": "Black and white Warbler",
+      "scientific_name": "Mniotilta varia",
+      "type": "bird",
+      "image_path": "data/raw/159.Black_and_white_Warbler/Black_And_White_Warbler_0001_160352.jpg",
+      "colors": [
+        "black",
+        "white",
+        "striped"
+      ],
+      "description": "Small warbler with black and white striped plumage, resembling a zebra. Creeps along tree trunks."
+    },
+    "160.Black_throated_Blue_Warbler": {
+      "key": "160.Black_throated_Blue_Warbler",
+      "common_name": "Black throated Blue Warbler",
+      "scientific_name": "Setophaga caerulescens",
+      "type": "bird",
+      "image_path": "data/raw/160.Black_throated_Blue_Warbler/Black_Throated_Blue_Warbler_0001_161189.jpg",
+      "colors": [
+        "black",
+        "white",
+        "blue",
+        "olive"
+      ],
+      "description": "Small warbler. Males are blue above with black face and throat, white underparts. Females are olive with white wing spot."
+    },
+    "161.Blue_winged_Warbler": {
+      "key": "161.Blue_winged_Warbler",
+      "common_name": "Blue winged Warbler",
+      "scientific_name": "Vermivora cyanoptera",
+      "type": "bird",
+      "image_path": "data/raw/161.Blue_winged_Warbler/Blue_Winged_Warbler_0002_161890.jpg",
+      "colors": [
+        "white",
+        "blue",
+        "yellow",
+        "gray",
+        "olive"
+      ],
+      "description": "Small warbler. Males have yellow head and underparts, blue-gray wings with white bars, and olive back."
+    },
+    "162.Canada_Warbler": {
+      "key": "162.Canada_Warbler",
+      "common_name": "Canada Warbler",
+      "scientific_name": "Cardellina canadensis",
+      "type": "bird",
+      "image_path": "data/raw/162.Canada_Warbler/Canada_Warbler_0002_162426.jpg",
+      "colors": [
+        "black",
+        "yellow",
+        "gray"
+      ],
+      "description": "Small warbler with yellow underparts, gray upperparts, and black necklace on yellow breast."
+    },
+    "163.Cape_May_Warbler": {
+      "key": "163.Cape_May_Warbler",
+      "common_name": "Cape May Warbler",
+      "scientific_name": "Setophaga tigrina",
+      "type": "bird",
+      "image_path": "data/raw/163.Cape_May_Warbler/Cape_May_Warbler_0001_139008.jpg",
+      "colors": [
+        "white",
+        "yellow",
+        "chestnut"
+      ],
+      "description": "Small warbler. Breeding males have yellow head with chestnut cheek patch, streaked yellow underparts, and white wing patches."
+    },
+    "164.Cerulean_Warbler": {
+      "key": "164.Cerulean_Warbler",
+      "common_name": "Cerulean Warbler",
+      "scientific_name": "Setophaga cerulea",
+      "type": "bird",
+      "image_path": "data/raw/164.Cerulean_Warbler/Cerulean_Warbler_0002_797219.jpg",
+      "colors": [
+        "black",
+        "white",
+        "blue",
+        "gray"
+      ],
+      "description": "Small warbler. Males are blue above with white underparts and black streaks. Females are blue-gray."
+    },
+    "165.Chestnut_sided_Warbler": {
+      "key": "165.Chestnut_sided_Warbler",
+      "common_name": "Chestnut sided Warbler",
+      "scientific_name": "Setophaga pensylvanica",
+      "type": "bird",
+      "image_path": "data/raw/165.Chestnut_sided_Warbler/Chestnut_Sided_Warbler_0001_163813.jpg",
+      "colors": [
+        "black",
+        "white",
+        "yellow",
+        "chestnut"
+      ],
+      "description": "Small warbler. Breeding males have yellow crown, black face, white underparts, and chestnut sides. Females are duller."
+    },
+    "166.Golden_winged_Warbler": {
+      "key": "166.Golden_winged_Warbler",
+      "common_name": "Golden winged Warbler",
+      "scientific_name": "Vermivora chrysoptera",
+      "type": "bird",
+      "image_path": "data/raw/166.Golden_winged_Warbler/Golden_Winged_Warbler_0003_164469.jpg",
+      "colors": [
+        "black",
+        "white",
+        "yellow",
+        "gray"
+      ],
+      "description": "Small warbler. Males have yellow crown, black face, white wing patches, and gray body."
+    },
+    "167.Hooded_Warbler": {
+      "key": "167.Hooded_Warbler",
+      "common_name": "Hooded Warbler",
+      "scientific_name": "Setophaga citrina",
+      "type": "bird",
+      "image_path": "data/raw/167.Hooded_Warbler/Hooded_Warbler_0001_164704.jpg",
+      "colors": [
+        "black",
+        "yellow"
+      ],
+      "description": "Small warbler. Males have black hood, yellow face, and yellow underparts. Females lack hood."
+    },
+    "168.Kentucky_Warbler": {
+      "key": "168.Kentucky_Warbler",
+      "common_name": "Kentucky Warbler",
+      "scientific_name": "Geothlypis formosa",
+      "type": "bird",
+      "image_path": "data/raw/168.Kentucky_Warbler/Kentucky_Warbler_0002_795886.jpg",
+      "colors": [
+        "black",
+        "yellow",
+        "olive"
+      ],
+      "description": "Medium-sized warbler with olive upperparts, yellow underparts, black mask, and yellow spectacles."
+    },
+    "169.Magnolia_Warbler": {
+      "key": "169.Magnolia_Warbler",
+      "common_name": "Magnolia Warbler",
+      "scientific_name": "Setophaga magnolia",
+      "type": "bird",
+      "image_path": "data/raw/169.Magnolia_Warbler/Magnolia_Warbler_0001_166266.jpg",
+      "colors": [
+        "black",
+        "white",
+        "yellow"
+      ],
+      "description": "Small warbler. Breeding males have black back with white wing bars, yellow underparts with black streaks, and white tail patches."
+    },
+    "170.Mourning_Warbler": {
+      "key": "170.Mourning_Warbler",
+      "common_name": "Mourning Warbler",
+      "scientific_name": "Geothlypis philadelphia",
+      "type": "bird",
+      "image_path": "data/raw/170.Mourning_Warbler/Mourning_Warbler_0002_166520.jpg",
+      "colors": [
+        "black",
+        "yellow",
+        "gray",
+        "olive"
+      ],
+      "description": "Medium-sized warbler with olive upperparts, yellow underparts, and gray hood with black bib."
+    },
+    "171.Myrtle_Warbler": {
+      "key": "171.Myrtle_Warbler",
+      "common_name": "Myrtle Warbler",
+      "scientific_name": "Setophaga coronata",
+      "type": "bird",
+      "image_path": "data/raw/171.Myrtle_Warbler/Myrtle_Warbler_0001_166770.jpg",
+      "colors": [
+        "white",
+        "yellow"
+      ],
+      "description": "Small warbler. Breeding males have yellow rump, yellow crown patch, white throat, and streaked sides."
+    },
+    "172.Nashville_Warbler": {
+      "key": "172.Nashville_Warbler",
+      "common_name": "Nashville Warbler",
+      "scientific_name": "Leiothlypis ruficapilla",
+      "type": "bird",
+      "image_path": "data/raw/172.Nashville_Warbler/Nashville_Warbler_0001_167117.jpg",
+      "colors": [
+        "white",
+        "yellow",
+        "gray",
+        "olive"
+      ],
+      "description": "Small warbler with olive upperparts, yellow underparts, gray head, and white eye ring."
+    },
+    "173.Orange_crowned_Warbler": {
+      "key": "173.Orange_crowned_Warbler",
+      "common_name": "Orange crowned Warbler",
+      "scientific_name": "Leiothlypis celata",
+      "type": "bird",
+      "image_path": "data/raw/173.Orange_crowned_Warbler/Orange_Crowned_Warbler_0001_167660.jpg",
+      "colors": [
+        "yellow",
+        "orange",
+        "olive"
+      ],
+      "description": "Small warbler with olive-yellow upperparts, yellow underparts, and faint orange crown patch."
+    },
+    "174.Palm_Warbler": {
+      "key": "174.Palm_Warbler",
+      "common_name": "Palm Warbler",
+      "scientific_name": "Setophaga palmarum",
+      "type": "bird",
+      "image_path": "data/raw/174.Palm_Warbler/Palm_Warbler_0001_170297.jpg",
+      "colors": [
+        "brown",
+        "yellow",
+        "tan"
+      ],
+      "description": "Small warbler with brown cap, yellow underparts with streaks, and constantly bobs tail."
+    },
+    "175.Pine_Warbler": {
+      "key": "175.Pine_Warbler",
+      "common_name": "Pine Warbler",
+      "scientific_name": "Setophaga pinus",
+      "type": "bird",
+      "image_path": "data/raw/175.Pine_Warbler/Pine_Warbler_0002_171176.jpg",
+      "colors": [
+        "white",
+        "yellow",
+        "olive"
+      ],
+      "description": "Small warbler with olive-yellow upperparts, yellow underparts with faint streaks, and white wing bars."
+    },
+    "176.Prairie_Warbler": {
+      "key": "176.Prairie_Warbler",
+      "common_name": "Prairie Warbler",
+      "scientific_name": "Setophaga discolor",
+      "type": "bird",
+      "image_path": "data/raw/176.Prairie_Warbler/Prairie_Warbler_0002_172622.jpg",
+      "colors": [
+        "black",
+        "yellow",
+        "chestnut",
+        "olive"
+      ],
+      "description": "Small warbler with olive upperparts, yellow underparts with black streaks, and chestnut streaks on back."
+    },
+    "177.Prothonotary_Warbler": {
+      "key": "177.Prothonotary_Warbler",
+      "common_name": "Prothonotary Warbler",
+      "scientific_name": "Protonotaria citrea",
+      "type": "bird",
+      "image_path": "data/raw/177.Prothonotary_Warbler/Prothonotary_Warbler_0018_174196.jpg",
+      "colors": [
+        "blue",
+        "yellow",
+        "gray",
+        "bright",
+        "olive"
+      ],
+      "description": "Medium-sized warbler with bright yellow head and underparts, blue-gray wings, and olive back."
+    },
+    "178.Swainson_Warbler": {
+      "key": "178.Swainson_Warbler",
+      "common_name": "Swainson Warbler",
+      "scientific_name": "Limnothlypis swainsonii",
+      "type": "bird",
+      "image_path": "data/raw/178.Swainson_Warbler/Swainson_Warbler_0001_794869.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Medium-sized warbler with brown upperparts, white underparts, and brown crown stripe."
+    },
+    "179.Tennessee_Warbler": {
+      "key": "179.Tennessee_Warbler",
+      "common_name": "Tennessee Warbler",
+      "scientific_name": "Leiothlypis peregrina",
+      "type": "bird",
+      "image_path": "data/raw/179.Tennessee_Warbler/Tennessee_Warbler_0002_174884.jpg",
+      "colors": [
+        "white",
+        "gray",
+        "olive"
+      ],
+      "description": "Small warbler with olive upperparts, white underparts, gray head, and white eyebrow stripe."
+    },
+    "180.Wilson_Warbler": {
+      "key": "180.Wilson_Warbler",
+      "common_name": "Wilson Warbler",
+      "scientific_name": "Cardellina pusilla",
+      "type": "bird",
+      "image_path": "data/raw/180.Wilson_Warbler/Wilson_Warbler_0002_175571.jpg",
+      "colors": [
+        "black",
+        "yellow",
+        "olive"
+      ],
+      "description": "Small warbler with olive upperparts, yellow underparts, and black cap (males) or olive cap (females)."
+    },
+    "181.Worm_eating_Warbler": {
+      "key": "181.Worm_eating_Warbler",
+      "common_name": "Worm eating Warbler",
+      "scientific_name": "Helmitheros vermivorum",
+      "type": "bird",
+      "image_path": "data/raw/181.Worm_eating_Warbler/Worm_Eating_Warbler_0002_795533.jpg",
+      "colors": [
+        "black",
+        "striped",
+        "buff",
+        "olive"
+      ],
+      "description": "Medium-sized warbler with olive upperparts, buff underparts, and black and buff striped head."
+    },
+    "182.Yellow_Warbler": {
+      "key": "182.Yellow_Warbler",
+      "common_name": "Yellow Warbler",
+      "scientific_name": "Setophaga petechia",
+      "type": "bird",
+      "image_path": "data/raw/182.Yellow_Warbler/Yellow_Warbler_0003_176429.jpg",
+      "colors": [
+        "red",
+        "yellow",
+        "bright"
+      ],
+      "description": "Small warbler. Males are bright yellow with reddish streaks on breast. Females are duller yellow."
+    },
+    "183.Northern_Waterthrush": {
+      "key": "183.Northern_Waterthrush",
+      "common_name": "Northern Waterthrush",
+      "scientific_name": "Parkesia noveboracensis",
+      "type": "bird",
+      "image_path": "data/raw/183.Northern_Waterthrush/Northern_Waterthrush_0005_177023.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "dark"
+      ],
+      "description": "Large warbler with brown upperparts, white underparts with dark streaks, and white eyebrow stripe."
+    },
+    "184.Louisiana_Waterthrush": {
+      "key": "184.Louisiana_Waterthrush",
+      "common_name": "Louisiana Waterthrush",
+      "scientific_name": "Parkesia motacilla",
+      "type": "bird",
+      "image_path": "data/raw/184.Louisiana_Waterthrush/Louisiana_Waterthrush_0001_795271.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "dark"
+      ],
+      "description": "Large warbler with brown upperparts, white underparts with dark streaks, and white eyebrow stripe."
+    },
+    "185.Bohemian_Waxwing": {
+      "key": "185.Bohemian_Waxwing",
+      "common_name": "Bohemian Waxwing",
+      "scientific_name": "Bombycilla garrulus",
+      "type": "bird",
+      "image_path": "data/raw/185.Bohemian_Waxwing/Bohemian_Waxwing_0001_796680.jpg",
+      "colors": [
+        "white",
+        "gray"
+      ],
+      "description": "Medium-sized songbird similar to Cedar Waxwing but larger, with gray belly and white wing patches."
+    },
+    "186.Cedar_Waxwing": {
+      "key": "186.Cedar_Waxwing",
+      "common_name": "Cedar Waxwing",
+      "scientific_name": "Bombycilla cedrorum",
+      "type": "bird",
+      "image_path": "data/raw/186.Cedar_Waxwing/Cedar_Waxwing_0001_179170.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "red",
+        "yellow"
+      ],
+      "description": "Medium-sized songbird with sleek brown body, yellow-tipped tail, red waxy wing tips, and black mask."
+    },
+    "187.American_Three_toed_Woodpecker": {
+      "key": "187.American_Three_toed_Woodpecker",
+      "common_name": "American Three toed Woodpecker",
+      "scientific_name": "Picoides dorsalis",
+      "type": "bird",
+      "image_path": "data/raw/187.American_Three_toed_Woodpecker/American_Three_Toed_Woodpecker_0001_179912.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red",
+        "yellow"
+      ],
+      "description": "Medium-sized woodpecker with black and white barred back, yellow crown patch (males), and three toes."
+    },
+    "188.Pileated_Woodpecker": {
+      "key": "188.Pileated_Woodpecker",
+      "common_name": "Pileated Woodpecker",
+      "scientific_name": "Dryocopus pileatus",
+      "type": "bird",
+      "image_path": "data/raw/188.Pileated_Woodpecker/Pileated_Woodpecker_0002_180024.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red"
+      ],
+      "description": "Very large woodpecker with black body, white stripes on face, and red crest. Males have red mustache."
+    },
+    "189.Red_bellied_Woodpecker": {
+      "key": "189.Red_bellied_Woodpecker",
+      "common_name": "Red bellied Woodpecker",
+      "scientific_name": "Melanerpes carolinus",
+      "type": "bird",
+      "image_path": "data/raw/189.Red_bellied_Woodpecker/Red_Bellied_Woodpecker_0002_180879.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red",
+        "pale"
+      ],
+      "description": "Medium-sized woodpecker with black and white barred back, red cap and nape, and pale belly."
+    },
+    "190.Red_cockaded_Woodpecker": {
+      "key": "190.Red_cockaded_Woodpecker",
+      "common_name": "Red cockaded Woodpecker",
+      "scientific_name": "Leuconotopicus borealis",
+      "type": "bird",
+      "image_path": "data/raw/190.Red_cockaded_Woodpecker/Red_Cockaded_Woodpecker_0001_182541.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red"
+      ],
+      "description": "Medium-sized woodpecker with black and white barred back, white cheek patches, and small red spot on head (males)."
+    },
+    "191.Red_headed_Woodpecker": {
+      "key": "191.Red_headed_Woodpecker",
+      "common_name": "Red headed Woodpecker",
+      "scientific_name": "Melanerpes erythrocephalus",
+      "type": "bird",
+      "image_path": "data/raw/191.Red_headed_Woodpecker/Red_Headed_Woodpecker_0005_183414.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red"
+      ],
+      "description": "Medium-sized woodpecker with entirely red head, black and white body, and white wing patches."
+    },
+    "192.Downy_Woodpecker": {
+      "key": "192.Downy_Woodpecker",
+      "common_name": "Downy Woodpecker",
+      "scientific_name": "Picoides pubescens",
+      "type": "bird",
+      "image_path": "data/raw/192.Downy_Woodpecker/Downy_Woodpecker_0001_184484.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red"
+      ],
+      "description": "Small woodpecker with black and white plumage, white back, and small bill. Males have red nape patch."
+    },
+    "193.Bewick_Wren": {
+      "key": "193.Bewick_Wren",
+      "common_name": "Bewick Wren",
+      "scientific_name": "Thryomanes bewickii",
+      "type": "bird",
+      "image_path": "data/raw/193.Bewick_Wren/Bewick_Wren_0003_185072.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Small wren with brown upperparts, white underparts, and long tail with white corners."
+    },
+    "194.Cactus_Wren": {
+      "key": "194.Cactus_Wren",
+      "common_name": "Cactus Wren",
+      "scientific_name": "Campylorhynchus brunneicapillus",
+      "type": "bird",
+      "image_path": "data/raw/194.Cactus_Wren/Cactus_Wren_0001_185645.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "dark"
+      ],
+      "description": "Large wren with brown upperparts with white spots, white underparts with dark spots, and long tail."
+    },
+    "195.Carolina_Wren": {
+      "key": "195.Carolina_Wren",
+      "common_name": "Carolina Wren",
+      "scientific_name": "Thryothorus ludovicianus",
+      "type": "bird",
+      "image_path": "data/raw/195.Carolina_Wren/Carolina_Wren_0001_186455.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "red",
+        "buff"
+      ],
+      "description": "Large wren with reddish-brown upperparts, buff underparts, and white eyebrow stripe."
+    },
+    "196.House_Wren": {
+      "key": "196.House_Wren",
+      "common_name": "House Wren",
+      "scientific_name": "Troglodytes aedon",
+      "type": "bird",
+      "image_path": "data/raw/196.House_Wren/House_Wren_0001_188047.jpg",
+      "colors": [
+        "brown",
+        "red",
+        "light"
+      ],
+      "description": "Small, brown wren with barred wings and tail. Short, slightly curved bill."
+    },
+    "197.Marsh_Wren": {
+      "key": "197.Marsh_Wren",
+      "common_name": "Marsh Wren",
+      "scientific_name": "Cistothorus palustris",
+      "type": "bird",
+      "image_path": "data/raw/197.Marsh_Wren/Marsh_Wren_0004_188188.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Small wren with brown upperparts with white streaks, white underparts, and short tail."
+    },
+    "198.Rock_Wren": {
+      "key": "198.Rock_Wren",
+      "common_name": "Rock Wren",
+      "scientific_name": "Salpinctes obsoletus",
+      "type": "bird",
+      "image_path": "data/raw/198.Rock_Wren/Rock_Wren_0001_189289.jpg",
+      "colors": [
+        "brown",
+        "gray",
+        "buff"
+      ],
+      "description": "Medium-sized wren with gray-brown upperparts, buff underparts, and long tail."
+    },
+    "199.Winter_Wren": {
+      "key": "199.Winter_Wren",
+      "common_name": "Winter Wren",
+      "scientific_name": "Troglodytes hiemalis",
+      "type": "bird",
+      "image_path": "data/raw/199.Winter_Wren/Winter_Wren_0003_189838.jpg",
+      "colors": [
+        "brown",
+        "buff"
+      ],
+      "description": "Very small wren with brown mottled upperparts, buff underparts, and short tail."
+    },
+    "200.Common_Yellowthroat": {
+      "key": "200.Common_Yellowthroat",
+      "common_name": "Common Yellowthroat",
+      "scientific_name": "Geothlypis trichas",
+      "type": "bird",
+      "image_path": "data/raw/200.Common_Yellowthroat/Common_Yellowthroat_0003_190521.jpg",
+      "colors": [
+        "black",
+        "yellow",
+        "olive"
+      ],
+      "description": "Small warbler. Males have black mask, yellow throat, and olive back. Females lack mask."
+    },
+    "ADONIS": {
+      "key": "ADONIS",
+      "common_name": "ADONIS",
+      "scientific_name": "Lysandra bellargus",
+      "type": "butterfly",
+      "image_path": "data/raw/ADONIS/001.jpg",
+      "colors": [
+        "brown",
+        "blue",
+        "orange",
+        "bright"
+      ],
+      "description": "Small butterfly with bright blue upperwings (males) or brown upperwings (females), and orange spots on hindwings."
+    },
+    "AFRICAN GIANT SWALLOWTAIL": {
+      "key": "AFRICAN GIANT SWALLOWTAIL",
+      "common_name": "AFRICAN GIANT SWALLOWTAIL",
+      "scientific_name": "Papilio antimachus",
+      "type": "butterfly",
+      "image_path": "data/raw/AFRICAN GIANT SWALLOWTAIL/001.jpg",
+      "colors": [
+        "black",
+        "yellow"
+      ],
+      "description": "Very large butterfly with black and yellow wings, long tail-like extensions on hindwings, and distinctive wing pattern."
+    },
+    "AMERICAN SNOOT": {
+      "key": "AMERICAN SNOOT",
+      "common_name": "AMERICAN SNOOT",
+      "scientific_name": "Libytheana carinenta",
+      "type": "butterfly",
+      "image_path": "data/raw/AMERICAN SNOOT/001.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "orange"
+      ],
+      "description": "Small butterfly with long snout-like projection on head, brown wings with orange patches, and white spots."
+    },
+    "AN 88": {
+      "key": "AN 88",
+      "common_name": "AN 88",
+      "scientific_name": "Diaethria anna",
+      "type": "butterfly",
+      "image_path": "data/raw/AN 88/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red"
+      ],
+      "description": "Small butterfly with black and white wings, distinctive '88' or '89' pattern on hindwings, and red markings."
+    },
+    "APPOLLO": {
+      "key": "APPOLLO",
+      "common_name": "APPOLLO",
+      "scientific_name": "Parnassius apollo",
+      "type": "butterfly",
+      "image_path": "data/raw/APPOLLO/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red"
+      ],
+      "description": "Large butterfly with white wings, black spots, red eye-spots on hindwings, and transparent wing tips."
+    },
+    "ARCIGERA FLOWER MOTH": {
+      "key": "ARCIGERA FLOWER MOTH",
+      "common_name": "ARCIGERA FLOWER MOTH",
+      "scientific_name": "Schinia arcigera",
+      "type": "butterfly",
+      "image_path": "data/raw/ARCIGERA FLOWER MOTH/001.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Medium-sized moth with brown and white patterned wings, and distinctive flower-like markings."
+    },
+    "ATALA": {
+      "key": "ATALA",
+      "common_name": "ATALA",
+      "scientific_name": "Eumaeus atala",
+      "type": "butterfly",
+      "image_path": "data/raw/ATALA/001.jpg",
+      "colors": [
+        "black",
+        "red",
+        "blue",
+        "green",
+        "iridescent"
+      ],
+      "description": "Small butterfly with black wings, blue-green iridescent spots, and red abdomen."
+    },
+    "ATLAS MOTH": {
+      "key": "ATLAS MOTH",
+      "common_name": "ATLAS MOTH",
+      "scientific_name": "Attacus atlas",
+      "type": "butterfly",
+      "image_path": "data/raw/ATLAS MOTH/001.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "red"
+      ],
+      "description": "Very large moth with brown, red, and white patterned wings, and distinctive snake-like wing tips."
+    },
+    "BANDED ORANGE HELICONIAN": {
+      "key": "BANDED ORANGE HELICONIAN",
+      "common_name": "BANDED ORANGE HELICONIAN",
+      "scientific_name": "Dryadula phaetusa",
+      "type": "butterfly",
+      "image_path": "data/raw/BANDED ORANGE HELICONIAN/001.jpg",
+      "colors": [
+        "black",
+        "orange"
+      ],
+      "description": "Medium-sized butterfly with orange and black banded wings, and long narrow shape."
+    },
+    "BANDED PEACOCK": {
+      "key": "BANDED PEACOCK",
+      "common_name": "BANDED PEACOCK",
+      "scientific_name": "Anartia fatima",
+      "type": "butterfly",
+      "image_path": "data/raw/BANDED PEACOCK/001.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Medium-sized butterfly with brown wings, white bands, and distinctive eye-spots on hindwings."
+    },
+    "BANDED TIGER MOTH": {
+      "key": "BANDED TIGER MOTH",
+      "common_name": "BANDED TIGER MOTH",
+      "scientific_name": "Apantesis vittata",
+      "type": "butterfly",
+      "image_path": "data/raw/BANDED TIGER MOTH/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "yellow",
+        "orange"
+      ],
+      "description": "Medium-sized moth with black and white banded wings, and orange or yellow markings."
+    },
+    "BECKERS WHITE": {
+      "key": "BECKERS WHITE",
+      "common_name": "BECKERS WHITE",
+      "scientific_name": "Pontia beckerii",
+      "type": "butterfly",
+      "image_path": "data/raw/BECKERS WHITE/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "green",
+        "gray"
+      ],
+      "description": "Small butterfly with white wings, black spots on forewings, and gray-green undersides."
+    },
+    "BIRD CHERRY ERMINE MOTH": {
+      "key": "BIRD CHERRY ERMINE MOTH",
+      "common_name": "BIRD CHERRY ERMINE MOTH",
+      "scientific_name": "Yponomeuta evonymella",
+      "type": "butterfly",
+      "image_path": "data/raw/BIRD CHERRY ERMINE MOTH/001.jpg",
+      "colors": [
+        "black",
+        "white"
+      ],
+      "description": "Small white moth with black spots, and distinctive ermine-like pattern."
+    },
+    "BLACK HAIRSTREAK": {
+      "key": "BLACK HAIRSTREAK",
+      "common_name": "BLACK HAIRSTREAK",
+      "scientific_name": "Satyrium pruni",
+      "type": "butterfly",
+      "image_path": "data/raw/BLACK HAIRSTREAK/001.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "orange"
+      ],
+      "description": "Small butterfly with brown wings, orange band on hindwings, and white-tipped tail."
+    },
+    "BLUE MORPHO": {
+      "key": "BLUE MORPHO",
+      "common_name": "BLUE MORPHO",
+      "scientific_name": "Morpho menelaus",
+      "type": "butterfly",
+      "image_path": "data/raw/BLUE MORPHO/001.jpg",
+      "colors": [
+        "brown",
+        "blue",
+        "iridescent"
+      ],
+      "description": "Very large butterfly with brilliant blue iridescent upperwings and brown undersides with eye-spots."
+    },
+    "BLUE SPOTTED CROW": {
+      "key": "BLUE SPOTTED CROW",
+      "common_name": "BLUE SPOTTED CROW",
+      "scientific_name": "Euploea midamus",
+      "type": "butterfly",
+      "image_path": "data/raw/BLUE SPOTTED CROW/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "brown",
+        "blue",
+        "dark"
+      ],
+      "description": "Medium-sized butterfly with dark brown or black wings, blue spots, and white markings."
+    },
+    "BROOKES BIRDWING": {
+      "key": "BROOKES BIRDWING",
+      "common_name": "BROOKES BIRDWING",
+      "scientific_name": "Ornithoptera brookiana",
+      "type": "butterfly",
+      "image_path": "data/raw/BROOKES BIRDWING/001.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "green"
+      ],
+      "description": "Very large butterfly with black and green wings (males) or brown wings (females), and long tail-like extensions."
+    },
+    "BROWN ARGUS": {
+      "key": "BROWN ARGUS",
+      "common_name": "BROWN ARGUS",
+      "scientific_name": "Aricia agestis",
+      "type": "butterfly",
+      "image_path": "data/raw/BROWN ARGUS/001.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "orange"
+      ],
+      "description": "Small butterfly with brown wings, orange spots on hindwings, and white fringes."
+    },
+    "BROWN SIPROETA": {
+      "key": "BROWN SIPROETA",
+      "common_name": "BROWN SIPROETA",
+      "scientific_name": "Siproeta epaphus",
+      "type": "butterfly",
+      "image_path": "data/raw/BROWN SIPROETA/001.jpg",
+      "colors": [
+        "brown",
+        "orange"
+      ],
+      "description": "Medium-sized butterfly with brown wings, orange bands, and distinctive eye-spots."
+    },
+    "CABBAGE WHITE": {
+      "key": "CABBAGE WHITE",
+      "common_name": "CABBAGE WHITE",
+      "scientific_name": "Pieris rapae",
+      "type": "butterfly",
+      "image_path": "data/raw/CABBAGE WHITE/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "green",
+        "yellow"
+      ],
+      "description": "Small butterfly with white wings, black spots on forewings (males) or two spots (females), and yellow-green undersides."
+    },
+    "CAIRNS BIRDWING": {
+      "key": "CAIRNS BIRDWING",
+      "common_name": "CAIRNS BIRDWING",
+      "scientific_name": "Ornithoptera euphorion",
+      "type": "butterfly",
+      "image_path": "data/raw/CAIRNS BIRDWING/001.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "green"
+      ],
+      "description": "Very large butterfly with black and green wings (males) or brown wings (females), and long tail-like extensions."
+    },
+    "CHALK HILL BLUE": {
+      "key": "CHALK HILL BLUE",
+      "common_name": "CHALK HILL BLUE",
+      "scientific_name": "Lysandra coridon",
+      "type": "butterfly",
+      "image_path": "data/raw/CHALK HILL BLUE/001.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "blue"
+      ],
+      "description": "Small butterfly with blue upperwings (males) or brown upperwings (females), and distinctive white fringes."
+    },
+    "CHECQUERED SKIPPER": {
+      "key": "CHECQUERED SKIPPER",
+      "common_name": "CHECQUERED SKIPPER",
+      "scientific_name": "Carterocephalus palaemon",
+      "type": "butterfly",
+      "image_path": "data/raw/CHECQUERED SKIPPER/001.jpg",
+      "colors": [
+        "brown",
+        "red",
+        "orange"
+      ],
+      "description": "Small butterfly with brown and orange checkered wings, and distinctive pattern."
+    },
+    "CHESTNUT": {
+      "key": "CHESTNUT",
+      "common_name": "CHESTNUT",
+      "scientific_name": "Coenonympha glycerion",
+      "type": "butterfly",
+      "image_path": "data/raw/CHESTNUT/001.jpg",
+      "colors": [
+        "brown",
+        "orange"
+      ],
+      "description": "Small butterfly with brown wings, orange patches, and eye-spots on hindwings."
+    },
+    "CINNABAR MOTH": {
+      "key": "CINNABAR MOTH",
+      "common_name": "CINNABAR MOTH",
+      "scientific_name": "Tyria jacobaeae",
+      "type": "butterfly",
+      "image_path": "data/raw/CINNABAR MOTH/001.jpg",
+      "colors": [
+        "black",
+        "red"
+      ],
+      "description": "Medium-sized moth with black and red wings, and distinctive warning colors."
+    },
+    "CLEARWING MOTH": {
+      "key": "CLEARWING MOTH",
+      "common_name": "CLEARWING MOTH",
+      "scientific_name": "Sesia apiformis",
+      "type": "butterfly",
+      "image_path": "data/raw/CLEARWING MOTH/001.jpg",
+      "colors": [
+        "black",
+        "yellow"
+      ],
+      "description": "Medium-sized moth with transparent wings, yellow and black body, and wasp-like appearance."
+    },
+    "CLEOPATRA": {
+      "key": "CLEOPATRA",
+      "common_name": "CLEOPATRA",
+      "scientific_name": "Gonepteryx cleopatra",
+      "type": "butterfly",
+      "image_path": "data/raw/CLEOPATRA/001.jpg",
+      "colors": [
+        "white",
+        "green",
+        "yellow"
+      ],
+      "description": "Medium-sized butterfly with yellow wings (males) or greenish-white wings (females), and distinctive shape."
+    },
+    "CLODIUS PARNASSIAN": {
+      "key": "CLODIUS PARNASSIAN",
+      "common_name": "CLODIUS PARNASSIAN",
+      "scientific_name": "Parnassius clodius",
+      "type": "butterfly",
+      "image_path": "data/raw/CLODIUS PARNASSIAN/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red"
+      ],
+      "description": "Large butterfly with white wings, black spots, red eye-spots on hindwings, and transparent wing tips."
+    },
+    "CLOUDED SULPHUR": {
+      "key": "CLOUDED SULPHUR",
+      "common_name": "CLOUDED SULPHUR",
+      "scientific_name": "Colias philodice",
+      "type": "butterfly",
+      "image_path": "data/raw/CLOUDED SULPHUR/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "yellow"
+      ],
+      "description": "Medium-sized butterfly with yellow wings (males) or white/yellow wings (females), and black borders."
+    },
+    "COMET MOTH": {
+      "key": "COMET MOTH",
+      "common_name": "COMET MOTH",
+      "scientific_name": "Argema mittrei",
+      "type": "butterfly",
+      "image_path": "data/raw/COMET MOTH/001.jpg",
+      "colors": [
+        "brown",
+        "yellow"
+      ],
+      "description": "Very large moth with yellow and brown wings, long tail-like extensions, and distinctive eye-spots."
+    },
+    "COMMON BANDED AWL": {
+      "key": "COMMON BANDED AWL",
+      "common_name": "COMMON BANDED AWL",
+      "scientific_name": "Hasora chromus",
+      "type": "butterfly",
+      "image_path": "data/raw/COMMON BANDED AWL/001.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Medium-sized butterfly with brown wings, white bands, and distinctive shape."
+    },
+    "COMMON WOOD-NYMPH": {
+      "key": "COMMON WOOD-NYMPH",
+      "common_name": "COMMON WOOD-NYMPH",
+      "scientific_name": "Cercyonis pegala",
+      "type": "butterfly",
+      "image_path": "data/raw/COMMON WOOD-NYMPH/001.jpg",
+      "colors": [
+        "brown",
+        "yellow"
+      ],
+      "description": "Medium-sized butterfly with brown wings, eye-spots on forewings, and yellow patches."
+    },
+    "COPPER TAIL": {
+      "key": "COPPER TAIL",
+      "common_name": "COPPER TAIL",
+      "scientific_name": "Lycaena phlaeas",
+      "type": "butterfly",
+      "image_path": "data/raw/COPPER TAIL/001.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "red",
+        "orange",
+        "copper"
+      ],
+      "description": "Small butterfly with orange and brown wings, black spots, and copper-colored hindwings."
+    },
+    "CRECENT": {
+      "key": "CRECENT",
+      "common_name": "CRECENT",
+      "scientific_name": "Phyciodes tharos",
+      "type": "butterfly",
+      "image_path": "data/raw/CRECENT/001.jpg",
+      "colors": [
+        "black",
+        "orange"
+      ],
+      "description": "Small butterfly with orange and black wings, crescent-shaped markings, and distinctive pattern."
+    },
+    "CRIMSON PATCH": {
+      "key": "CRIMSON PATCH",
+      "common_name": "CRIMSON PATCH",
+      "scientific_name": "Chlosyne janais",
+      "type": "butterfly",
+      "image_path": "data/raw/CRIMSON PATCH/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red"
+      ],
+      "description": "Medium-sized butterfly with black wings, red patches, and white spots."
+    },
+    "DANAID EGGFLY": {
+      "key": "DANAID EGGFLY",
+      "common_name": "DANAID EGGFLY",
+      "scientific_name": "Hypolimnas misippus",
+      "type": "butterfly",
+      "image_path": "data/raw/DANAID EGGFLY/001.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Medium-sized butterfly with brown wings, white spots, and distinctive eye-spots on hindwings."
+    },
+    "EASTERN COMA": {
+      "key": "EASTERN COMA",
+      "common_name": "EASTERN COMA",
+      "scientific_name": "Polygonia comma",
+      "type": "butterfly",
+      "image_path": "data/raw/EASTERN COMA/001.jpg",
+      "colors": [
+        "black",
+        "orange"
+      ],
+      "description": "Medium-sized butterfly with orange and black wings, jagged edges, and distinctive pattern."
+    },
+    "EASTERN DAPPLE WHITE": {
+      "key": "EASTERN DAPPLE WHITE",
+      "common_name": "EASTERN DAPPLE WHITE",
+      "scientific_name": "Euchloe ausonides",
+      "type": "butterfly",
+      "image_path": "data/raw/EASTERN DAPPLE WHITE/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "green"
+      ],
+      "description": "Small butterfly with white wings, green marbling on undersides, and black spots."
+    },
+    "EASTERN PINE ELFIN": {
+      "key": "EASTERN PINE ELFIN",
+      "common_name": "EASTERN PINE ELFIN",
+      "scientific_name": "Callophrys niphon",
+      "type": "butterfly",
+      "image_path": "data/raw/EASTERN PINE ELFIN/001.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "green"
+      ],
+      "description": "Small butterfly with brown wings, green undersides, and white line on hindwings."
+    },
+    "ELBOWED PIERROT": {
+      "key": "ELBOWED PIERROT",
+      "common_name": "ELBOWED PIERROT",
+      "scientific_name": "Caleta elna",
+      "type": "butterfly",
+      "image_path": "data/raw/ELBOWED PIERROT/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "orange"
+      ],
+      "description": "Small butterfly with black and white wings, orange spots, and distinctive pattern."
+    },
+    "EMPEROR GUM MOTH": {
+      "key": "EMPEROR GUM MOTH",
+      "common_name": "EMPEROR GUM MOTH",
+      "scientific_name": "Opodiphthera eucalypti",
+      "type": "butterfly",
+      "image_path": "data/raw/EMPEROR GUM MOTH/001.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Large moth with brown and white patterned wings, and distinctive eye-spots."
+    },
+    "GARDEN TIGER MOTH": {
+      "key": "GARDEN TIGER MOTH",
+      "common_name": "GARDEN TIGER MOTH",
+      "scientific_name": "Arctia caja",
+      "type": "butterfly",
+      "image_path": "data/raw/GARDEN TIGER MOTH/001.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "orange"
+      ],
+      "description": "Large moth with brown and white patterned wings, orange hindwings, and distinctive tiger-like pattern."
+    },
+    "GIANT LEOPARD MOTH": {
+      "key": "GIANT LEOPARD MOTH",
+      "common_name": "GIANT LEOPARD MOTH",
+      "scientific_name": "Hypercompe scribonia",
+      "type": "butterfly",
+      "image_path": "data/raw/GIANT LEOPARD MOTH/001.jpg",
+      "colors": [
+        "black",
+        "white"
+      ],
+      "description": "Large moth with white wings, black spots, and leopard-like pattern."
+    },
+    "GLITTERING SAPPHIRE": {
+      "key": "GLITTERING SAPPHIRE",
+      "common_name": "GLITTERING SAPPHIRE",
+      "scientific_name": "Iolaus iasis",
+      "type": "butterfly",
+      "image_path": "data/raw/GLITTERING SAPPHIRE/001.jpg",
+      "colors": [
+        "blue",
+        "iridescent"
+      ],
+      "description": "Small butterfly with blue iridescent wings, and distinctive shimmering appearance."
+    },
+    "GOLD BANDED": {
+      "key": "GOLD BANDED",
+      "common_name": "GOLD BANDED",
+      "scientific_name": "Charaxes jasius",
+      "type": "butterfly",
+      "image_path": "data/raw/GOLD BANDED/001.jpg",
+      "colors": [
+        "brown"
+      ],
+      "description": "Large butterfly with brown wings, gold bands, and distinctive eye-spots."
+    },
+    "GREAT EGGFLY": {
+      "key": "GREAT EGGFLY",
+      "common_name": "GREAT EGGFLY",
+      "scientific_name": "Hypolimnas bolina",
+      "type": "butterfly",
+      "image_path": "data/raw/GREAT EGGFLY/001.jpg",
+      "colors": [
+        "black",
+        "white"
+      ],
+      "description": "Medium-sized butterfly with black wings, white spots, and distinctive eye-spots on hindwings."
+    },
+    "GREAT JAY": {
+      "key": "GREAT JAY",
+      "common_name": "GREAT JAY",
+      "scientific_name": "Graphium eurypylus",
+      "type": "butterfly",
+      "image_path": "data/raw/GREAT JAY/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "green"
+      ],
+      "description": "Large butterfly with black and green wings, white spots, and long tail-like extensions."
+    },
+    "GREEN CELLED CATTLEHEART": {
+      "key": "GREEN CELLED CATTLEHEART",
+      "common_name": "GREEN CELLED CATTLEHEART",
+      "scientific_name": "Parides sesostris",
+      "type": "butterfly",
+      "image_path": "data/raw/GREEN CELLED CATTLEHEART/001.jpg",
+      "colors": [
+        "black",
+        "green"
+      ],
+      "description": "Large butterfly with black wings, green spots, and distinctive pattern."
+    },
+    "GREEN HAIRSTREAK": {
+      "key": "GREEN HAIRSTREAK",
+      "common_name": "GREEN HAIRSTREAK",
+      "scientific_name": "Callophrys rubi",
+      "type": "butterfly",
+      "image_path": "data/raw/GREEN HAIRSTREAK/001.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "green"
+      ],
+      "description": "Small butterfly with brown upperwings, green undersides, and white line on hindwings."
+    },
+    "GREY HAIRSTREAK": {
+      "key": "GREY HAIRSTREAK",
+      "common_name": "GREY HAIRSTREAK",
+      "scientific_name": "Strymon melinus",
+      "type": "butterfly",
+      "image_path": "data/raw/GREY HAIRSTREAK/001.jpg",
+      "colors": [
+        "white",
+        "orange",
+        "gray"
+      ],
+      "description": "Small butterfly with gray wings, orange spots, and white-tipped tail."
+    },
+    "HERCULES MOTH": {
+      "key": "HERCULES MOTH",
+      "common_name": "HERCULES MOTH",
+      "scientific_name": "Coscinocera hercules",
+      "type": "butterfly",
+      "image_path": "data/raw/HERCULES MOTH/001.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Very large moth with brown and white patterned wings, and distinctive eye-spots."
+    },
+    "HUMMING BIRD HAWK MOTH": {
+      "key": "HUMMING BIRD HAWK MOTH",
+      "common_name": "HUMMING BIRD HAWK MOTH",
+      "scientific_name": "Macroglossum stellatarum",
+      "type": "butterfly",
+      "image_path": "data/raw/HUMMING BIRD HAWK MOTH/001.jpg",
+      "colors": [
+        "brown",
+        "orange"
+      ],
+      "description": "Medium-sized moth with brown wings, orange hindwings, and long proboscis. Hovers like a hummingbird."
+    },
+    "INDRA SWALLOW": {
+      "key": "INDRA SWALLOW",
+      "common_name": "INDRA SWALLOW",
+      "scientific_name": "Papilio indra",
+      "type": "butterfly",
+      "image_path": "data/raw/INDRA SWALLOW/001.jpg",
+      "colors": [
+        "black",
+        "yellow"
+      ],
+      "description": "Large butterfly with black wings, yellow spots, and long tail-like extensions."
+    },
+    "IO MOTH": {
+      "key": "IO MOTH",
+      "common_name": "IO MOTH",
+      "scientific_name": "Automeris io",
+      "type": "butterfly",
+      "image_path": "data/raw/IO MOTH/001.jpg",
+      "colors": [
+        "yellow",
+        "pink"
+      ],
+      "description": "Large moth with yellow and pink wings, distinctive eye-spots, and warning colors."
+    },
+    "Iphiclus sister": {
+      "key": "Iphiclus sister",
+      "common_name": "Iphiclus sister",
+      "scientific_name": "Adelpha iphiclus",
+      "type": "butterfly",
+      "image_path": "data/raw/Iphiclus sister/001.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Medium-sized butterfly with brown wings, white bands, and distinctive pattern."
+    },
+    "JULIA": {
+      "key": "JULIA",
+      "common_name": "JULIA",
+      "scientific_name": "Dryas iulia",
+      "type": "butterfly",
+      "image_path": "data/raw/JULIA/001.jpg",
+      "colors": [
+        "black",
+        "orange"
+      ],
+      "description": "Medium-sized butterfly with orange wings, black borders, and long narrow shape."
+    },
+    "LARGE MARBLE": {
+      "key": "LARGE MARBLE",
+      "common_name": "LARGE MARBLE",
+      "scientific_name": "Euchloe ausonides",
+      "type": "butterfly",
+      "image_path": "data/raw/LARGE MARBLE/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "green"
+      ],
+      "description": "Small butterfly with white wings, green marbling on undersides, and black spots."
+    },
+    "LUNA MOTH": {
+      "key": "LUNA MOTH",
+      "common_name": "LUNA MOTH",
+      "scientific_name": "Actias luna",
+      "type": "butterfly",
+      "image_path": "data/raw/LUNA MOTH/001.jpg",
+      "colors": [
+        "green"
+      ],
+      "description": "Very large moth with green wings, long tail-like extensions, and distinctive eye-spots."
+    },
+    "MADAGASCAN SUNSET MOTH": {
+      "key": "MADAGASCAN SUNSET MOTH",
+      "common_name": "MADAGASCAN SUNSET MOTH",
+      "scientific_name": "Chrysiridia rhipheus",
+      "type": "butterfly",
+      "image_path": "data/raw/MADAGASCAN SUNSET MOTH/001.jpg",
+      "colors": [
+        "iridescent"
+      ],
+      "description": "Large moth with iridescent wings showing rainbow colors, and distinctive tail-like extensions."
+    },
+    "MALACHITE": {
+      "key": "MALACHITE",
+      "common_name": "MALACHITE",
+      "scientific_name": "Siproeta stelenes",
+      "type": "butterfly",
+      "image_path": "data/raw/MALACHITE/001.jpg",
+      "colors": [
+        "black",
+        "green"
+      ],
+      "description": "Medium-sized butterfly with green and black wings, and distinctive malachite-like pattern."
+    },
+    "MANGROVE SKIPPER": {
+      "key": "MANGROVE SKIPPER",
+      "common_name": "MANGROVE SKIPPER",
+      "scientific_name": "Phocides pigmalion",
+      "type": "butterfly",
+      "image_path": "data/raw/MANGROVE SKIPPER/001.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "dark"
+      ],
+      "description": "Medium-sized butterfly with dark brown wings, white spots, and distinctive pattern."
+    },
+    "MESTRA": {
+      "key": "MESTRA",
+      "common_name": "MESTRA",
+      "scientific_name": "Mestra amymone",
+      "type": "butterfly",
+      "image_path": "data/raw/MESTRA/001.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "orange"
+      ],
+      "description": "Medium-sized butterfly with brown wings, orange patches, and white spots."
+    },
+    "METALMARK": {
+      "key": "METALMARK",
+      "common_name": "METALMARK",
+      "scientific_name": "Calephelis virginiensis",
+      "type": "butterfly",
+      "image_path": "data/raw/METALMARK/001.jpg",
+      "colors": [
+        "brown",
+        "metallic"
+      ],
+      "description": "Small butterfly with brown wings, metallic spots, and distinctive pattern."
+    },
+    "MILBERTS TORTOISESHELL": {
+      "key": "MILBERTS TORTOISESHELL",
+      "common_name": "MILBERTS TORTOISESHELL",
+      "scientific_name": "Aglais milberti",
+      "type": "butterfly",
+      "image_path": "data/raw/MILBERTS TORTOISESHELL/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "orange"
+      ],
+      "description": "Medium-sized butterfly with orange and black wings, white spots, and jagged edges."
+    },
+    "MONARCH": {
+      "key": "MONARCH",
+      "common_name": "MONARCH",
+      "scientific_name": "Danaus plexippus",
+      "type": "butterfly",
+      "image_path": "data/raw/MONARCH/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "orange"
+      ],
+      "description": "Large butterfly with orange and black wings, white spots, and distinctive pattern. Famous for migration."
+    },
+    "MOURNING CLOAK": {
+      "key": "MOURNING CLOAK",
+      "common_name": "MOURNING CLOAK",
+      "scientific_name": "Nymphalis antiopa",
+      "type": "butterfly",
+      "image_path": "data/raw/MOURNING CLOAK/001.jpg",
+      "colors": [
+        "brown",
+        "blue",
+        "yellow",
+        "dark"
+      ],
+      "description": "Large butterfly with dark brown wings, yellow borders, and blue spots."
+    },
+    "OLEANDER HAWK MOTH": {
+      "key": "OLEANDER HAWK MOTH",
+      "common_name": "OLEANDER HAWK MOTH",
+      "scientific_name": "Daphnis nerii",
+      "type": "butterfly",
+      "image_path": "data/raw/OLEANDER HAWK MOTH/001.jpg",
+      "colors": [
+        "brown",
+        "green"
+      ],
+      "description": "Large moth with green and brown wings, and distinctive eye-spots."
+    },
+    "ORANGE OAKLEAF": {
+      "key": "ORANGE OAKLEAF",
+      "common_name": "ORANGE OAKLEAF",
+      "scientific_name": "Kallima inachus",
+      "type": "butterfly",
+      "image_path": "data/raw/ORANGE OAKLEAF/001.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "orange"
+      ],
+      "description": "Large butterfly with orange and black upperwings, and brown leaf-like undersides for camouflage."
+    },
+    "ORANGE TIP": {
+      "key": "ORANGE TIP",
+      "common_name": "ORANGE TIP",
+      "scientific_name": "Anthocharis cardamines",
+      "type": "butterfly",
+      "image_path": "data/raw/ORANGE TIP/001.jpg",
+      "colors": [
+        "white",
+        "green",
+        "orange"
+      ],
+      "description": "Small butterfly with white wings, orange tips on forewings (males), and green marbling on undersides."
+    },
+    "ORCHARD SWALLOW": {
+      "key": "ORCHARD SWALLOW",
+      "common_name": "ORCHARD SWALLOW",
+      "scientific_name": "Papilio aegeus",
+      "type": "butterfly",
+      "image_path": "data/raw/ORCHARD SWALLOW/001.jpg",
+      "colors": [
+        "black",
+        "white"
+      ],
+      "description": "Large butterfly with black wings, white spots, and long tail-like extensions."
+    },
+    "PAINTED LADY": {
+      "key": "PAINTED LADY",
+      "common_name": "PAINTED LADY",
+      "scientific_name": "Vanessa cardui",
+      "type": "butterfly",
+      "image_path": "data/raw/PAINTED LADY/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "orange"
+      ],
+      "description": "Medium-sized butterfly with orange and black wings, white spots, and distinctive pattern."
+    },
+    "PAPER KITE": {
+      "key": "PAPER KITE",
+      "common_name": "PAPER KITE",
+      "scientific_name": "Idea leuconoe",
+      "type": "butterfly",
+      "image_path": "data/raw/PAPER KITE/001.jpg",
+      "colors": [
+        "black",
+        "white"
+      ],
+      "description": "Large butterfly with white wings, black spots, and distinctive pattern."
+    },
+    "PEACOCK": {
+      "key": "PEACOCK",
+      "common_name": "PEACOCK",
+      "scientific_name": "Aglais io",
+      "type": "butterfly",
+      "image_path": "data/raw/PEACOCK/001.jpg",
+      "colors": [
+        "black",
+        "red"
+      ],
+      "description": "Medium-sized butterfly with red and black wings, distinctive eye-spots, and jagged edges."
+    },
+    "PINE WHITE": {
+      "key": "PINE WHITE",
+      "common_name": "PINE WHITE",
+      "scientific_name": "Neophasia menapia",
+      "type": "butterfly",
+      "image_path": "data/raw/PINE WHITE/001.jpg",
+      "colors": [
+        "black",
+        "white"
+      ],
+      "description": "Medium-sized butterfly with white wings, black spots, and distinctive pattern."
+    },
+    "PIPEVINE SWALLOW": {
+      "key": "PIPEVINE SWALLOW",
+      "common_name": "PIPEVINE SWALLOW",
+      "scientific_name": "Battus philenor",
+      "type": "butterfly",
+      "image_path": "data/raw/PIPEVINE SWALLOW/001.jpg",
+      "colors": [
+        "black",
+        "blue"
+      ],
+      "description": "Large butterfly with black wings, blue iridescence, and distinctive pattern."
+    },
+    "POLYPHEMUS MOTH": {
+      "key": "POLYPHEMUS MOTH",
+      "common_name": "POLYPHEMUS MOTH",
+      "scientific_name": "Antheraea polyphemus",
+      "type": "butterfly",
+      "image_path": "data/raw/POLYPHEMUS MOTH/001.jpg",
+      "colors": [
+        "brown",
+        "tan"
+      ],
+      "description": "Very large moth with brown and tan wings, distinctive eye-spots, and transparent patches."
+    },
+    "POPINJAY": {
+      "key": "POPINJAY",
+      "common_name": "POPINJAY",
+      "scientific_name": "Stibochiona nicea",
+      "type": "butterfly",
+      "image_path": "data/raw/POPINJAY/001.jpg",
+      "colors": [
+        "black",
+        "white"
+      ],
+      "description": "Medium-sized butterfly with black and white wings, and distinctive pattern."
+    },
+    "PURPLE HAIRSTREAK": {
+      "key": "PURPLE HAIRSTREAK",
+      "common_name": "PURPLE HAIRSTREAK",
+      "scientific_name": "Favonius quercus",
+      "type": "butterfly",
+      "image_path": "data/raw/PURPLE HAIRSTREAK/001.jpg",
+      "colors": [
+        "brown",
+        "orange",
+        "purple"
+      ],
+      "description": "Small butterfly with purple upperwings (males) or brown upperwings (females), and orange spots on hindwings."
+    },
+    "PURPLISH COPPER": {
+      "key": "PURPLISH COPPER",
+      "common_name": "PURPLISH COPPER",
+      "scientific_name": "Lycaena helloides",
+      "type": "butterfly",
+      "image_path": "data/raw/PURPLISH COPPER/001.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "orange",
+        "purple"
+      ],
+      "description": "Small butterfly with orange and brown wings, purple sheen, and black spots."
+    },
+    "QUESTION MARK": {
+      "key": "QUESTION MARK",
+      "common_name": "QUESTION MARK",
+      "scientific_name": "Polygonia interrogationis",
+      "type": "butterfly",
+      "image_path": "data/raw/QUESTION MARK/001.jpg",
+      "colors": [
+        "black",
+        "orange",
+        "silver"
+      ],
+      "description": "Medium-sized butterfly with orange and black wings, jagged edges, and silver question mark on hindwings."
+    },
+    "RED ADMIRAL": {
+      "key": "RED ADMIRAL",
+      "common_name": "RED ADMIRAL",
+      "scientific_name": "Vanessa atalanta",
+      "type": "butterfly",
+      "image_path": "data/raw/RED ADMIRAL/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red"
+      ],
+      "description": "Medium-sized butterfly with black and red wings, white spots, and distinctive pattern."
+    },
+    "RED CRACKER": {
+      "key": "RED CRACKER",
+      "common_name": "RED CRACKER",
+      "scientific_name": "Hamadryas amphinome",
+      "type": "butterfly",
+      "image_path": "data/raw/RED CRACKER/001.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "red"
+      ],
+      "description": "Medium-sized butterfly with brown and red wings, white spots, and distinctive pattern."
+    },
+    "RED POSTMAN": {
+      "key": "RED POSTMAN",
+      "common_name": "RED POSTMAN",
+      "scientific_name": "Heliconius erato",
+      "type": "butterfly",
+      "image_path": "data/raw/RED POSTMAN/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "red"
+      ],
+      "description": "Medium-sized butterfly with black and red wings, white spots, and distinctive pattern."
+    },
+    "RED SPOTTED PURPLE": {
+      "key": "RED SPOTTED PURPLE",
+      "common_name": "RED SPOTTED PURPLE",
+      "scientific_name": "Limenitis arthemis",
+      "type": "butterfly",
+      "image_path": "data/raw/RED SPOTTED PURPLE/001.jpg",
+      "colors": [
+        "black",
+        "red",
+        "blue"
+      ],
+      "description": "Large butterfly with black wings, blue iridescence, and red spots on hindwings."
+    },
+    "ROSY MAPLE MOTH": {
+      "key": "ROSY MAPLE MOTH",
+      "common_name": "ROSY MAPLE MOTH",
+      "scientific_name": "Dryocampa rubicunda",
+      "type": "butterfly",
+      "image_path": "data/raw/ROSY MAPLE MOTH/001.jpg",
+      "colors": [
+        "yellow",
+        "pink"
+      ],
+      "description": "Small moth with pink and yellow wings, and distinctive pattern."
+    },
+    "SCARCE SWALLOW": {
+      "key": "SCARCE SWALLOW",
+      "common_name": "SCARCE SWALLOW",
+      "scientific_name": "Iphiclides podalirius",
+      "type": "butterfly",
+      "image_path": "data/raw/SCARCE SWALLOW/001.jpg",
+      "colors": [
+        "black",
+        "blue",
+        "yellow"
+      ],
+      "description": "Large butterfly with yellow and black wings, blue spots, and long tail-like extensions."
+    },
+    "SILVER SPOT SKIPPER": {
+      "key": "SILVER SPOT SKIPPER",
+      "common_name": "SILVER SPOT SKIPPER",
+      "scientific_name": "Hesperia comma",
+      "type": "butterfly",
+      "image_path": "data/raw/SILVER SPOT SKIPPER/001.jpg",
+      "colors": [
+        "brown",
+        "silver"
+      ],
+      "description": "Small butterfly with brown wings, silver spots, and distinctive pattern."
+    },
+    "SIXSPOT BURNET MOTH": {
+      "key": "SIXSPOT BURNET MOTH",
+      "common_name": "SIXSPOT BURNET MOTH",
+      "scientific_name": "Zygaena filipendulae",
+      "type": "butterfly",
+      "image_path": "data/raw/SIXSPOT BURNET MOTH/001.jpg",
+      "colors": [
+        "black",
+        "red"
+      ],
+      "description": "Medium-sized moth with black wings, red spots, and distinctive warning colors."
+    },
+    "SLEEPY ORANGE": {
+      "key": "SLEEPY ORANGE",
+      "common_name": "SLEEPY ORANGE",
+      "scientific_name": "Eurema nicippe",
+      "type": "butterfly",
+      "image_path": "data/raw/SLEEPY ORANGE/001.jpg",
+      "colors": [
+        "black",
+        "orange"
+      ],
+      "description": "Small butterfly with orange wings, black borders, and distinctive pattern."
+    },
+    "SOOTYWING": {
+      "key": "SOOTYWING",
+      "common_name": "SOOTYWING",
+      "scientific_name": "Pholisora catullus",
+      "type": "butterfly",
+      "image_path": "data/raw/SOOTYWING/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "brown",
+        "dark"
+      ],
+      "description": "Small butterfly with dark brown or black wings, white spots, and distinctive pattern."
+    },
+    "SOUTHERN DOGFACE": {
+      "key": "SOUTHERN DOGFACE",
+      "common_name": "SOUTHERN DOGFACE",
+      "scientific_name": "Zerene cesonia",
+      "type": "butterfly",
+      "image_path": "data/raw/SOUTHERN DOGFACE/001.jpg",
+      "colors": [
+        "black",
+        "yellow"
+      ],
+      "description": "Medium-sized butterfly with yellow wings, black borders, and dog face-like pattern on forewings."
+    },
+    "STRAITED QUEEN": {
+      "key": "STRAITED QUEEN",
+      "common_name": "STRAITED QUEEN",
+      "scientific_name": "Danaus gilippus",
+      "type": "butterfly",
+      "image_path": "data/raw/STRAITED QUEEN/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "orange"
+      ],
+      "description": "Medium-sized butterfly with orange and black wings, white spots, and distinctive pattern."
+    },
+    "TROPICAL LEAFWING": {
+      "key": "TROPICAL LEAFWING",
+      "common_name": "TROPICAL LEAFWING",
+      "scientific_name": "Historis odius",
+      "type": "butterfly",
+      "image_path": "data/raw/TROPICAL LEAFWING/001.jpg",
+      "colors": [
+        "brown",
+        "orange"
+      ],
+      "description": "Large butterfly with brown wings, orange patches, and leaf-like pattern on undersides."
+    },
+    "TWO BARRED FLASHER": {
+      "key": "TWO BARRED FLASHER",
+      "common_name": "TWO BARRED FLASHER",
+      "scientific_name": "Astraptes fulgerator",
+      "type": "butterfly",
+      "image_path": "data/raw/TWO BARRED FLASHER/001.jpg",
+      "colors": [
+        "white",
+        "brown"
+      ],
+      "description": "Medium-sized butterfly with brown wings, white bars, and distinctive pattern."
+    },
+    "ULYSES": {
+      "key": "ULYSES",
+      "common_name": "ULYSES",
+      "scientific_name": "Papilio ulysses",
+      "type": "butterfly",
+      "image_path": "data/raw/ULYSES/001.jpg",
+      "colors": [
+        "black",
+        "brown",
+        "blue"
+      ],
+      "description": "Large butterfly with brilliant blue upperwings and black borders, and brown undersides."
+    },
+    "VICEROY": {
+      "key": "VICEROY",
+      "common_name": "VICEROY",
+      "scientific_name": "Limenitis archippus",
+      "type": "butterfly",
+      "image_path": "data/raw/VICEROY/001.jpg",
+      "colors": [
+        "black",
+        "white",
+        "orange"
+      ],
+      "description": "Medium-sized butterfly with orange and black wings, white spots, and distinctive pattern. Mimics Monarch."
+    },
+    "WHITE LINED SPHINX MOTH": {
+      "key": "WHITE LINED SPHINX MOTH",
+      "common_name": "WHITE LINED SPHINX MOTH",
+      "scientific_name": "Hyles lineata",
+      "type": "butterfly",
+      "image_path": "data/raw/WHITE LINED SPHINX MOTH/001.jpg",
+      "colors": [
+        "white",
+        "brown",
+        "pink"
+      ],
+      "description": "Large moth with brown and white wings, pink hindwings, and distinctive pattern."
+    },
+    "WOOD SATYR": {
+      "key": "WOOD SATYR",
+      "common_name": "WOOD SATYR",
+      "scientific_name": "Megisto cymela",
+      "type": "butterfly",
+      "image_path": "data/raw/WOOD SATYR/001.jpg",
+      "colors": [
+        "brown"
+      ],
+      "description": "Medium-sized butterfly with brown wings, eye-spots, and distinctive pattern."
+    },
+    "YELLOW SWALLOW TAIL": {
+      "key": "YELLOW SWALLOW TAIL",
+      "common_name": "YELLOW SWALLOW TAIL",
+      "scientific_name": "Papilio machaon",
+      "type": "butterfly",
+      "image_path": "data/raw/YELLOW SWALLOW TAIL/001.jpg",
+      "colors": [
+        "black",
+        "blue",
+        "yellow"
+      ],
+      "description": "Large butterfly with yellow and black wings, blue spots, and long tail-like extensions."
+    },
+    "ZEBRA LONG WING": {
+      "key": "ZEBRA LONG WING",
+      "common_name": "ZEBRA LONG WING",
+      "scientific_name": "Heliconius charithonia",
+      "type": "butterfly",
+      "image_path": "data/raw/ZEBRA LONG WING/001.jpg",
+      "colors": [
+        "black",
+        "yellow"
+      ],
+      "description": "Medium-sized butterfly with black wings, yellow stripes, and long narrow shape."
+    }
+  }
+}
