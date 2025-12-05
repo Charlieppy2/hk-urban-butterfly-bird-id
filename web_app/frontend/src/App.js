@@ -120,6 +120,7 @@ function App() {
     }
   });
   const [showFavorites, setShowFavorites] = useState(false);
+  const [enlargedImage, setEnlargedImage] = useState(null); // { url, title }
   const [showBirdsPage, setShowBirdsPage] = useState(false);
   const [showButterfliesPage, setShowButterfliesPage] = useState(false);
   const [birdsData, setBirdsData] = useState([]);
@@ -1501,7 +1502,14 @@ function App() {
                         <img 
                           src={`${API_URL}/api/species-image/${encodeURIComponent(bird.image_path)}`}
                           alt={bird.common_name}
-                          className="species-image"
+                          className="species-image clickable-image"
+                          onClick={() => {
+                            setEnlargedImage({
+                              url: `${API_URL}/api/species-image/${encodeURIComponent(bird.image_path)}`,
+                              title: bird.common_name,
+                              subtitle: bird.scientific_name
+                            });
+                          }}
                           onError={(e) => {
                             const imgUrl = `${API_URL}/api/species-image/${encodeURIComponent(bird.image_path)}`;
                             console.error('❌ Image load error:', {
@@ -1682,7 +1690,14 @@ function App() {
                         <img 
                           src={`${API_URL}/api/species-image/${encodeURIComponent(butterfly.image_path)}`}
                           alt={butterfly.common_name}
-                          className="species-image"
+                          className="species-image clickable-image"
+                          onClick={() => {
+                            setEnlargedImage({
+                              url: `${API_URL}/api/species-image/${encodeURIComponent(butterfly.image_path)}`,
+                              title: butterfly.common_name,
+                              subtitle: butterfly.scientific_name
+                            });
+                          }}
                           onError={(e) => {
                             const imgUrl = `${API_URL}/api/species-image/${encodeURIComponent(butterfly.image_path)}`;
                             console.error('❌ Image load error:', {
@@ -2589,6 +2604,40 @@ function App() {
                   )}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Image Enlargement Modal */}
+      {enlargedImage && (
+        <div 
+          className="image-modal-overlay"
+          onClick={() => setEnlargedImage(null)}
+        >
+          <div 
+            className="image-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              className="image-modal-close"
+              onClick={() => setEnlargedImage(null)}
+              aria-label="Close"
+            >
+              ✕
+            </button>
+            <div className="image-modal-header">
+              <h3>{enlargedImage.title}</h3>
+              {enlargedImage.subtitle && (
+                <p className="image-modal-subtitle"><em>{enlargedImage.subtitle}</em></p>
+              )}
+            </div>
+            <div className="image-modal-image-container">
+              <img 
+                src={enlargedImage.url} 
+                alt={enlargedImage.title}
+                className="image-modal-image"
+              />
             </div>
           </div>
         </div>
