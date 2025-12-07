@@ -19,9 +19,9 @@ const getApiUrl = () => {
     const protocol = window.location.protocol;
     const port = window.location.port;
     
-    // 如果是 localhost 或 127.0.0.1，使用 localhost:5000
+    // 如果是 localhost 或 127.0.0.1，使用 localhost:5001
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
-      return 'http://localhost:5000';
+      return 'http://localhost:5001';
     }
     
     // 检查是否是局域网 IP 地址（192.168.x.x, 10.x.x.x, 172.16-31.x.x）
@@ -76,6 +76,7 @@ function App() {
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [warning, setWarning] = useState(null); // 警告信息
   const [history, setHistory] = useState([]);
   const [batchMode, setBatchMode] = useState(false);
   const [batchFiles, setBatchFiles] = useState([]);
@@ -272,12 +273,21 @@ function App() {
       setPrediction(response.data.prediction);
       console.log('🔍 Full response data:', response.data);
       
+      // 保存警告信息（如果有）
+      if (response.data.warning) {
+        setWarning(response.data.warning);
+        console.log('⚠️ Warning:', response.data.warning);
+      } else {
+        setWarning(null); // 清除之前的警告
+      }
+      
       // Add to history
       const historyItem = {
         id: Date.now(),
         image: preview,
         prediction: response.data.prediction,
         quality: response.data.quality_analysis,
+        warning: response.data.warning, // 保存警告信息
         timestamp: new Date().toLocaleString('en-US', {
           year: 'numeric',
           month: '2-digit',
@@ -372,6 +382,7 @@ function App() {
     setPreview(null);
     setPrediction(null);
     setError(null);
+    setWarning(null); // 清除警告
     setQualityAnalysis(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -1795,19 +1806,13 @@ function App() {
           <div className="upload-area">
             {!preview ? (
               <div className="upload-placeholder">
-                <p>📷 Upload an image or use camera</p>
+                <p>📷 Upload an image</p>
                 <div className="button-group">
                   <button 
                     className="btn btn-primary" 
                     onClick={() => fileInputRef.current?.click()}
                   >
                     {batchMode ? 'Choose Files' : 'Choose File'}
-                  </button>
-                  <button 
-                    className="btn btn-secondary" 
-                    onClick={handleCameraCapture}
-                  >
-                    {isCameraOpen ? '📸 Capture Photo' : '📷 Open Camera'}
                   </button>
                   <button 
                     className={`btn ${batchMode ? 'btn-primary' : 'btn-secondary'}`}
@@ -1849,19 +1854,7 @@ function App() {
               </div>
             )}
 
-            {isCameraOpen && (
-              <div className="camera-view">
-                <video ref={videoRef} autoPlay playsInline />
-                <div className="camera-controls">
-                  <button className="btn btn-primary" onClick={capturePhoto}>
-                    📸 Capture
-                  </button>
-                  <button className="btn btn-secondary" onClick={closeCamera}>
-                    Close
-                  </button>
-                </div>
-              </div>
-            )}
+            {/* 相机功能已禁用 - 不再显示相机视图 */}
 
             <canvas ref={canvasRef} style={{ display: 'none' }} />
           </div>
@@ -1924,6 +1917,41 @@ function App() {
                   {isCurrentFavorite() ? '❤️' : '🤍'}
                 </button>
               </div>
+              
+              {/* 顯示警告信息（如果是非蝴蝶/鳥類圖片） */}
+              {warning && (
+                <div className="warning-card" style={{
+                  background: 'linear-gradient(135deg, #FF9800 0%, #FFB74D 100%)',
+                  color: 'white',
+                  padding: '20px',
+                  borderRadius: '12px',
+                  marginBottom: '20px',
+                  boxShadow: '0 4px 12px rgba(255, 152, 0, 0.3)',
+                  border: '2px solid rgba(255, 255, 255, 0.3)'
+                }}>
+                  <h3 style={{ marginTop: 0, marginBottom: '10px', fontSize: '1.2rem' }}>
+                    {warning.title}
+                  </h3>
+                  <p style={{ marginBottom: '15px', fontSize: '1rem', opacity: 0.95 }}>
+                    {warning.message}
+                  </p>
+                  {warning.suggestions && warning.suggestions.length > 0 && (
+                    <div style={{ marginTop: '15px' }}>
+                      <strong style={{ display: 'block', marginBottom: '10px' }}>💡 建議：</strong>
+                      <ul style={{ margin: 0, paddingLeft: '20px', opacity: 0.95 }}>
+                        {warning.suggestions.map((suggestion, idx) => (
+                          <li key={idx} style={{ marginBottom: '8px' }}>{suggestion}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  <div style={{ marginTop: '15px', fontSize: '0.9rem', opacity: 0.9 }}>
+                    <p>置信度: {(warning.confidence * 100).toFixed(1)}%</p>
+                    <p>前3名總置信度: {(warning.top3_total_confidence * 100).toFixed(1)}%</p>
+                  </div>
+                </div>
+              )}
+              
               <div className="result-card">
                 <div className="result-main">
                   <span className="result-class">{prediction.class}</span>

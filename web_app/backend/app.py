@@ -586,6 +586,32 @@ def predict():
                 'confidence': float(predictions[0][idx])
             })
         
+        # 檢測是否為非蝴蝶/鳥類圖片
+        # 如果置信度低於30%，可能是其他類型的圖片
+        LOW_CONFIDENCE_THRESHOLD = 0.30
+        is_likely_not_target = confidence < LOW_CONFIDENCE_THRESHOLD
+        
+        # 計算前3個預測的總置信度，如果都很低，更可能是非目標圖片
+        top3_total_confidence = sum(p['confidence'] for p in top_predictions[:3])
+        is_likely_not_target = is_likely_not_target or top3_total_confidence < 0.50
+        
+        # 生成警告信息
+        warning_message = None
+        if is_likely_not_target:
+            warning_message = {
+                'type': 'low_confidence',
+                'title': '⚠️ 識別置信度較低',
+                'message': '這張圖片可能不是蝴蝶或鳥類，或者圖片質量不足以進行準確識別。',
+                'suggestions': [
+                    '請確保上傳的是蝴蝶或鳥類的清晰照片',
+                    '嘗試從不同角度拍攝，確保主體清晰可見',
+                    '確保照片光線充足，避免模糊或過暗',
+                    '如果確實是蝴蝶或鳥類，請嘗試拍攝更清晰的照片'
+                ],
+                'confidence': confidence,
+                'top3_total_confidence': top3_total_confidence
+            }
+        
         # Get similar species - pass predictions to avoid re-computing
         # This saves memory by not calling model.predict again
         # Make a copy of predictions[0] before deleting predictions
@@ -645,7 +671,8 @@ def predict():
             },
             'similar_species': similar_species,
             'image_path': filename,
-            'quality_analysis': quality_analysis
+            'quality_analysis': quality_analysis,
+            'warning': warning_message  # 添加警告信息
         })
         
         # Add CORS headers explicitly for mobile devices
