@@ -1937,7 +1937,7 @@ function App() {
                   </p>
                   {warning.suggestions && warning.suggestions.length > 0 && (
                     <div style={{ marginTop: '15px' }}>
-                      <strong style={{ display: 'block', marginBottom: '10px' }}>💡 建議：</strong>
+                      <strong style={{ display: 'block', marginBottom: '10px' }}>💡 Suggestions:</strong>
                       <ul style={{ margin: 0, paddingLeft: '20px', opacity: 0.95 }}>
                         {warning.suggestions.map((suggestion, idx) => (
                           <li key={idx} style={{ marginBottom: '8px' }}>{suggestion}</li>
@@ -1946,8 +1946,8 @@ function App() {
                     </div>
                   )}
                   <div style={{ marginTop: '15px', fontSize: '0.9rem', opacity: 0.9 }}>
-                    <p>置信度: {(warning.confidence * 100).toFixed(1)}%</p>
-                    <p>前3名總置信度: {(warning.top3_total_confidence * 100).toFixed(1)}%</p>
+                    <p>Confidence: {(warning.confidence * 100).toFixed(1)}%</p>
+                    <p>Top 3 Total Confidence: {(warning.top3_total_confidence * 100).toFixed(1)}%</p>
                   </div>
                 </div>
               )}

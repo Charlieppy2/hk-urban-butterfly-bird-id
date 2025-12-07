@@ -600,13 +600,13 @@ def predict():
         if is_likely_not_target:
             warning_message = {
                 'type': 'low_confidence',
-                'title': '⚠️ 識別置信度較低',
-                'message': '這張圖片可能不是蝴蝶或鳥類，或者圖片質量不足以進行準確識別。',
+                'title': '⚠️ Low Identification Confidence',
+                'message': 'This image may not be a butterfly or bird, or the image quality is insufficient for accurate identification.',
                 'suggestions': [
-                    '請確保上傳的是蝴蝶或鳥類的清晰照片',
-                    '嘗試從不同角度拍攝，確保主體清晰可見',
-                    '確保照片光線充足，避免模糊或過暗',
-                    '如果確實是蝴蝶或鳥類，請嘗試拍攝更清晰的照片'
+                    'Please ensure you upload a clear photo of a butterfly or bird',
+                    'Try taking photos from different angles to ensure the subject is clearly visible',
+                    'Ensure the photo has sufficient lighting, avoid blurry or too dark images',
+                    'If it is indeed a butterfly or bird, please try taking a clearer photo'
                 ],
                 'confidence': confidence,
                 'top3_total_confidence': top3_total_confidence
