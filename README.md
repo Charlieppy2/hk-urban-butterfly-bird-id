@@ -10,9 +10,9 @@ This is a web application system developed using deep learning technology to ide
 
 ### 🔍 Core Identification Features
 - **Image Upload & Identification**: Support drag-and-drop or file selection (PNG, JPG, JPEG, GIF, WEBP)
-- **Real-time Camera Capture**: Use device camera to capture images for identification
 - **Batch Identification**: Upload multiple images at once for batch processing
 - **Smart Recognition**: Deep learning-based image classification with Top-3 predictions and confidence scores
+- **Low Confidence Warning**: Automatically detects and warns when uploaded images are not butterflies or birds, or when image quality is insufficient
 
 ### 📊 Image Quality Analysis
 - **Multi-dimensional Analysis**: Brightness, contrast, sharpness, saturation, resolution
@@ -173,15 +173,17 @@ cd web_app/backend
 python app.py
 ```
 
-Backend service will start at `http://localhost:5000`
+Backend service will start at `http://localhost:5001`
 
 You should see:
 ```
 Loading model...
 Model loaded successfully from ...
 Starting Flask server...
-Running on http://0.0.0.0:5000
+Running on http://0.0.0.0:5001
 ```
+
+**Note**: The backend uses port 5001 by default to avoid conflicts with macOS AirPlay Receiver on port 5000.
 
 **Start Frontend Application:**
 
@@ -220,7 +222,7 @@ cd web_app/frontend
 ### Verify Services
 
 **Check Backend:**
-Open browser and visit: `http://localhost:5000`
+Open browser and visit: `http://localhost:5001`
 
 You should see:
 ```json
@@ -244,15 +246,11 @@ You should see the main application interface with upload area and buttons.
    - Click "Choose File" button to select image
    - Or drag and drop image to upload area
 
-2. **Capture Image**:
-   - Click "📷 Use Camera" button
-   - Allow browser to access camera
-   - Click "📸 Capture" to take photo
-
-3. **View Results**:
+2. **View Results**:
    - System will display identification results and confidence
    - Show Top-3 predictions
    - Automatically perform image quality analysis
+   - If the image is not a butterfly or bird, or confidence is low, a warning message will be displayed with suggestions
 
 ### Use AI Assistant
 
@@ -386,7 +384,7 @@ python train_assistant.py
 3. **GPU Acceleration**: Training model recommended to use GPU acceleration (Google Colab recommended)
 4. **Disk Space**: Ensure sufficient disk space for dataset and model storage (model ~19MB)
 5. **Browser Compatibility**: Recommended to use latest versions of Chrome, Firefox, or Edge
-6. **Port Conflicts**: If ports 5000 or 3000 are already in use, stop the conflicting services or change ports in configuration
+6. **Port Conflicts**: If ports 5001 (backend) or 3000 (frontend) are already in use, stop the conflicting services or change ports in configuration
 7. **Windows PowerShell**: Use `;` instead of `&&` for chaining commands in PowerShell
 8. **Keep Terminals Open**: Both backend and frontend services must remain running - keep terminal windows open
 
@@ -406,7 +404,7 @@ python train_assistant.py
 **Problem**: "Cannot connect to website" or "Connection refused"
 
 **Solution**:
-1. Verify backend service is running (check http://localhost:5000)
+1. Verify backend service is running (check http://localhost:5001)
 2. Ensure both services are running simultaneously
 3. Try clearing browser cache and refreshing
 4. Check firewall settings
@@ -423,11 +421,12 @@ python train_assistant.py
 
 ### Port Already in Use
 
-**Problem**: Port 5000 or 3000 is already in use
+**Problem**: Port 5001 (backend) or 3000 (frontend) is already in use
 
 **Solution**:
 1. Close other programs using these ports
 2. Or modify port in `app.py` (backend) or set `PORT=3001` environment variable (frontend)
+3. Note: Backend uses port 5001 by default to avoid conflicts with macOS AirPlay Receiver
 
 ### Installation Takes Too Long
 
@@ -437,9 +436,35 @@ python train_assistant.py
 - Frontend dependencies may take 2-5 minutes
 - Ensure stable internet connection
 
+## 🌐 Deployment
+
+### Production URLs
+- **Frontend**: https://butterfly-bird-id.vercel.app
+- **Backend API**: https://butterfly-bird-id.koyeb.app
+
+### Deployment Platforms
+- **Frontend**: Deployed on Vercel (automatic deployment from GitHub)
+- **Backend**: Deployed on Koyeb (using Dockerfile.koyeb)
+
+### Environment Variables
+For Vercel frontend deployment, set:
+- `REACT_APP_API_URL`: Your backend API URL (e.g., `https://butterfly-bird-id.koyeb.app`)
+
+For Koyeb backend deployment:
+- `FLASK_ENV`: `production`
+- `PORT`: `8080` (automatically set by Koyeb)
+
 ## 📝 Changelog
 
-### v1.0.0 (Latest)
+### v1.1.0 (Latest)
+- ✨ Added low confidence warning system for non-target images
+- ✨ Improved UI to conditionally show results based on confidence
+- 🔧 Changed backend default port to 5001 to avoid macOS conflicts
+- 🚀 Deployed to production (Vercel + Koyeb)
+- 🌐 Updated API URL configuration for production deployment
+- 📝 Updated documentation with deployment information
+
+### v1.0.0
 - ✨ Added favorites feature
 - ✨ Added image quality analysis
 - ✨ Added AI chat assistant

@@ -10,9 +10,9 @@
 
 ### 🔍 核心识别功能
 - **图片上传识别**: 支持拖拽上传或选择文件（PNG, JPG, JPEG, GIF, WEBP）
-- **实时拍摄**: 使用设备摄像头拍摄图片进行识别
 - **批量识别**: 一次上传多张图片进行批量识别
 - **智能识别**: 基于深度学习的图像分类，提供Top-3预测结果和置信度
+- **低置信度警告**: 自动检测并警告上传的图片不是蝴蝶或鸟类，或图片质量不足
 
 ### 📊 图片质量分析
 - **多维度分析**: 亮度、对比度、清晰度、饱和度、分辨率
@@ -173,15 +173,17 @@ cd web_app/backend
 python app.py
 ```
 
-后端服务将在 `http://localhost:5000` 启动
+后端服务将在 `http://localhost:5001` 启动
 
 您应该看到：
 ```
 Loading model...
 Model loaded successfully from ...
 Starting Flask server...
-Running on http://0.0.0.0:5000
+Running on http://0.0.0.0:5001
 ```
+
+**注意**：后端默认使用端口 5001，以避免与 macOS AirPlay Receiver 在端口 5000 上的冲突。
 
 **启动前端应用：**
 
@@ -220,7 +222,7 @@ cd web_app/frontend
 ### 验证服务
 
 **检查后端：**
-打开浏览器访问：`http://localhost:5000`
+打开浏览器访问：`http://localhost:5001`
 
 您应该看到：
 ```json
@@ -244,15 +246,11 @@ cd web_app/frontend
    - 点击 "Choose File" 按钮选择图片
    - 或直接拖拽图片到上传区域
 
-2. **拍摄图片**：
-   - 点击 "📷 Use Camera" 按钮
-   - 允许浏览器访问摄像头
-   - 点击 "📸 Capture" 拍摄
-
-3. **查看结果**：
+2. **查看结果**：
    - 系统会显示识别结果和置信度
    - 显示Top-3预测结果
    - 自动进行图片质量分析
+   - 如果图片不是蝴蝶或鸟类，或置信度较低，将显示警告信息和建议
 
 ### 使用AI助手
 
@@ -386,7 +384,7 @@ python train_assistant.py
 3. **GPU加速**: 训练模型建议使用GPU加速（Google Colab推荐）
 4. **磁盘空间**: 确保有足够的磁盘空间存储数据集和模型（模型约19MB）
 5. **浏览器兼容性**: 建议使用Chrome、Firefox或Edge最新版本
-6. **端口冲突**: 如果端口 5000 或 3000 已被占用，请停止冲突的服务或修改配置中的端口
+6. **端口冲突**: 如果端口 5001（后端）或 3000（前端）已被占用，请停止冲突的服务或修改配置中的端口
 7. **Windows PowerShell**: 在 PowerShell 中使用 `;` 而不是 `&&` 来连接命令
 8. **保持终端打开**: 后端和前端服务必须保持运行 - 请保持终端窗口打开
 
@@ -406,7 +404,7 @@ python train_assistant.py
 **问题**：显示 "无法连上这个网站" 或 "Connection refused"
 
 **解决方法**：
-1. 确认后端服务正在运行（检查 http://localhost:5000）
+1. 确认后端服务正在运行（检查 http://localhost:5001）
 2. 确保两个服务都在运行
 3. 尝试清除浏览器缓存并刷新
 4. 检查防火墙设置
@@ -423,11 +421,12 @@ python train_assistant.py
 
 ### 端口已被占用
 
-**问题**：端口 5000 或 3000 已被使用
+**问题**：端口 5001（后端）或 3000（前端）已被使用
 
 **解决方法**：
 1. 关闭使用这些端口的其他程序
 2. 或修改 `app.py` 中的端口号（后端）或设置 `PORT=3001` 环境变量（前端）
+3. 注意：后端默认使用端口 5001，以避免与 macOS AirPlay Receiver 的冲突
 
 ### 安装时间过长
 
@@ -437,9 +436,35 @@ python train_assistant.py
 - 前端依赖可能需要 2-5 分钟
 - 确保网络连接稳定
 
+## 🌐 部署信息
+
+### 生产环境 URL
+- **前端**: https://butterfly-bird-id.vercel.app
+- **后端 API**: https://butterfly-bird-id.koyeb.app
+
+### 部署平台
+- **前端**: 部署在 Vercel（从 GitHub 自动部署）
+- **后端**: 部署在 Koyeb（使用 Dockerfile.koyeb）
+
+### 环境变量
+对于 Vercel 前端部署，设置：
+- `REACT_APP_API_URL`: 您的后端 API URL（例如：`https://butterfly-bird-id.koyeb.app`）
+
+对于 Koyeb 后端部署：
+- `FLASK_ENV`: `production`
+- `PORT`: `8080`（由 Koyeb 自动设置）
+
 ## 📝 更新日志
 
-### v1.0.0 (最新)
+### v1.1.0 (最新)
+- ✨ 新增低置信度警告系统，用于非目标图片
+- ✨ 改进 UI，根据置信度条件性显示结果
+- 🔧 将后端默认端口改为 5001，避免 macOS 冲突
+- 🚀 部署到生产环境（Vercel + Koyeb）
+- 🌐 更新生产部署的 API URL 配置
+- 📝 更新文档，包含部署信息
+
+### v1.0.0
 - ✨ 新增收藏功能
 - ✨ 新增图片质量分析
 - ✨ 新增AI聊天助手
