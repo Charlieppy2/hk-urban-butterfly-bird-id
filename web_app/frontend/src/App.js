@@ -1952,29 +1952,32 @@ function App() {
                 </div>
               )}
               
-              <div className="result-card">
-                <div className="result-main">
-                  <span className="result-class">{prediction.class}</span>
-                  <span className="result-confidence">
-                    {(prediction.confidence * 100).toFixed(2)}% confidence
-                  </span>
+              {/* 只有在沒有警告時才顯示預測結果 */}
+              {!warning && (
+                <div className="result-card">
+                  <div className="result-main">
+                    <span className="result-class">{prediction.class}</span>
+                    <span className="result-confidence">
+                      {(prediction.confidence * 100).toFixed(2)}% confidence
+                    </span>
+                  </div>
+                  
+                  <div className="result-details">
+                    <h3>Top Predictions:</h3>
+                    <p className="predictions-hint">These are the model's top predictions for this image:</p>
+                    <ul>
+                      {prediction.top_predictions.map((pred, idx) => (
+                        <li key={idx}>
+                          <span className="pred-class">{pred.class}</span>
+                          <span className="pred-confidence">
+                            {(pred.confidence * 100).toFixed(2)}%
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-                
-                <div className="result-details">
-                  <h3>Top Predictions:</h3>
-                  <p className="predictions-hint">These are the model's top predictions for this image:</p>
-                  <ul>
-                    {prediction.top_predictions.map((pred, idx) => (
-                      <li key={idx}>
-                        <span className="pred-class">{pred.class}</span>
-                        <span className="pred-confidence">
-                          {(pred.confidence * 100).toFixed(2)}%
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+              )}
             </div>
           )}
 
