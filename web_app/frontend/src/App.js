@@ -121,6 +121,22 @@ function App() {
     }
   });
   const [showFavorites, setShowFavorites] = useState(false);
+  
+  // Collection (Field Guide) States
+  const [collectedSpecies, setCollectedSpecies] = useState(() => {
+    // Load collected species IDs from localStorage
+    const saved = localStorage.getItem('collectedSpecies');
+    if (!saved) return new Set();
+    try {
+      const ids = JSON.parse(saved);
+      return new Set(ids);
+    } catch (error) {
+      console.error('Error loading collected species:', error);
+      return new Set();
+    }
+  });
+  const [showCollection, setShowCollection] = useState(false);
+  const [collectionNotification, setCollectionNotification] = useState(null); // For animation
   const [enlargedImage, setEnlargedImage] = useState(null); // { url, title }
   const [showBirdsPage, setShowBirdsPage] = useState(false);
   const [showButterfliesPage, setShowButterfliesPage] = useState(false);
@@ -280,6 +296,15 @@ function App() {
         console.log('⚠️ Warning:', response.data.warning);
       } else {
         setWarning(null); // 清除之前的警告
+      }
+      
+      // Add to collection if prediction is successful
+      if (response.data.prediction && response.data.prediction.class) {
+        const speciesId = getSpeciesId(response.data.prediction);
+        const speciesName = response.data.prediction.class;
+        if (speciesId) {
+          addToCollection(speciesId, speciesName);
+        }
       }
       
       // Add to history
@@ -967,6 +992,88 @@ function App() {
     }
   };
 
+  // Load species data when collection page is opened
+  useEffect(() => {
+    if (showCollection && (birdsData.length === 0 || butterfliesData.length === 0)) {
+      // Load birds if not loaded
+      if (birdsData.length === 0 && !birdsLoading) {
+        const cachedBirds = localStorage.getItem('birds_data_cache');
+        const cacheTimestamp = localStorage.getItem('birds_data_cache_timestamp');
+        const cacheAge = cacheTimestamp ? Date.now() - parseInt(cacheTimestamp) : Infinity;
+        const CACHE_DURATION = 24 * 60 * 60 * 1000;
+        
+        if (cachedBirds && cacheAge < CACHE_DURATION) {
+          try {
+            const birds = JSON.parse(cachedBirds);
+            // Ensure cached birds have key field
+            const birdsWithKey = birds.map(bird => ({
+              ...bird,
+              key: bird.key || getSpeciesId(bird),
+              species_id: bird.species_id || bird.key || getSpeciesId(bird)
+            }));
+            setBirdsData(birdsWithKey);
+          } catch (e) {
+            localStorage.removeItem('birds_data_cache');
+          }
+        } else if (!birdsLoading) {
+          setBirdsLoading(true);
+          axios.get(`${API_URL}/api/birds`, { timeout: 15000 })
+            .then(response => {
+              if (response.data.status === 'success') {
+                // Preserve the key (species ID) in each bird object
+                const birds = Object.entries(response.data.birds).map(([key, bird]) => ({
+                  ...bird,
+                  key: key, // Add key to preserve species ID
+                  species_id: key // Also add as species_id for compatibility
+                }));
+                setBirdsData(birds);
+                localStorage.setItem('birds_data_cache', JSON.stringify(birds));
+                localStorage.setItem('birds_data_cache_timestamp', Date.now().toString());
+              }
+            })
+            .catch(error => console.error('Error loading birds:', error))
+            .finally(() => setBirdsLoading(false));
+        }
+      }
+      
+      // Load butterflies if not loaded
+      if (butterfliesData.length === 0 && !butterfliesLoading) {
+        const cachedButterflies = localStorage.getItem('butterflies_data_cache');
+        const cacheTimestamp = localStorage.getItem('butterflies_data_cache_timestamp');
+        const cacheAge = cacheTimestamp ? Date.now() - parseInt(cacheTimestamp) : Infinity;
+        const CACHE_DURATION = 24 * 60 * 60 * 1000;
+        
+        if (cachedButterflies && cacheAge < CACHE_DURATION) {
+          try {
+            const butterflies = JSON.parse(cachedButterflies);
+            // Ensure cached butterflies have key field
+            const butterfliesWithKey = butterflies.map(butterfly => ({
+              ...butterfly,
+              key: butterfly.key || getSpeciesId(butterfly),
+              species_id: butterfly.species_id || butterfly.key || getSpeciesId(butterfly)
+            }));
+            setButterfliesData(butterfliesWithKey);
+          } catch (e) {
+            localStorage.removeItem('butterflies_data_cache');
+          }
+        } else if (!butterfliesLoading) {
+          setButterfliesLoading(true);
+          axios.get(`${API_URL}/api/butterflies`, { timeout: 15000 })
+            .then(response => {
+              if (response.data.status === 'success') {
+                const butterflies = Object.values(response.data.butterflies);
+                setButterfliesData(butterflies);
+                localStorage.setItem('butterflies_data_cache', JSON.stringify(butterflies));
+                localStorage.setItem('butterflies_data_cache_timestamp', Date.now().toString());
+              }
+            })
+            .catch(error => console.error('Error loading butterflies:', error))
+            .finally(() => setButterfliesLoading(false));
+        }
+      }
+    }
+  }, [showCollection, birdsData.length, butterfliesData.length, birdsLoading, butterfliesLoading]);
+
   // Load birds data when birds page is opened (with localStorage cache)
   useEffect(() => {
     if (showBirdsPage && birdsData.length === 0 && !birdsLoading) {
@@ -1008,7 +1115,12 @@ function App() {
       })
         .then(response => {
           if (response.data.status === 'success') {
-            const birds = Object.values(response.data.birds);
+            // Preserve the key (species ID) in each bird object
+            const birds = Object.entries(response.data.birds).map(([key, bird]) => ({
+              ...bird,
+              key: key, // Add key to preserve species ID
+              species_id: key // Also add as species_id for compatibility
+            }));
             setBirdsData(birds);
             // Cache the data
             localStorage.setItem('birds_data_cache', JSON.stringify(birds));
@@ -1059,8 +1171,14 @@ function App() {
             localStorage.removeItem('butterflies_data_cache_timestamp');
             // Continue to fetch fresh data below
           } else {
-            setButterfliesData(butterflies);
-            console.log(`✅ Loaded ${butterflies.length} butterfly/moth species from cache`);
+            // Ensure cached butterflies have key field
+            const butterfliesWithKey = butterflies.map(butterfly => ({
+              ...butterfly,
+              key: butterfly.key || getSpeciesId(butterfly),
+              species_id: butterfly.species_id || butterfly.key || getSpeciesId(butterfly)
+            }));
+            setButterfliesData(butterfliesWithKey);
+            console.log(`✅ Loaded ${butterfliesWithKey.length} butterfly/moth species from cache`);
             return;
           }
         } catch (e) {
@@ -1077,7 +1195,12 @@ function App() {
       })
         .then(response => {
           if (response.data.status === 'success') {
-            const butterflies = Object.values(response.data.butterflies);
+            // Preserve the key (species ID) in each butterfly object
+            const butterflies = Object.entries(response.data.butterflies).map(([key, butterfly]) => ({
+              ...butterfly,
+              key: key, // Add key to preserve species ID
+              species_id: key // Also add as species_id for compatibility
+            }));
             setButterfliesData(butterflies);
             // Cache the data
             localStorage.setItem('butterflies_data_cache', JSON.stringify(butterflies));
@@ -1110,18 +1233,21 @@ function App() {
     setShowBirdsPage(true);
     setShowButterfliesPage(false);
     setShowFavorites(false);
+    setShowCollection(false);
   };
 
   const handleShowButterflies = () => {
     setShowButterfliesPage(true);
     setShowBirdsPage(false);
     setShowFavorites(false);
+    setShowCollection(false);
   };
 
   const handleShowMain = () => {
     setShowBirdsPage(false);
     setShowButterfliesPage(false);
     setShowFavorites(false);
+    setShowCollection(false);
   };
 
   // Text Description Identification Functions
@@ -1158,6 +1284,16 @@ function App() {
         setDescriptionConversation(prev => [...prev, botMessage]);
         setCurrentMatches(response.data.matches || []);
         setDescriptionResults(response.data);
+        
+        // Add top match to collection if available
+        if (response.data.matches && response.data.matches.length > 0) {
+          const topMatch = response.data.matches[0];
+          const speciesId = getSpeciesId(topMatch);
+          const speciesName = topMatch.common_name || topMatch.class;
+          if (speciesId) {
+            addToCollection(speciesId, speciesName);
+          }
+        }
       } else {
         setError(response.data.error || 'Failed to identify species');
       }
@@ -1184,6 +1320,15 @@ function App() {
     setDescriptionInput('');
   };
 
+  const handleCategoryChange = (newCategory) => {
+    // Clear conversation and results when switching categories
+    setDescriptionCategory(newCategory);
+    setDescriptionConversation([]);
+    setCurrentMatches([]);
+    setDescriptionResults(null);
+    setDescriptionInput('');
+  };
+
   const handleQuickQuestion = (question) => {
     setDescriptionInput(question);
   };
@@ -1194,6 +1339,85 @@ function App() {
     setShowSpeciesModal(true);
   };
 
+  // Add species to collection
+  const addToCollection = (speciesId, speciesName) => {
+    if (!speciesId) {
+      console.warn('⚠️ Cannot add to collection: speciesId is null/undefined');
+      return false;
+    }
+    
+    console.log('📚 Adding to collection:', { speciesId, speciesName });
+    
+    const newCollected = new Set(collectedSpecies);
+    if (!newCollected.has(speciesId)) {
+      newCollected.add(speciesId);
+      setCollectedSpecies(newCollected);
+      
+      // Save to localStorage
+      localStorage.setItem('collectedSpecies', JSON.stringify(Array.from(newCollected)));
+      console.log('✅ Saved to collection. Total collected:', newCollected.size);
+      console.log('📋 Collected IDs:', Array.from(newCollected));
+      
+      // Show notification animation
+      setCollectionNotification({
+        message: `+1 Added to your Field Guide!`,
+        speciesName: speciesName
+      });
+      
+      // Auto-hide notification after 3 seconds
+      setTimeout(() => {
+        setCollectionNotification(null);
+      }, 3000);
+      
+      return true;
+    } else {
+      console.log('ℹ️ Species already in collection:', speciesId);
+      return false;
+    }
+  };
+
+  // Get species ID from prediction or match
+  const getSpeciesId = (predictionOrMatch, objectKey = null) => {
+    // If objectKey is provided (from Object.keys()), use it directly
+    if (objectKey) {
+      // objectKey is like "001.Black_footed_Albatross"
+      return objectKey;
+    }
+    
+    // Try different possible ID fields
+    if (predictionOrMatch.species_id) return predictionOrMatch.species_id;
+    if (predictionOrMatch.key) return predictionOrMatch.key;
+    if (predictionOrMatch.class) {
+      // Use class name as ID (e.g., "001.Black_footed_Albatross")
+      return predictionOrMatch.class;
+    }
+    
+    // Extract ID from image_path if available
+    // image_path format: "data/raw/001.Black_footed_Albatross/..."
+    if (predictionOrMatch.image_path) {
+      const pathParts = predictionOrMatch.image_path.split('/');
+      if (pathParts.length >= 3 && pathParts[1] === 'raw') {
+        const speciesKey = pathParts[2];
+        if (speciesKey && speciesKey.match(/^\d{3}\./)) {
+          return speciesKey;
+        }
+      }
+    }
+    
+    // Fallback: Create ID from common_name and scientific_name
+    if (predictionOrMatch.common_name && predictionOrMatch.scientific_name) {
+      return `${predictionOrMatch.common_name}_${predictionOrMatch.scientific_name}`;
+    }
+    
+    return null;
+  };
+
+  // Check if species is collected
+  const isSpeciesCollected = (speciesId) => {
+    if (!speciesId) return false;
+    return collectedSpecies.has(speciesId);
+  };
+
   // Close species detail modal
   const handleCloseSpeciesModal = () => {
     setShowSpeciesModal(false);
@@ -1202,6 +1426,21 @@ function App() {
 
   return (
     <div className="App">
+      {/* Collection Notification Animation */}
+      {collectionNotification && (
+        <div className="collection-notification">
+          <div className="notification-content">
+            <span className="notification-icon">✨</span>
+            <div className="notification-text">
+              <div className="notification-message">{collectionNotification.message}</div>
+              {collectionNotification.speciesName && (
+                <div className="notification-species">{collectionNotification.speciesName}</div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      
       <header className="App-header">
         <h1>🦋🐦 Butterfly & Bird Identifier</h1>
         <p>AI-Powered Species Identification System</p>
@@ -1230,6 +1469,17 @@ function App() {
           >
             🦋 Butterflies (100)
           </button>
+          <button 
+            className={`nav-btn ${showCollection ? 'active' : ''}`}
+            onClick={() => { 
+              setShowCollection(true); 
+              setShowBirdsPage(false);
+              setShowButterfliesPage(false);
+              setShowDescriptionMode(false);
+            }}
+          >
+            📚 Field Guide
+          </button>
         </div>
       </header>
 
@@ -1248,19 +1498,19 @@ function App() {
               <div className="category-buttons">
                 <button 
                   className={`category-btn ${descriptionCategory === 'all' ? 'active' : ''}`}
-                  onClick={() => setDescriptionCategory('all')}
+                  onClick={() => handleCategoryChange('all')}
                 >
                   🔍 All Species
                 </button>
                 <button 
                   className={`category-btn ${descriptionCategory === 'bird' ? 'active' : ''}`}
-                  onClick={() => setDescriptionCategory('bird')}
+                  onClick={() => handleCategoryChange('bird')}
                 >
                   🐦 Birds Only
                 </button>
                 <button 
                   className={`category-btn ${descriptionCategory === 'butterfly' ? 'active' : ''}`}
-                  onClick={() => setDescriptionCategory('butterfly')}
+                  onClick={() => handleCategoryChange('butterfly')}
                 >
                   🦋 Butterflies Only
                 </button>
@@ -1285,15 +1535,45 @@ function App() {
                   
                   <div className="quick-start-prompts">
                     <p>Try these examples:</p>
-                    <button onClick={() => handleQuickQuestion("I saw a small blue butterfly with orange spots near a garden")}>
-                      "Small blue butterfly with orange spots"
-                    </button>
-                    <button onClick={() => handleQuickQuestion("Large black bird with a hooked beak, seen near the coast")}>
-                      "Large black bird with hooked beak"
-                    </button>
-                    <button onClick={() => handleQuickQuestion("Yellow and black striped butterfly in a meadow")}>
-                      "Yellow and black striped butterfly"
-                    </button>
+                    {descriptionCategory === 'all' && (
+                      <>
+                        <button onClick={() => handleQuickQuestion("I saw a small blue butterfly with orange spots near a garden")}>
+                          "Small blue butterfly with orange spots"
+                        </button>
+                        <button onClick={() => handleQuickQuestion("Large black bird with a hooked beak, seen near the coast")}>
+                          "Large black bird with hooked beak"
+                        </button>
+                        <button onClick={() => handleQuickQuestion("Yellow and black striped butterfly in a meadow")}>
+                          "Yellow and black striped butterfly"
+                        </button>
+                      </>
+                    )}
+                    {descriptionCategory === 'bird' && (
+                      <>
+                        <button onClick={() => handleQuickQuestion("Large black bird with a hooked beak, seen near the coast")}>
+                          "Large black bird with hooked beak"
+                        </button>
+                        <button onClick={() => handleQuickQuestion("Small red bird with a crest on its head in the forest")}>
+                          "Small red bird with crested head"
+                        </button>
+                        <button onClick={() => handleQuickQuestion("White bird with long legs wading in shallow water")}>
+                          "White bird wading in water"
+                        </button>
+                      </>
+                    )}
+                    {descriptionCategory === 'butterfly' && (
+                      <>
+                        <button onClick={() => handleQuickQuestion("I saw a small blue butterfly with orange spots near a garden")}>
+                          "Small blue butterfly with orange spots"
+                        </button>
+                        <button onClick={() => handleQuickQuestion("Yellow and black striped butterfly in a meadow")}>
+                          "Yellow and black striped butterfly"
+                        </button>
+                        <button onClick={() => handleQuickQuestion("Large orange butterfly with black veins on its wings")}>
+                          "Large orange butterfly with black veins"
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -1310,11 +1590,23 @@ function App() {
                         <span className="message-time">{msg.timestamp}</span>
                         
                         {/* Show matches if available */}
-                        {msg.matches && msg.matches.length > 0 && (
-                          <div className="message-matches">
-                            <h4>🎯 Possible Matches:</h4>
-                            <div className="matches-grid">
-                              {msg.matches.slice(0, 3).map((match, idx) => (
+                        {msg.matches && msg.matches.length > 0 && (() => {
+                          // Filter matches by category if needed
+                          let filteredMatches = msg.matches;
+                          if (descriptionCategory === 'bird') {
+                            filteredMatches = msg.matches.filter(m => 
+                              m.category && (m.category.toLowerCase().includes('bird') || m.category === 'Bird')
+                            );
+                          } else if (descriptionCategory === 'butterfly') {
+                            filteredMatches = msg.matches.filter(m => 
+                              m.category && (m.category.toLowerCase().includes('butterfly') || m.category.toLowerCase().includes('moth') || m.category === 'Butterfly/Moth')
+                            );
+                          }
+                          return filteredMatches.length > 0 ? (
+                            <div className="message-matches">
+                              <h4>🎯 Possible Matches:</h4>
+                              <div className="matches-grid">
+                                {filteredMatches.slice(0, 3).map((match, idx) => (
                                 <div 
                                   key={idx} 
                                   className="match-card clickable"
@@ -1348,7 +1640,8 @@ function App() {
                               ))}
                             </div>
                           </div>
-                        )}
+                          ) : null;
+                        })()}
                         
                         {/* Show follow-up question buttons */}
                         {msg.followUpQuestions && msg.followUpQuestions.length > 0 && (
@@ -1800,8 +2093,126 @@ function App() {
           </div>
         )}
 
+        {/* Field Guide (Collection) Page */}
+        {showCollection && (
+          <div className="collection-page">
+            <div className="collection-header">
+              <h2>📚 My Field Guide</h2>
+              <p className="collection-stats">
+                Collected: <strong>{collectedSpecies.size}</strong> species
+              </p>
+            </div>
+            
+            <div className="collection-tabs">
+              <button 
+                className={`collection-tab ${descriptionCategory === 'all' ? 'active' : ''}`}
+                onClick={() => setDescriptionCategory('all')}
+              >
+                All Species
+              </button>
+              <button 
+                className={`collection-tab ${descriptionCategory === 'bird' ? 'active' : ''}`}
+                onClick={() => setDescriptionCategory('bird')}
+              >
+                Birds Only
+              </button>
+              <button 
+                className={`collection-tab ${descriptionCategory === 'butterfly' ? 'active' : ''}`}
+                onClick={() => setDescriptionCategory('butterfly')}
+              >
+                Butterflies Only
+              </button>
+            </div>
+
+            <div className="collection-grid">
+              {/* Load and display all species */}
+              {(() => {
+                const allSpecies = [...birdsData, ...butterfliesData];
+                const filteredSpecies = allSpecies.filter(species => {
+                  if (descriptionCategory === 'bird') {
+                    return species.category === 'Bird' || species.type === 'bird';
+                  } else if (descriptionCategory === 'butterfly') {
+                    return species.category === 'Butterfly/Moth' || species.type === 'butterfly';
+                  }
+                  return true;
+                });
+
+                // Sort: collected species first, then uncollected
+                const sortedSpecies = filteredSpecies.sort((a, b) => {
+                  const aId = getSpeciesId(a);
+                  const bId = getSpeciesId(b);
+                  const aCollected = isSpeciesCollected(aId);
+                  const bCollected = isSpeciesCollected(bId);
+                  
+                  // Collected species come first
+                  if (aCollected && !bCollected) return -1;
+                  if (!aCollected && bCollected) return 1;
+                  
+                  // If both have same collection status, sort alphabetically by common name
+                  const aName = a.common_name || '';
+                  const bName = b.common_name || '';
+                  return aName.localeCompare(bName);
+                });
+
+                return sortedSpecies.map((species, idx) => {
+                  const speciesId = getSpeciesId(species);
+                  const isCollected = isSpeciesCollected(speciesId);
+                  
+                  // Debug logging for first few species
+                  if (idx < 3) {
+                    console.log('🔍 Collection check:', {
+                      common_name: species.common_name,
+                      speciesId,
+                      isCollected,
+                      hasKey: !!species.key,
+                      image_path: species.image_path
+                    });
+                  }
+                  
+                  return (
+                    <div 
+                      key={idx} 
+                      className={`collection-card ${isCollected ? 'collected' : 'uncollected'}`}
+                      onClick={() => handleSpeciesCardClick(species)}
+                    >
+                      {species.image_path && (
+                        <div className="collection-image-container">
+                          <img 
+                            src={`${API_URL}/api/species-image/${encodeURIComponent(species.image_path)}`}
+                            alt={species.common_name}
+                            className={`collection-image ${isCollected ? '' : 'grayscale'}`}
+                            onError={(e) => { e.target.style.display = 'none'; }}
+                          />
+                          {isCollected && (
+                            <div className="collected-badge">✓ Collected</div>
+                          )}
+                          {!isCollected && (
+                            <div className="uncollected-overlay">
+                              <span className="uncollected-icon">🔒</span>
+                              <span className="uncollected-text">Not Collected</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      <div className="collection-info">
+                        <h4>{species.common_name}</h4>
+                        {species.scientific_name && (
+                          <p className="collection-scientific">{species.scientific_name}</p>
+                        )}
+                        <span className={`collection-category ${(species.category || species.type || '').toLowerCase()}`}>
+                          {species.category || (species.type === 'bird' ? 'Bird' : 'Butterfly/Moth')}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                });
+              })()}
+            </div>
+          </div>
+        )}
+
         {/* Main Page (Identification) */}
-        {!showBirdsPage && !showButterfliesPage && !showDescriptionMode && (
+        {!showBirdsPage && !showButterfliesPage && !showDescriptionMode && !showCollection && (
           <>
         <div className="upload-section">
           <div className="upload-area">
