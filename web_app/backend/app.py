@@ -342,6 +342,105 @@ def get_similar_species(image_array, top_k=5, exclude_idx=None):
         return []
 
 
+def is_cartoon_or_illustration(image_path):
+    """
+    Detect if an image is a cartoon, illustration, or non-photographic image.
+    Cartoon/illustration images typically have:
+    - High color saturation with uniform regions
+    - Very sharp edges (high edge density)
+    - Low texture variation (uniform color patches)
+    - High contrast between regions
+    """
+    try:
+        img = Image.open(image_path)
+        if img.mode != 'RGB':
+            img = img.convert('RGB')
+        
+        img_array = np.array(img)
+        
+        if CV2_AVAILABLE:
+            # Convert to grayscale for edge detection
+            gray = cv2.cvtColor(img_array, cv2.COLOR_RGB2GRAY)
+            
+            # 1. Edge detection - cartoons have very sharp, clear edges
+            edges = cv2.Canny(gray, 50, 150)
+            edge_density = np.sum(edges > 0) / (edges.shape[0] * edges.shape[1])
+            
+            # 2. Color uniformity - cartoons have large uniform color regions
+            # Calculate color variance in small patches
+            h, w = gray.shape
+            patch_size = min(32, h // 8, w // 8)
+            patches = []
+            for i in range(0, h - patch_size, patch_size):
+                for j in range(0, w - patch_size, patch_size):
+                    patch = gray[i:i+patch_size, j:j+patch_size]
+                    patches.append(np.std(patch))
+            texture_variance = np.mean(patches) if patches else 0
+            
+            # 3. Color saturation - cartoons often have high saturation
+            hsv = cv2.cvtColor(img_array, cv2.COLOR_RGB2HSV)
+            saturation = np.mean(hsv[:, :, 1]) / 255.0
+            
+            # 4. Color count - cartoons typically have fewer distinct colors
+            # Resize for faster processing
+            small_img = cv2.resize(img_array, (100, 100))
+            unique_colors = len(np.unique(small_img.reshape(-1, 3), axis=0))
+            color_diversity = unique_colors / (100 * 100)  # Normalize
+            
+            # 5. Gradient analysis - cartoons have sharp transitions
+            grad_x = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
+            grad_y = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
+            gradient_magnitude = np.sqrt(grad_x**2 + grad_y**2)
+            avg_gradient = np.mean(gradient_magnitude)
+            
+            # Cartoon detection criteria:
+            # - High edge density (>0.15) AND low texture variance (<20) = cartoon
+            # - High saturation (>0.6) AND low color diversity (<0.3) = cartoon
+            # - High average gradient (>50) AND low texture variance (<25) = cartoon
+            is_cartoon = False
+            
+            # Criterion 1: Sharp edges + uniform texture
+            if edge_density > 0.15 and texture_variance < 20:
+                is_cartoon = True
+            
+            # Criterion 2: High saturation + few colors
+            if saturation > 0.6 and color_diversity < 0.3:
+                is_cartoon = True
+            
+            # Criterion 3: High gradient + low texture
+            if avg_gradient > 50 and texture_variance < 25:
+                is_cartoon = True
+            
+            # Criterion 4: Very high edge density (typical of line art)
+            if edge_density > 0.25:
+                is_cartoon = True
+            
+            return is_cartoon
+        
+        else:
+            # Fallback: Simple detection using PIL
+            # Convert to grayscale
+            gray = np.dot(img_array[...,:3], [0.2989, 0.5870, 0.1140])
+            
+            # Calculate color variance (texture)
+            texture_variance = np.std(gray)
+            
+            # Calculate saturation
+            rgb_max = np.max(img_array, axis=2)
+            rgb_min = np.min(img_array, axis=2)
+            saturation = np.mean(np.where(rgb_max > 0, (rgb_max - rgb_min) / rgb_max, 0))
+            
+            # Simple heuristic: low texture variance + high saturation = likely cartoon
+            if texture_variance < 25 and saturation > 0.6:
+                return True
+            
+            return False
+    
+    except Exception as e:
+        print(f"Error detecting cartoon: {e}")
+        return False
+
+
 def analyze_image_quality(image_path):
     """Analyze image quality and provide recommendations"""
     try:
@@ -587,9 +686,13 @@ def predict():
             })
         
         # 檢測是否為非蝴蝶/鳥類圖片
+        # 方法0: 優先檢測是否為卡通/插畫圖片（所有卡通圖片都歸類為 others）
+        is_cartoon = is_cartoon_or_illustration(filepath)
+        is_likely_not_target = is_cartoon
+        
         # 方法1: 如果置信度低於30%，可能是其他類型的圖片
         LOW_CONFIDENCE_THRESHOLD = 0.30
-        is_likely_not_target = confidence < LOW_CONFIDENCE_THRESHOLD
+        is_likely_not_target = is_likely_not_target or confidence < LOW_CONFIDENCE_THRESHOLD
         
         # 方法2: 計算前3個預測的總置信度，如果都很低，更可能是非目標圖片
         top3_total_confidence = sum(p['confidence'] for p in top_predictions[:3])
@@ -620,19 +723,34 @@ def predict():
         # 生成警告信息
         warning_message = None
         if is_likely_not_target:
-            warning_message = {
-                'type': 'low_confidence',
-                'title': '⚠️ Low Identification Confidence',
-                'message': 'This image may not be a butterfly or bird, or the image quality is insufficient for accurate identification.',
-                'suggestions': [
-                    'Please ensure you upload a clear photo of a butterfly or bird',
-                    'Try taking photos from different angles to ensure the subject is clearly visible',
-                    'Ensure the photo has sufficient lighting, avoid blurry or too dark images',
-                    'If it is indeed a butterfly or bird, please try taking a clearer photo'
-                ],
-                'confidence': confidence,
-                'top3_total_confidence': top3_total_confidence
-            }
+            # 如果是卡通/插畫圖片，使用特殊的警告消息
+            if is_cartoon:
+                warning_message = {
+                    'type': 'cartoon',
+                    'title': '⚠️ Cartoon/Illustration Detected',
+                    'message': 'This appears to be a cartoon, illustration, or non-photographic image. This system is designed to identify real butterflies and birds from photographs.',
+                    'suggestions': [
+                        'Please upload a real photograph of a butterfly or bird',
+                        'Cartoon or illustrated images cannot be accurately identified',
+                        'Try using a clear photo taken with a camera'
+                    ],
+                    'confidence': confidence,
+                    'top3_total_confidence': top3_total_confidence
+                }
+            else:
+                warning_message = {
+                    'type': 'low_confidence',
+                    'title': '⚠️ Low Identification Confidence',
+                    'message': 'This image may not be a butterfly or bird, or the image quality is insufficient for accurate identification.',
+                    'suggestions': [
+                        'Please ensure you upload a clear photo of a butterfly or bird',
+                        'Try taking photos from different angles to ensure the subject is clearly visible',
+                        'Ensure the photo has sufficient lighting, avoid blurry or too dark images',
+                        'If it is indeed a butterfly or bird, please try taking a clearer photo'
+                    ],
+                    'confidence': confidence,
+                    'top3_total_confidence': top3_total_confidence
+                }
         
         # Get similar species - pass predictions to avoid re-computing
         # This saves memory by not calling model.predict again
