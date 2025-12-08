@@ -1,0 +1,2002 @@
+{
+  "ADONIS": {
+    "id": 1,
+    "common_name": "ADONIS",
+    "scientific_name": "Lysandra bellargus",
+    "description": "Small butterfly with bright blue upperwings (males) or brown upperwings (females), and orange spots on hindwings.",
+    "habitat": "Grasslands, meadows, and open areas with chalk or limestone soils",
+    "distribution": "Europe, from southern England to the Mediterranean",
+    "wingspan": "3-4 cm",
+    "diet": "Nectar from flowers, especially thistles and knapweeds",
+    "behavior": "Flies from May to September. Males are territorial. Forms colonies.",
+    "lifecycle": "Eggs laid on horseshoe vetch. Caterpillars feed on host plant. Overwinters as pupa.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/ADONIS",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/adonis",
+      "butterflyidentification": "https://www.butterflyidentification.com/adonis",
+      "inaturalist": "https://www.inaturalist.org/taxa/adonis"
+    },
+    "notes": "",
+    "image_path": "data/raw/ADONIS/001.jpg"
+  },
+  "AFRICAN GIANT SWALLOWTAIL": {
+    "id": 2,
+    "common_name": "AFRICAN GIANT SWALLOWTAIL",
+    "scientific_name": "Papilio antimachus",
+    "description": "Very large butterfly with black and yellow wings, long tail-like extensions on hindwings, and distinctive wing pattern.",
+    "habitat": "Tropical rainforests and forest edges",
+    "distribution": "West and Central Africa",
+    "wingspan": "15-25 cm",
+    "diet": "Nectar from flowers, tree sap, and rotting fruit",
+    "behavior": "Strong flier. Males are territorial. Rarely seen at ground level.",
+    "lifecycle": "Eggs laid on Rutaceae family plants. Large caterpillars with defensive spines.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/AFRICAN_GIANT_SWALLOWTAIL",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/african-giant-swallowtail",
+      "butterflyidentification": "https://www.butterflyidentification.com/african-giant-swallowtail",
+      "inaturalist": "https://www.inaturalist.org/taxa/african-giant-swallowtail"
+    },
+    "notes": "",
+    "image_path": "data/raw/AFRICAN GIANT SWALLOWTAIL/001.jpg"
+  },
+  "AMERICAN SNOOT": {
+    "id": 3,
+    "common_name": "AMERICAN SNOOT",
+    "scientific_name": "Libytheana carinenta",
+    "description": "Small butterfly with long snout-like projection on head, brown wings with orange patches, and white spots.",
+    "habitat": "Open areas, fields, and woodland edges",
+    "distribution": "North and South America, from United States to Argentina",
+    "wingspan": "3.5-5 cm",
+    "diet": "Nectar from flowers, especially composites",
+    "behavior": "Migratory. Fast flier. Often perches with wings closed.",
+    "lifecycle": "Eggs laid on hackberry trees. Caterpillars feed on leaves. Multiple generations per year.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/AMERICAN_SNOOT",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/american-snoot",
+      "butterflyidentification": "https://www.butterflyidentification.com/american-snoot",
+      "inaturalist": "https://www.inaturalist.org/taxa/american-snoot"
+    },
+    "notes": "",
+    "image_path": "data/raw/AMERICAN SNOOT/001.jpg"
+  },
+  "AN 88": {
+    "id": 4,
+    "common_name": "AN 88",
+    "scientific_name": "Diaethria anna",
+    "description": "Small butterfly with black and white wings, distinctive '88' or '89' pattern on hindwings, and red markings.",
+    "habitat": "Tropical and subtropical forests",
+    "distribution": "Central and South America, from Mexico to Brazil",
+    "wingspan": "3-4 cm",
+    "diet": "Nectar from flowers, rotting fruit, and tree sap",
+    "behavior": "Fast flier. Males are territorial. Often seen on forest trails.",
+    "lifecycle": "Eggs laid on plants in the Urticaceae family. Caterpillars are green with spines.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/AN_88",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/an-88",
+      "butterflyidentification": "https://www.butterflyidentification.com/an-88",
+      "inaturalist": "https://www.inaturalist.org/taxa/an-88"
+    },
+    "notes": "",
+    "image_path": "data/raw/AN 88/001.jpg"
+  },
+  "APPOLLO": {
+    "id": 5,
+    "common_name": "APPOLLO",
+    "scientific_name": "Parnassius apollo",
+    "description": "Large butterfly with white wings, black spots, red eye-spots on hindwings, and transparent wing tips.",
+    "habitat": "Mountain meadows and alpine grasslands",
+    "distribution": "Europe and Asia, in mountainous regions",
+    "wingspan": "6-8 cm",
+    "diet": "Nectar from flowers, especially thistles and knapweeds",
+    "behavior": "Slow flier. Flies from June to August. Endangered in many areas.",
+    "lifecycle": "Eggs laid on stonecrop plants. Caterpillars feed on host plant. Overwinters as egg or young caterpillar.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/APPOLLO",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/appollo",
+      "butterflyidentification": "https://www.butterflyidentification.com/appollo",
+      "inaturalist": "https://www.inaturalist.org/taxa/appollo"
+    },
+    "notes": "",
+    "image_path": "data/raw/APPOLLO/001.jpg"
+  },
+  "ARCIGERA FLOWER MOTH": {
+    "id": 6,
+    "common_name": "ARCIGERA FLOWER MOTH",
+    "scientific_name": "Schinia arcigera",
+    "description": "Medium-sized moth with brown and white patterned wings, and distinctive flower-like markings.",
+    "habitat": "Grasslands, prairies, and open areas",
+    "distribution": "North America, from Canada to Mexico",
+    "wingspan": "2.5-3.5 cm",
+    "diet": "Nectar from flowers, especially evening primroses",
+    "behavior": "Nocturnal. Attracted to lights. Flies from May to September.",
+    "lifecycle": "Eggs laid on host plants. Caterpillars feed on flowers and seeds.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/ARCIGERA_FLOWER_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/arcigera-flower-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/arcigera-flower-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/arcigera-flower-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/ARCIGERA FLOWER MOTH/001.jpg"
+  },
+  "ATALA": {
+    "id": 7,
+    "common_name": "ATALA",
+    "scientific_name": "Eumaeus atala",
+    "description": "Small butterfly with black wings, blue-green iridescent spots, and red abdomen.",
+    "habitat": "Tropical and subtropical areas with cycad plants",
+    "distribution": "Florida, Caribbean, and Central America",
+    "wingspan": "3.5-4.5 cm",
+    "diet": "Nectar from flowers, especially Lantana",
+    "behavior": "Slow flier. Forms colonies. Warning colors indicate toxicity.",
+    "lifecycle": "Eggs laid on cycad plants. Caterpillars are toxic due to cycad consumption.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/ATALA",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/atala",
+      "butterflyidentification": "https://www.butterflyidentification.com/atala",
+      "inaturalist": "https://www.inaturalist.org/taxa/atala"
+    },
+    "notes": "",
+    "image_path": "data/raw/ATALA/001.jpg"
+  },
+  "ATLAS MOTH": {
+    "id": 8,
+    "common_name": "ATLAS MOTH",
+    "scientific_name": "Attacus atlas",
+    "description": "Very large moth with brown, red, and white patterned wings, and distinctive snake-like wing tips.",
+    "habitat": "Tropical and subtropical forests",
+    "distribution": "Southeast Asia, from India to Indonesia",
+    "wingspan": "25-30 cm",
+    "diet": "Adults do not feed. Caterpillars feed on various trees.",
+    "behavior": "Nocturnal. Attracted to lights. Short-lived as adults.",
+    "lifecycle": "Large caterpillars feed on various host plants. Cocoons are made of silk.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/ATLAS_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/atlas-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/atlas-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/atlas-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/ATLAS MOTH/001.jpg"
+  },
+  "BANDED ORANGE HELICONIAN": {
+    "id": 9,
+    "common_name": "BANDED ORANGE HELICONIAN",
+    "scientific_name": "Dryadula phaetusa",
+    "description": "Medium-sized butterfly with orange and black banded wings, and long narrow shape.",
+    "habitat": "Tropical forests and gardens",
+    "distribution": "Central and South America, from Mexico to Brazil",
+    "wingspan": "7-9 cm",
+    "diet": "Nectar from flowers, especially Lantana and Pentas",
+    "behavior": "Strong flier. Migratory. Forms aggregations at roosting sites.",
+    "lifecycle": "Eggs laid on passionflower vines. Caterpillars feed on host plant.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/BANDED_ORANGE_HELICONIAN",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/banded-orange-heliconian",
+      "butterflyidentification": "https://www.butterflyidentification.com/banded-orange-heliconian",
+      "inaturalist": "https://www.inaturalist.org/taxa/banded-orange-heliconian"
+    },
+    "notes": "",
+    "image_path": "data/raw/BANDED ORANGE HELICONIAN/001.jpg"
+  },
+  "BANDED PEACOCK": {
+    "id": 10,
+    "common_name": "BANDED PEACOCK",
+    "scientific_name": "Anartia fatima",
+    "description": "Medium-sized butterfly with brown wings, white bands, and distinctive eye-spots on hindwings.",
+    "habitat": "Open areas, gardens, and forest edges",
+    "distribution": "Central and South America, from Mexico to Brazil",
+    "wingspan": "5-7 cm",
+    "diet": "Nectar from flowers, especially Lantana",
+    "behavior": "Fast flier. Common in gardens. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on plants in the Acanthaceae family. Multiple generations per year.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/BANDED_PEACOCK",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/banded-peacock",
+      "butterflyidentification": "https://www.butterflyidentification.com/banded-peacock",
+      "inaturalist": "https://www.inaturalist.org/taxa/banded-peacock"
+    },
+    "notes": "",
+    "image_path": "data/raw/BANDED PEACOCK/001.jpg"
+  },
+  "BANDED TIGER MOTH": {
+    "id": 11,
+    "common_name": "BANDED TIGER MOTH",
+    "scientific_name": "Apantesis vittata",
+    "description": "Medium-sized moth with black and white banded wings, and orange or yellow markings.",
+    "habitat": "Grasslands, meadows, and open areas",
+    "distribution": "North America, from Canada to Mexico",
+    "wingspan": "3-4 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Nocturnal. Attracted to lights. Flies from May to August.",
+    "lifecycle": "Eggs laid on various host plants. Caterpillars are woolly bears.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/BANDED_TIGER_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/banded-tiger-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/banded-tiger-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/banded-tiger-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/BANDED TIGER MOTH/001.jpg"
+  },
+  "BECKERS WHITE": {
+    "id": 12,
+    "common_name": "BECKERS WHITE",
+    "scientific_name": "Pontia beckerii",
+    "description": "Small butterfly with white wings, black spots on forewings, and gray-green undersides.",
+    "habitat": "Deserts, grasslands, and open areas",
+    "distribution": "Western North America, from Canada to Mexico",
+    "wingspan": "3-4 cm",
+    "diet": "Nectar from flowers, especially mustards",
+    "behavior": "Fast flier. Flies from March to October. Multiple generations per year.",
+    "lifecycle": "Eggs laid on plants in the Brassicaceae family. Caterpillars feed on host plant.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/BECKERS_WHITE",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/beckers-white",
+      "butterflyidentification": "https://www.butterflyidentification.com/beckers-white",
+      "inaturalist": "https://www.inaturalist.org/taxa/beckers-white"
+    },
+    "notes": "",
+    "image_path": "data/raw/BECKERS WHITE/001.jpg"
+  },
+  "BIRD CHERRY ERMINE MOTH": {
+    "id": 13,
+    "common_name": "BIRD CHERRY ERMINE MOTH",
+    "scientific_name": "Yponomeuta evonymella",
+    "description": "Small white moth with black spots, and distinctive ermine-like pattern.",
+    "habitat": "Woodlands and areas with cherry trees",
+    "distribution": "Europe and Asia",
+    "wingspan": "1.5-2.5 cm",
+    "diet": "Adults do not feed. Caterpillars feed on cherry and related trees.",
+    "behavior": "Nocturnal. Can form large colonies that defoliate trees.",
+    "lifecycle": "Eggs laid on cherry trees. Caterpillars form communal webs. Overwinters as young caterpillar.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/BIRD_CHERRY_ERMINE_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/bird-cherry-ermine-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/bird-cherry-ermine-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/bird-cherry-ermine-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/BIRD CHERRY ERMINE MOTH/001.jpg"
+  },
+  "BLACK HAIRSTREAK": {
+    "id": 14,
+    "common_name": "BLACK HAIRSTREAK",
+    "scientific_name": "Satyrium pruni",
+    "description": "Small butterfly with brown wings, orange band on hindwings, and white-tipped tail.",
+    "habitat": "Woodlands and hedgerows with blackthorn",
+    "distribution": "Europe, from England to Russia",
+    "wingspan": "3-4 cm",
+    "diet": "Nectar from flowers, honeydew from aphids",
+    "behavior": "Flies from June to July. Rare and localized. Perches high in trees.",
+    "lifecycle": "Eggs laid on blackthorn. Caterpillars feed on leaves. Overwinters as egg.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/BLACK_HAIRSTREAK",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/black-hairstreak",
+      "butterflyidentification": "https://www.butterflyidentification.com/black-hairstreak",
+      "inaturalist": "https://www.inaturalist.org/taxa/black-hairstreak"
+    },
+    "notes": "",
+    "image_path": "data/raw/BLACK HAIRSTREAK/001.jpg"
+  },
+  "BLUE MORPHO": {
+    "id": 15,
+    "common_name": "BLUE MORPHO",
+    "scientific_name": "Morpho menelaus",
+    "description": "Very large butterfly with brilliant blue iridescent upperwings and brown undersides with eye-spots.",
+    "habitat": "Tropical rainforests",
+    "distribution": "Central and South America, from Mexico to Brazil",
+    "wingspan": "12-20 cm",
+    "diet": "Nectar from flowers, rotting fruit, and tree sap",
+    "behavior": "Strong flier. Males are territorial. Flies in forest canopy.",
+    "lifecycle": "Eggs laid on various host plants. Large caterpillars with defensive spines.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/BLUE_MORPHO",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/blue-morpho",
+      "butterflyidentification": "https://www.butterflyidentification.com/blue-morpho",
+      "inaturalist": "https://www.inaturalist.org/taxa/blue-morpho"
+    },
+    "notes": "",
+    "image_path": "data/raw/BLUE MORPHO/001.jpg"
+  },
+  "BLUE SPOTTED CROW": {
+    "id": 16,
+    "common_name": "BLUE SPOTTED CROW",
+    "scientific_name": "Euploea midamus",
+    "description": "Medium-sized butterfly with dark brown or black wings, blue spots, and white markings.",
+    "habitat": "Tropical forests and gardens",
+    "distribution": "Southeast Asia, from India to Indonesia",
+    "wingspan": "7-9 cm",
+    "diet": "Nectar from flowers, especially Lantana",
+    "behavior": "Slow flier. Forms aggregations. Warning colors indicate toxicity.",
+    "lifecycle": "Eggs laid on plants in the Apocynaceae family. Caterpillars are toxic.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/BLUE_SPOTTED_CROW",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/blue-spotted-crow",
+      "butterflyidentification": "https://www.butterflyidentification.com/blue-spotted-crow",
+      "inaturalist": "https://www.inaturalist.org/taxa/blue-spotted-crow"
+    },
+    "notes": "",
+    "image_path": "data/raw/BLUE SPOTTED CROW/001.jpg"
+  },
+  "BROOKES BIRDWING": {
+    "id": 17,
+    "common_name": "BROOKES BIRDWING",
+    "scientific_name": "Ornithoptera brookiana",
+    "description": "Very large butterfly with black and green wings (males) or brown wings (females), and long tail-like extensions.",
+    "habitat": "Tropical rainforests",
+    "distribution": "Southeast Asia, especially Borneo and Sumatra",
+    "wingspan": "15-20 cm",
+    "diet": "Nectar from flowers, tree sap",
+    "behavior": "Strong flier. Males are territorial. Rare and protected.",
+    "lifecycle": "Eggs laid on Aristolochia plants. Large caterpillars. Protected species.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/BROOKES_BIRDWING",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/brookes-birdwing",
+      "butterflyidentification": "https://www.butterflyidentification.com/brookes-birdwing",
+      "inaturalist": "https://www.inaturalist.org/taxa/brookes-birdwing"
+    },
+    "notes": "",
+    "image_path": "data/raw/BROOKES BIRDWING/001.jpg"
+  },
+  "BROWN ARGUS": {
+    "id": 18,
+    "common_name": "BROWN ARGUS",
+    "scientific_name": "Aricia agestis",
+    "description": "Small butterfly with brown wings, orange spots on hindwings, and white fringes.",
+    "habitat": "Grasslands, meadows, and open areas",
+    "distribution": "Europe, from England to the Mediterranean",
+    "wingspan": "2.5-3.5 cm",
+    "diet": "Nectar from flowers, especially knapweeds",
+    "behavior": "Flies from May to September. Forms colonies. Low flier.",
+    "lifecycle": "Eggs laid on rockrose and related plants. Caterpillars feed on host plant.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/BROWN_ARGUS",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/brown-argus",
+      "butterflyidentification": "https://www.butterflyidentification.com/brown-argus",
+      "inaturalist": "https://www.inaturalist.org/taxa/brown-argus"
+    },
+    "notes": "",
+    "image_path": "data/raw/BROWN ARGUS/001.jpg"
+  },
+  "BROWN SIPROETA": {
+    "id": 19,
+    "common_name": "BROWN SIPROETA",
+    "scientific_name": "Siproeta epaphus",
+    "description": "Medium-sized butterfly with brown wings, orange bands, and distinctive eye-spots.",
+    "habitat": "Tropical forests and gardens",
+    "distribution": "Central and South America, from Mexico to Brazil",
+    "wingspan": "6-8 cm",
+    "diet": "Nectar from flowers, rotting fruit",
+    "behavior": "Fast flier. Common in gardens. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on plants in the Acanthaceae family. Multiple generations per year.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/BROWN_SIPROETA",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/brown-siproeta",
+      "butterflyidentification": "https://www.butterflyidentification.com/brown-siproeta",
+      "inaturalist": "https://www.inaturalist.org/taxa/brown-siproeta"
+    },
+    "notes": "",
+    "image_path": "data/raw/BROWN SIPROETA/001.jpg"
+  },
+  "CABBAGE WHITE": {
+    "id": 20,
+    "common_name": "CABBAGE WHITE",
+    "scientific_name": "Pieris rapae",
+    "description": "Small butterfly with white wings, black spots on forewings (males) or two spots (females), and yellow-green undersides.",
+    "habitat": "Gardens, fields, and open areas",
+    "distribution": "Worldwide, introduced to many regions",
+    "wingspan": "4-6 cm",
+    "diet": "Nectar from flowers, especially mustards",
+    "behavior": "Common garden pest. Fast flier. Multiple generations per year.",
+    "lifecycle": "Eggs laid on plants in the Brassicaceae family. Green caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/CABBAGE_WHITE",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/cabbage-white",
+      "butterflyidentification": "https://www.butterflyidentification.com/cabbage-white",
+      "inaturalist": "https://www.inaturalist.org/taxa/cabbage-white"
+    },
+    "notes": "",
+    "image_path": "data/raw/CABBAGE WHITE/001.jpg"
+  },
+  "CAIRNS BIRDWING": {
+    "id": 21,
+    "common_name": "CAIRNS BIRDWING",
+    "scientific_name": "Ornithoptera euphorion",
+    "description": "Very large butterfly with black and green wings (males) or brown wings (females), and long tail-like extensions.",
+    "habitat": "Tropical rainforests",
+    "distribution": "Northeastern Australia and Papua New Guinea",
+    "wingspan": "12-15 cm",
+    "diet": "Nectar from flowers, tree sap",
+    "behavior": "Strong flier. Males are territorial. Protected species.",
+    "lifecycle": "Eggs laid on Aristolochia plants. Large caterpillars. Protected in Australia.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/CAIRNS_BIRDWING",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/cairns-birdwing",
+      "butterflyidentification": "https://www.butterflyidentification.com/cairns-birdwing",
+      "inaturalist": "https://www.inaturalist.org/taxa/cairns-birdwing"
+    },
+    "notes": "",
+    "image_path": "data/raw/CAIRNS BIRDWING/001.jpg"
+  },
+  "CHALK HILL BLUE": {
+    "id": 22,
+    "common_name": "CHALK HILL BLUE",
+    "scientific_name": "Lysandra coridon",
+    "description": "Small butterfly with blue upperwings (males) or brown upperwings (females), and distinctive white fringes.",
+    "habitat": "Chalk grasslands and limestone areas",
+    "distribution": "Europe, from England to the Mediterranean",
+    "wingspan": "3-4 cm",
+    "diet": "Nectar from flowers, especially knapweeds",
+    "behavior": "Flies from July to September. Forms colonies. Low flier.",
+    "lifecycle": "Eggs laid on horseshoe vetch. Caterpillars feed on host plant. Overwinters as egg.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/CHALK_HILL_BLUE",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/chalk-hill-blue",
+      "butterflyidentification": "https://www.butterflyidentification.com/chalk-hill-blue",
+      "inaturalist": "https://www.inaturalist.org/taxa/chalk-hill-blue"
+    },
+    "notes": "",
+    "image_path": "data/raw/CHALK HILL BLUE/001.jpg"
+  },
+  "CHECQUERED SKIPPER": {
+    "id": 23,
+    "common_name": "CHECQUERED SKIPPER",
+    "scientific_name": "Carterocephalus palaemon",
+    "description": "Small butterfly with brown and orange checkered wings, and distinctive pattern.",
+    "habitat": "Woodlands, grasslands, and open areas",
+    "distribution": "Europe, Asia, and North America",
+    "wingspan": "2.5-3.5 cm",
+    "diet": "Nectar from flowers, especially bugle and bluebells",
+    "behavior": "Fast flier. Flies from May to July. Low flier.",
+    "lifecycle": "Eggs laid on grasses. Caterpillars feed on host plant. Overwinters as caterpillar.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/CHECQUERED_SKIPPER",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/checquered-skipper",
+      "butterflyidentification": "https://www.butterflyidentification.com/checquered-skipper",
+      "inaturalist": "https://www.inaturalist.org/taxa/checquered-skipper"
+    },
+    "notes": "",
+    "image_path": "data/raw/CHECQUERED SKIPPER/001.jpg"
+  },
+  "CHESTNUT": {
+    "id": 24,
+    "common_name": "CHESTNUT",
+    "scientific_name": "Coenonympha glycerion",
+    "description": "Small butterfly with brown wings, orange patches, and eye-spots on hindwings.",
+    "habitat": "Grasslands, meadows, and open areas",
+    "distribution": "Europe and Asia",
+    "wingspan": "3-4 cm",
+    "diet": "Nectar from flowers, especially grasses",
+    "behavior": "Flies from June to August. Low flier. Forms colonies.",
+    "lifecycle": "Eggs laid on grasses. Caterpillars feed on host plant. Overwinters as caterpillar.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/CHESTNUT",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/chestnut",
+      "butterflyidentification": "https://www.butterflyidentification.com/chestnut",
+      "inaturalist": "https://www.inaturalist.org/taxa/chestnut"
+    },
+    "notes": "",
+    "image_path": "data/raw/CHESTNUT/001.jpg"
+  },
+  "CINNABAR MOTH": {
+    "id": 25,
+    "common_name": "CINNABAR MOTH",
+    "scientific_name": "Tyria jacobaeae",
+    "description": "Medium-sized moth with black and red wings, and distinctive warning colors.",
+    "habitat": "Grasslands, meadows, and open areas",
+    "distribution": "Europe, Asia, and introduced to North America and Australia",
+    "wingspan": "3-4 cm",
+    "diet": "Adults do not feed. Caterpillars feed on ragwort.",
+    "behavior": "Nocturnal. Flies from May to August. Warning colors indicate toxicity.",
+    "lifecycle": "Eggs laid on ragwort. Yellow and black striped caterpillars are toxic.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/CINNABAR_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/cinnabar-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/cinnabar-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/cinnabar-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/CINNABAR MOTH/001.jpg"
+  },
+  "CLEARWING MOTH": {
+    "id": 26,
+    "common_name": "CLEARWING MOTH",
+    "scientific_name": "Sesia apiformis",
+    "description": "Medium-sized moth with transparent wings, yellow and black body, and wasp-like appearance.",
+    "habitat": "Woodlands and areas with poplar trees",
+    "distribution": "Europe and Asia",
+    "wingspan": "3-4 cm",
+    "diet": "Adults do not feed. Caterpillars feed on poplar trees.",
+    "behavior": "Diurnal. Mimics wasps. Flies from May to July.",
+    "lifecycle": "Eggs laid on poplar trees. Caterpillars bore into tree trunks.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/CLEARWING_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/clearwing-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/clearwing-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/clearwing-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/CLEARWING MOTH/001.jpg"
+  },
+  "CLEOPATRA": {
+    "id": 27,
+    "common_name": "CLEOPATRA",
+    "scientific_name": "Gonepteryx cleopatra",
+    "description": "Medium-sized butterfly with yellow wings (males) or greenish-white wings (females), and distinctive shape.",
+    "habitat": "Woodlands, scrublands, and gardens",
+    "distribution": "Europe, from Mediterranean to southern England",
+    "wingspan": "5-6 cm",
+    "diet": "Nectar from flowers, especially thistles",
+    "behavior": "Strong flier. Flies from March to October. Overwinters as adult.",
+    "lifecycle": "Eggs laid on buckthorn. Green caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/CLEOPATRA",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/cleopatra",
+      "butterflyidentification": "https://www.butterflyidentification.com/cleopatra",
+      "inaturalist": "https://www.inaturalist.org/taxa/cleopatra"
+    },
+    "notes": "",
+    "image_path": "data/raw/CLEOPATRA/001.jpg"
+  },
+  "CLODIUS PARNASSIAN": {
+    "id": 28,
+    "common_name": "CLODIUS PARNASSIAN",
+    "scientific_name": "Parnassius clodius",
+    "description": "Large butterfly with white wings, black spots, red eye-spots on hindwings, and transparent wing tips.",
+    "habitat": "Mountain meadows and alpine areas",
+    "distribution": "Western North America, from Alaska to California",
+    "wingspan": "5-7 cm",
+    "diet": "Nectar from flowers, especially thistles",
+    "behavior": "Slow flier. Flies from May to August. High altitude species.",
+    "lifecycle": "Eggs laid on stonecrop plants. Caterpillars feed on host plant.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/CLODIUS_PARNASSIAN",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/clodius-parnassian",
+      "butterflyidentification": "https://www.butterflyidentification.com/clodius-parnassian",
+      "inaturalist": "https://www.inaturalist.org/taxa/clodius-parnassian"
+    },
+    "notes": "",
+    "image_path": "data/raw/CLODIUS PARNASSIAN/001.jpg"
+  },
+  "CLOUDED SULPHUR": {
+    "id": 29,
+    "common_name": "CLOUDED SULPHUR",
+    "scientific_name": "Colias philodice",
+    "description": "Medium-sized butterfly with yellow wings (males) or white/yellow wings (females), and black borders.",
+    "habitat": "Grasslands, fields, and open areas",
+    "distribution": "North America, from Canada to Mexico",
+    "wingspan": "4-6 cm",
+    "diet": "Nectar from flowers, especially clovers",
+    "behavior": "Fast flier. Migratory. Multiple generations per year.",
+    "lifecycle": "Eggs laid on plants in the Fabaceae family. Green caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/CLOUDED_SULPHUR",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/clouded-sulphur",
+      "butterflyidentification": "https://www.butterflyidentification.com/clouded-sulphur",
+      "inaturalist": "https://www.inaturalist.org/taxa/clouded-sulphur"
+    },
+    "notes": "",
+    "image_path": "data/raw/CLOUDED SULPHUR/001.jpg"
+  },
+  "COMET MOTH": {
+    "id": 30,
+    "common_name": "COMET MOTH",
+    "scientific_name": "Argema mittrei",
+    "description": "Very large moth with yellow and brown wings, long tail-like extensions, and distinctive eye-spots.",
+    "habitat": "Tropical rainforests",
+    "distribution": "Madagascar",
+    "wingspan": "15-20 cm",
+    "diet": "Adults do not feed. Caterpillars feed on various trees.",
+    "behavior": "Nocturnal. Attracted to lights. Short-lived as adults.",
+    "lifecycle": "Large caterpillars feed on host plants. Cocoons are made of silk.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/COMET_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/comet-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/comet-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/comet-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/COMET MOTH/001.jpg"
+  },
+  "COMMON BANDED AWL": {
+    "id": 31,
+    "common_name": "COMMON BANDED AWL",
+    "scientific_name": "Hasora chromus",
+    "description": "Medium-sized butterfly with brown wings, white bands, and distinctive shape.",
+    "habitat": "Tropical forests and gardens",
+    "distribution": "Southeast Asia, from India to Australia",
+    "wingspan": "4-5 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Fast flier. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on plants in the Fabaceae family. Caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/COMMON_BANDED_AWL",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/common-banded-awl",
+      "butterflyidentification": "https://www.butterflyidentification.com/common-banded-awl",
+      "inaturalist": "https://www.inaturalist.org/taxa/common-banded-awl"
+    },
+    "notes": "",
+    "image_path": "data/raw/COMMON BANDED AWL/001.jpg"
+  },
+  "COMMON WOOD-NYMPH": {
+    "id": 32,
+    "common_name": "COMMON WOOD-NYMPH",
+    "scientific_name": "Cercyonis pegala",
+    "description": "Medium-sized butterfly with brown wings, eye-spots on forewings, and yellow patches.",
+    "habitat": "Woodlands, grasslands, and open areas",
+    "distribution": "North America, from Canada to Mexico",
+    "wingspan": "5-7 cm",
+    "diet": "Nectar from flowers, tree sap, and rotting fruit",
+    "behavior": "Slow flier. Flies from June to September. Low flier.",
+    "lifecycle": "Eggs laid on grasses. Caterpillars feed on host plant. Overwinters as caterpillar.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/COMMON_WOOD-NYMPH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/common-wood-nymph",
+      "butterflyidentification": "https://www.butterflyidentification.com/common-wood-nymph",
+      "inaturalist": "https://www.inaturalist.org/taxa/common-wood-nymph"
+    },
+    "notes": "",
+    "image_path": "data/raw/COMMON WOOD-NYMPH/001.jpg"
+  },
+  "COPPER TAIL": {
+    "id": 33,
+    "common_name": "COPPER TAIL",
+    "scientific_name": "Lycaena phlaeas",
+    "description": "Small butterfly with orange and brown wings, black spots, and copper-colored hindwings.",
+    "habitat": "Grasslands, meadows, and open areas",
+    "distribution": "Europe, Asia, and North America",
+    "wingspan": "2.5-3.5 cm",
+    "diet": "Nectar from flowers, especially daisies",
+    "behavior": "Fast flier. Flies from April to October. Multiple generations per year.",
+    "lifecycle": "Eggs laid on dock and sorrel plants. Green caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/COPPER_TAIL",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/copper-tail",
+      "butterflyidentification": "https://www.butterflyidentification.com/copper-tail",
+      "inaturalist": "https://www.inaturalist.org/taxa/copper-tail"
+    },
+    "notes": "",
+    "image_path": "data/raw/COPPER TAIL/001.jpg"
+  },
+  "CRECENT": {
+    "id": 34,
+    "common_name": "CRECENT",
+    "scientific_name": "Phyciodes tharos",
+    "description": "Small butterfly with orange and black wings, crescent-shaped markings, and distinctive pattern.",
+    "habitat": "Grasslands, fields, and open areas",
+    "distribution": "North America, from Canada to Mexico",
+    "wingspan": "3-4 cm",
+    "diet": "Nectar from flowers, especially asters",
+    "behavior": "Fast flier. Multiple generations per year. Flies from April to October.",
+    "lifecycle": "Eggs laid on plants in the Asteraceae family. Caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/CRECENT",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/crecent",
+      "butterflyidentification": "https://www.butterflyidentification.com/crecent",
+      "inaturalist": "https://www.inaturalist.org/taxa/crecent"
+    },
+    "notes": "",
+    "image_path": "data/raw/CRECENT/001.jpg"
+  },
+  "CRIMSON PATCH": {
+    "id": 35,
+    "common_name": "CRIMSON PATCH",
+    "scientific_name": "Chlosyne janais",
+    "description": "Medium-sized butterfly with black wings, red patches, and white spots.",
+    "habitat": "Tropical forests and gardens",
+    "distribution": "Central and South America, from Mexico to Brazil",
+    "wingspan": "5-7 cm",
+    "diet": "Nectar from flowers, especially Lantana",
+    "behavior": "Fast flier. Common in gardens. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on plants in the Acanthaceae family. Caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/CRIMSON_PATCH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/crimson-patch",
+      "butterflyidentification": "https://www.butterflyidentification.com/crimson-patch",
+      "inaturalist": "https://www.inaturalist.org/taxa/crimson-patch"
+    },
+    "notes": "",
+    "image_path": "data/raw/CRIMSON PATCH/001.jpg"
+  },
+  "DANAID EGGFLY": {
+    "id": 36,
+    "common_name": "DANAID EGGFLY",
+    "scientific_name": "Hypolimnas misippus",
+    "description": "Medium-sized butterfly with brown wings, white spots, and distinctive eye-spots on hindwings.",
+    "habitat": "Tropical and subtropical areas",
+    "distribution": "Africa, Asia, and Australia",
+    "wingspan": "6-8 cm",
+    "diet": "Nectar from flowers, especially Lantana",
+    "behavior": "Fast flier. Mimics toxic species. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on various host plants. Caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/DANAID_EGGFLY",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/danaid-eggfly",
+      "butterflyidentification": "https://www.butterflyidentification.com/danaid-eggfly",
+      "inaturalist": "https://www.inaturalist.org/taxa/danaid-eggfly"
+    },
+    "notes": "",
+    "image_path": "data/raw/DANAID EGGFLY/001.jpg"
+  },
+  "EASTERN COMA": {
+    "id": 37,
+    "common_name": "EASTERN COMA",
+    "scientific_name": "Polygonia comma",
+    "description": "Medium-sized butterfly with orange and black wings, jagged edges, and distinctive pattern.",
+    "habitat": "Woodlands, fields, and open areas",
+    "distribution": "Eastern North America",
+    "wingspan": "4-6 cm",
+    "diet": "Nectar from flowers, tree sap, and rotting fruit",
+    "behavior": "Fast flier. Overwinters as adult. Flies from March to November.",
+    "lifecycle": "Eggs laid on elm and nettle plants. Spiny caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/EASTERN_COMA",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/eastern-coma",
+      "butterflyidentification": "https://www.butterflyidentification.com/eastern-coma",
+      "inaturalist": "https://www.inaturalist.org/taxa/eastern-coma"
+    },
+    "notes": "",
+    "image_path": "data/raw/EASTERN COMA/001.jpg"
+  },
+  "EASTERN DAPPLE WHITE": {
+    "id": 38,
+    "common_name": "EASTERN DAPPLE WHITE",
+    "scientific_name": "Euchloe ausonides",
+    "description": "Small butterfly with white wings, green marbling on undersides, and black spots.",
+    "habitat": "Grasslands, meadows, and open areas",
+    "distribution": "Western North America, from Canada to Mexico",
+    "wingspan": "3-4 cm",
+    "diet": "Nectar from flowers, especially mustards",
+    "behavior": "Fast flier. Flies from March to June. Single generation per year.",
+    "lifecycle": "Eggs laid on plants in the Brassicaceae family. Green caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/EASTERN_DAPPLE_WHITE",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/eastern-dapple-white",
+      "butterflyidentification": "https://www.butterflyidentification.com/eastern-dapple-white",
+      "inaturalist": "https://www.inaturalist.org/taxa/eastern-dapple-white"
+    },
+    "notes": "",
+    "image_path": "data/raw/EASTERN DAPPLE WHITE/001.jpg"
+  },
+  "EASTERN PINE ELFIN": {
+    "id": 39,
+    "common_name": "EASTERN PINE ELFIN",
+    "scientific_name": "Callophrys niphon",
+    "description": "Small butterfly with brown wings, green undersides, and white line on hindwings.",
+    "habitat": "Pine forests and woodlands",
+    "distribution": "Eastern North America",
+    "wingspan": "2-3 cm",
+    "diet": "Nectar from flowers, especially blueberries",
+    "behavior": "Fast flier. Flies from March to May. Low flier.",
+    "lifecycle": "Eggs laid on pine trees. Green caterpillars feed on needles.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/EASTERN_PINE_ELFIN",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/eastern-pine-elfin",
+      "butterflyidentification": "https://www.butterflyidentification.com/eastern-pine-elfin",
+      "inaturalist": "https://www.inaturalist.org/taxa/eastern-pine-elfin"
+    },
+    "notes": "",
+    "image_path": "data/raw/EASTERN PINE ELFIN/001.jpg"
+  },
+  "ELBOWED PIERROT": {
+    "id": 40,
+    "common_name": "ELBOWED PIERROT",
+    "scientific_name": "Caleta elna",
+    "description": "Small butterfly with black and white wings, orange spots, and distinctive pattern.",
+    "habitat": "Tropical forests and gardens",
+    "distribution": "Southeast Asia, from India to Indonesia",
+    "wingspan": "2.5-3.5 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Fast flier. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on various host plants. Caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/ELBOWED_PIERROT",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/elbowed-pierrot",
+      "butterflyidentification": "https://www.butterflyidentification.com/elbowed-pierrot",
+      "inaturalist": "https://www.inaturalist.org/taxa/elbowed-pierrot"
+    },
+    "notes": "",
+    "image_path": "data/raw/ELBOWED PIERROT/001.jpg"
+  },
+  "EMPEROR GUM MOTH": {
+    "id": 41,
+    "common_name": "EMPEROR GUM MOTH",
+    "scientific_name": "Opodiphthera eucalypti",
+    "description": "Large moth with brown and white patterned wings, and distinctive eye-spots.",
+    "habitat": "Eucalyptus forests and woodlands",
+    "distribution": "Australia and New Zealand",
+    "wingspan": "10-15 cm",
+    "diet": "Adults do not feed. Caterpillars feed on eucalyptus leaves.",
+    "behavior": "Nocturnal. Attracted to lights. Flies from autumn to spring.",
+    "lifecycle": "Large green caterpillars feed on eucalyptus. Cocoons are made of silk.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/EMPEROR_GUM_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/emperor-gum-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/emperor-gum-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/emperor-gum-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/EMPEROR GUM MOTH/001.jpg"
+  },
+  "GARDEN TIGER MOTH": {
+    "id": 42,
+    "common_name": "GARDEN TIGER MOTH",
+    "scientific_name": "Arctia caja",
+    "description": "Large moth with brown and white patterned wings, orange hindwings, and distinctive tiger-like pattern.",
+    "habitat": "Gardens, meadows, and open areas",
+    "distribution": "Europe, Asia, and North America",
+    "wingspan": "5-7 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Nocturnal. Attracted to lights. Flies from June to August.",
+    "lifecycle": "Eggs laid on various host plants. Woolly bear caterpillars are common.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/GARDEN_TIGER_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/garden-tiger-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/garden-tiger-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/garden-tiger-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/GARDEN TIGER MOTH/001.jpg"
+  },
+  "GIANT LEOPARD MOTH": {
+    "id": 43,
+    "common_name": "GIANT LEOPARD MOTH",
+    "scientific_name": "Hypercompe scribonia",
+    "description": "Large moth with white wings, black spots, and leopard-like pattern.",
+    "habitat": "Woodlands, gardens, and open areas",
+    "distribution": "North America, from Canada to Mexico",
+    "wingspan": "5-7 cm",
+    "diet": "Adults do not feed. Caterpillars feed on various plants.",
+    "behavior": "Nocturnal. Attracted to lights. Flies from May to August.",
+    "lifecycle": "Eggs laid on various host plants. Black and red caterpillars with spines.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/GIANT_LEOPARD_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/giant-leopard-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/giant-leopard-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/giant-leopard-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/GIANT LEOPARD MOTH/001.jpg"
+  },
+  "GLITTERING SAPPHIRE": {
+    "id": 44,
+    "common_name": "GLITTERING SAPPHIRE",
+    "scientific_name": "Iolaus iasis",
+    "description": "Small butterfly with blue iridescent wings, and distinctive shimmering appearance.",
+    "habitat": "Tropical forests and gardens",
+    "distribution": "Africa, from South Africa to East Africa",
+    "wingspan": "2.5-3.5 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Fast flier. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on various host plants. Caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/GLITTERING_SAPPHIRE",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/glittering-sapphire",
+      "butterflyidentification": "https://www.butterflyidentification.com/glittering-sapphire",
+      "inaturalist": "https://www.inaturalist.org/taxa/glittering-sapphire"
+    },
+    "notes": "",
+    "image_path": "data/raw/GLITTERING SAPPHIRE/001.jpg"
+  },
+  "GOLD BANDED": {
+    "id": 45,
+    "common_name": "GOLD BANDED",
+    "scientific_name": "Charaxes jasius",
+    "description": "Large butterfly with brown wings, gold bands, and distinctive eye-spots.",
+    "habitat": "Mediterranean woodlands and scrublands",
+    "distribution": "Mediterranean region, from Spain to Greece",
+    "wingspan": "7-9 cm",
+    "diet": "Nectar from flowers, tree sap, and rotting fruit",
+    "behavior": "Strong flier. Flies from May to October. Males are territorial.",
+    "lifecycle": "Eggs laid on strawberry trees. Large caterpillars with spines.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/GOLD_BANDED",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/gold-banded",
+      "butterflyidentification": "https://www.butterflyidentification.com/gold-banded",
+      "inaturalist": "https://www.inaturalist.org/taxa/gold-banded"
+    },
+    "notes": "",
+    "image_path": "data/raw/GOLD BANDED/001.jpg"
+  },
+  "GREAT EGGFLY": {
+    "id": 46,
+    "common_name": "GREAT EGGFLY",
+    "scientific_name": "Hypolimnas bolina",
+    "description": "Medium-sized butterfly with black wings, white spots, and distinctive eye-spots on hindwings.",
+    "habitat": "Tropical and subtropical areas",
+    "distribution": "Africa, Asia, and Australia",
+    "wingspan": "6-8 cm",
+    "diet": "Nectar from flowers, especially Lantana",
+    "behavior": "Fast flier. Flies year-round in tropical areas. Common in gardens.",
+    "lifecycle": "Eggs laid on various host plants. Caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/GREAT_EGGFLY",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/great-eggfly",
+      "butterflyidentification": "https://www.butterflyidentification.com/great-eggfly",
+      "inaturalist": "https://www.inaturalist.org/taxa/great-eggfly"
+    },
+    "notes": "",
+    "image_path": "data/raw/GREAT EGGFLY/001.jpg"
+  },
+  "GREAT JAY": {
+    "id": 47,
+    "common_name": "GREAT JAY",
+    "scientific_name": "Graphium eurypylus",
+    "description": "Large butterfly with black and green wings, white spots, and long tail-like extensions.",
+    "habitat": "Tropical rainforests",
+    "distribution": "Southeast Asia, from India to Indonesia",
+    "wingspan": "8-10 cm",
+    "diet": "Nectar from flowers, tree sap",
+    "behavior": "Strong flier. Flies in forest canopy. Males are territorial.",
+    "lifecycle": "Eggs laid on various host plants. Large caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/GREAT_JAY",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/great-jay",
+      "butterflyidentification": "https://www.butterflyidentification.com/great-jay",
+      "inaturalist": "https://www.inaturalist.org/taxa/great-jay"
+    },
+    "notes": "",
+    "image_path": "data/raw/GREAT JAY/001.jpg"
+  },
+  "GREEN CELLED CATTLEHEART": {
+    "id": 48,
+    "common_name": "GREEN CELLED CATTLEHEART",
+    "scientific_name": "Parides sesostris",
+    "description": "Large butterfly with black wings, green spots, and distinctive pattern.",
+    "habitat": "Tropical rainforests",
+    "distribution": "Central and South America, from Mexico to Brazil",
+    "wingspan": "8-10 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Strong flier. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on Aristolochia plants. Large caterpillars feed on host plant.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/GREEN_CELLED_CATTLEHEART",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/green-celled-cattleheart",
+      "butterflyidentification": "https://www.butterflyidentification.com/green-celled-cattleheart",
+      "inaturalist": "https://www.inaturalist.org/taxa/green-celled-cattleheart"
+    },
+    "notes": "",
+    "image_path": "data/raw/GREEN CELLED CATTLEHEART/001.jpg"
+  },
+  "GREEN HAIRSTREAK": {
+    "id": 49,
+    "common_name": "GREEN HAIRSTREAK",
+    "scientific_name": "Callophrys rubi",
+    "description": "Small butterfly with brown upperwings, green undersides, and white line on hindwings.",
+    "habitat": "Heathlands, grasslands, and open areas",
+    "distribution": "Europe and Asia",
+    "wingspan": "2.5-3 cm",
+    "diet": "Nectar from flowers, especially gorse and broom",
+    "behavior": "Fast flier. Flies from April to July. Low flier.",
+    "lifecycle": "Eggs laid on various host plants. Green caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/GREEN_HAIRSTREAK",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/green-hairstreak",
+      "butterflyidentification": "https://www.butterflyidentification.com/green-hairstreak",
+      "inaturalist": "https://www.inaturalist.org/taxa/green-hairstreak"
+    },
+    "notes": "",
+    "image_path": "data/raw/GREEN HAIRSTREAK/001.jpg"
+  },
+  "GREY HAIRSTREAK": {
+    "id": 50,
+    "common_name": "GREY HAIRSTREAK",
+    "scientific_name": "Strymon melinus",
+    "description": "Small butterfly with gray wings, orange spots, and white-tipped tail.",
+    "habitat": "Open areas, fields, and gardens",
+    "distribution": "North America, from Canada to Mexico",
+    "wingspan": "2.5-3.5 cm",
+    "diet": "Nectar from flowers, especially clovers",
+    "behavior": "Fast flier. Multiple generations per year. Flies from March to November.",
+    "lifecycle": "Eggs laid on various host plants. Green caterpillars feed on flowers and fruits.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/GREY_HAIRSTREAK",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/grey-hairstreak",
+      "butterflyidentification": "https://www.butterflyidentification.com/grey-hairstreak",
+      "inaturalist": "https://www.inaturalist.org/taxa/grey-hairstreak"
+    },
+    "notes": "",
+    "image_path": "data/raw/GREY HAIRSTREAK/001.jpg"
+  },
+  "HERCULES MOTH": {
+    "id": 51,
+    "common_name": "HERCULES MOTH",
+    "scientific_name": "Coscinocera hercules",
+    "description": "Very large moth with brown and white patterned wings, and distinctive eye-spots.",
+    "habitat": "Tropical rainforests",
+    "distribution": "Northeastern Australia and New Guinea",
+    "wingspan": "25-27 cm",
+    "diet": "Adults do not feed. Caterpillars feed on various trees.",
+    "behavior": "Nocturnal. Attracted to lights. Short-lived as adults.",
+    "lifecycle": "Very large caterpillars feed on host plants. Cocoons are made of silk.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/HERCULES_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/hercules-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/hercules-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/hercules-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/HERCULES MOTH/001.jpg"
+  },
+  "HUMMING BIRD HAWK MOTH": {
+    "id": 52,
+    "common_name": "HUMMING BIRD HAWK MOTH",
+    "scientific_name": "Macroglossum stellatarum",
+    "description": "Medium-sized moth with brown wings, orange hindwings, and long proboscis. Hovers like a hummingbird.",
+    "habitat": "Gardens, meadows, and open areas",
+    "distribution": "Europe, Asia, and Africa",
+    "wingspan": "4-5 cm",
+    "diet": "Nectar from flowers, especially honeysuckle",
+    "behavior": "Diurnal. Hovers while feeding. Migratory. Flies year-round in warm areas.",
+    "lifecycle": "Eggs laid on bedstraw plants. Green caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/HUMMING_BIRD_HAWK_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/humming-bird-hawk-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/humming-bird-hawk-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/humming-bird-hawk-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/HUMMING BIRD HAWK MOTH/001.jpg"
+  },
+  "INDRA SWALLOW": {
+    "id": 53,
+    "common_name": "INDRA SWALLOW",
+    "scientific_name": "Papilio indra",
+    "description": "Large butterfly with black wings, yellow spots, and long tail-like extensions.",
+    "habitat": "Mountain meadows and alpine areas",
+    "distribution": "Western North America, from Canada to Mexico",
+    "wingspan": "7-9 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Strong flier. Flies from May to August. High altitude species.",
+    "lifecycle": "Eggs laid on plants in the Apiaceae family. Large caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/INDRA_SWALLOW",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/indra-swallow",
+      "butterflyidentification": "https://www.butterflyidentification.com/indra-swallow",
+      "inaturalist": "https://www.inaturalist.org/taxa/indra-swallow"
+    },
+    "notes": "",
+    "image_path": "data/raw/INDRA SWALLOW/001.jpg"
+  },
+  "IO MOTH": {
+    "id": 54,
+    "common_name": "IO MOTH",
+    "scientific_name": "Automeris io",
+    "description": "Large moth with yellow and pink wings, distinctive eye-spots, and warning colors.",
+    "habitat": "Woodlands, fields, and open areas",
+    "distribution": "North America, from Canada to Mexico",
+    "wingspan": "6-8 cm",
+    "diet": "Adults do not feed. Caterpillars feed on various trees.",
+    "behavior": "Nocturnal. Attracted to lights. Flies from May to August.",
+    "lifecycle": "Large spiny caterpillars feed on host plants. Cocoons are made of silk.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/IO_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/io-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/io-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/io-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/IO MOTH/001.jpg"
+  },
+  "Iphiclus sister": {
+    "id": 55,
+    "common_name": "Iphiclus sister",
+    "scientific_name": "Adelpha iphiclus",
+    "description": "Medium-sized butterfly with brown wings, white bands, and distinctive pattern.",
+    "habitat": "Tropical forests and gardens",
+    "distribution": "Central and South America, from Mexico to Brazil",
+    "wingspan": "5-7 cm",
+    "diet": "Nectar from flowers, rotting fruit",
+    "behavior": "Fast flier. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on various host plants. Caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/Iphiclus_sister",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/iphiclus-sister",
+      "butterflyidentification": "https://www.butterflyidentification.com/iphiclus-sister",
+      "inaturalist": "https://www.inaturalist.org/taxa/iphiclus-sister"
+    },
+    "notes": "",
+    "image_path": "data/raw/Iphiclus sister/001.jpg"
+  },
+  "JULIA": {
+    "id": 56,
+    "common_name": "JULIA",
+    "scientific_name": "Dryas iulia",
+    "description": "Medium-sized butterfly with orange wings, black borders, and long narrow shape.",
+    "habitat": "Tropical forests and gardens",
+    "distribution": "Central and South America, from Texas to Brazil",
+    "wingspan": "8-10 cm",
+    "diet": "Nectar from flowers, especially Lantana",
+    "behavior": "Strong flier. Fast flier. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on passionflower vines. Caterpillars feed on host plant.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/JULIA",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/julia",
+      "butterflyidentification": "https://www.butterflyidentification.com/julia",
+      "inaturalist": "https://www.inaturalist.org/taxa/julia"
+    },
+    "notes": "",
+    "image_path": "data/raw/JULIA/001.jpg"
+  },
+  "LARGE MARBLE": {
+    "id": 57,
+    "common_name": "LARGE MARBLE",
+    "scientific_name": "Euchloe ausonides",
+    "description": "Small butterfly with white wings, green marbling on undersides, and black spots.",
+    "habitat": "Grasslands, meadows, and open areas",
+    "distribution": "Western North America, from Canada to Mexico",
+    "wingspan": "3-4 cm",
+    "diet": "Nectar from flowers, especially mustards",
+    "behavior": "Fast flier. Flies from March to June. Single generation per year.",
+    "lifecycle": "Eggs laid on plants in the Brassicaceae family. Green caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/LARGE_MARBLE",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/large-marble",
+      "butterflyidentification": "https://www.butterflyidentification.com/large-marble",
+      "inaturalist": "https://www.inaturalist.org/taxa/large-marble"
+    },
+    "notes": "",
+    "image_path": "data/raw/LARGE MARBLE/001.jpg"
+  },
+  "LUNA MOTH": {
+    "id": 58,
+    "common_name": "LUNA MOTH",
+    "scientific_name": "Actias luna",
+    "description": "Very large moth with green wings, long tail-like extensions, and distinctive eye-spots.",
+    "habitat": "Deciduous forests and woodlands",
+    "distribution": "Eastern North America, from Canada to Mexico",
+    "wingspan": "10-12 cm",
+    "diet": "Adults do not feed. Caterpillars feed on various trees.",
+    "behavior": "Nocturnal. Attracted to lights. Flies from May to July.",
+    "lifecycle": "Large green caterpillars feed on host plants. Cocoons are made of silk.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/LUNA_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/luna-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/luna-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/luna-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/LUNA MOTH/001.jpg"
+  },
+  "MADAGASCAN SUNSET MOTH": {
+    "id": 59,
+    "common_name": "MADAGASCAN SUNSET MOTH",
+    "scientific_name": "Chrysiridia rhipheus",
+    "description": "Large moth with iridescent wings showing rainbow colors, and distinctive tail-like extensions.",
+    "habitat": "Tropical forests",
+    "distribution": "Madagascar",
+    "wingspan": "7-11 cm",
+    "diet": "Adults do not feed. Caterpillars feed on Omphalea plants.",
+    "behavior": "Diurnal. Flies during day. Iridescent colors are structural, not from pigments.",
+    "lifecycle": "Large caterpillars feed on Omphalea. Cocoons are made of silk.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/MADAGASCAN_SUNSET_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/madagascan-sunset-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/madagascan-sunset-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/madagascan-sunset-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/MADAGASCAN SUNSET MOTH/001.jpg"
+  },
+  "MALACHITE": {
+    "id": 60,
+    "common_name": "MALACHITE",
+    "scientific_name": "Siproeta stelenes",
+    "description": "Medium-sized butterfly with green and black wings, and distinctive malachite-like pattern.",
+    "habitat": "Tropical forests and gardens",
+    "distribution": "Central and South America, from Texas to Brazil",
+    "wingspan": "8-10 cm",
+    "diet": "Nectar from flowers, rotting fruit",
+    "behavior": "Fast flier. Flies year-round in tropical areas. Common in gardens.",
+    "lifecycle": "Eggs laid on plants in the Acanthaceae family. Caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/MALACHITE",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/malachite",
+      "butterflyidentification": "https://www.butterflyidentification.com/malachite",
+      "inaturalist": "https://www.inaturalist.org/taxa/malachite"
+    },
+    "notes": "",
+    "image_path": "data/raw/MALACHITE/001.jpg"
+  },
+  "MANGROVE SKIPPER": {
+    "id": 61,
+    "common_name": "MANGROVE SKIPPER",
+    "scientific_name": "Phocides pigmalion",
+    "description": "Medium-sized butterfly with dark brown wings, white spots, and distinctive pattern.",
+    "habitat": "Mangrove forests and coastal areas",
+    "distribution": "Central and South America, from Florida to Brazil",
+    "wingspan": "5-7 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Fast flier. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on mangrove trees. Caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/MANGROVE_SKIPPER",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/mangrove-skipper",
+      "butterflyidentification": "https://www.butterflyidentification.com/mangrove-skipper",
+      "inaturalist": "https://www.inaturalist.org/taxa/mangrove-skipper"
+    },
+    "notes": "",
+    "image_path": "data/raw/MANGROVE SKIPPER/001.jpg"
+  },
+  "MESTRA": {
+    "id": 62,
+    "common_name": "MESTRA",
+    "scientific_name": "Mestra amymone",
+    "description": "Medium-sized butterfly with brown wings, orange patches, and white spots.",
+    "habitat": "Open areas, fields, and gardens",
+    "distribution": "Central and South America, from Mexico to Brazil",
+    "wingspan": "5-7 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Fast flier. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on various host plants. Caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/MESTRA",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/mestra",
+      "butterflyidentification": "https://www.butterflyidentification.com/mestra",
+      "inaturalist": "https://www.inaturalist.org/taxa/mestra"
+    },
+    "notes": "",
+    "image_path": "data/raw/MESTRA/001.jpg"
+  },
+  "METALMARK": {
+    "id": 63,
+    "common_name": "METALMARK",
+    "scientific_name": "Calephelis virginiensis",
+    "description": "Small butterfly with brown wings, metallic spots, and distinctive pattern.",
+    "habitat": "Grasslands, meadows, and open areas",
+    "distribution": "Eastern North America",
+    "wingspan": "2-3 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Fast flier. Flies from May to September. Low flier.",
+    "lifecycle": "Eggs laid on various host plants. Small caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/METALMARK",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/metalmark",
+      "butterflyidentification": "https://www.butterflyidentification.com/metalmark",
+      "inaturalist": "https://www.inaturalist.org/taxa/metalmark"
+    },
+    "notes": "",
+    "image_path": "data/raw/METALMARK/001.jpg"
+  },
+  "MILBERTS TORTOISESHELL": {
+    "id": 64,
+    "common_name": "MILBERTS TORTOISESHELL",
+    "scientific_name": "Aglais milberti",
+    "description": "Medium-sized butterfly with orange and black wings, white spots, and jagged edges.",
+    "habitat": "Woodlands, fields, and open areas",
+    "distribution": "North America, from Canada to Mexico",
+    "wingspan": "4-6 cm",
+    "diet": "Nectar from flowers, tree sap, and rotting fruit",
+    "behavior": "Fast flier. Overwinters as adult. Flies from March to October.",
+    "lifecycle": "Eggs laid on nettle plants. Spiny caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/MILBERTS_TORTOISESHELL",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/milberts-tortoiseshell",
+      "butterflyidentification": "https://www.butterflyidentification.com/milberts-tortoiseshell",
+      "inaturalist": "https://www.inaturalist.org/taxa/milberts-tortoiseshell"
+    },
+    "notes": "",
+    "image_path": "data/raw/MILBERTS TORTOISESHELL/001.jpg"
+  },
+  "MONARCH": {
+    "id": 65,
+    "common_name": "MONARCH",
+    "scientific_name": "Danaus plexippus",
+    "description": "Large butterfly with orange and black wings, white spots, and distinctive pattern. Famous for migration.",
+    "habitat": "Open areas, fields, and gardens",
+    "distribution": "North and South America, introduced to other regions",
+    "wingspan": "8-10 cm",
+    "diet": "Nectar from flowers, especially milkweeds",
+    "behavior": "Long-distance migrant. Forms large aggregations. Warning colors indicate toxicity.",
+    "lifecycle": "Eggs laid on milkweed. Striped caterpillars are toxic. Famous migration to Mexico.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/MONARCH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/monarch",
+      "butterflyidentification": "https://www.butterflyidentification.com/monarch",
+      "inaturalist": "https://www.inaturalist.org/taxa/monarch"
+    },
+    "notes": "",
+    "image_path": "data/raw/MONARCH/001.jpg"
+  },
+  "MOURNING CLOAK": {
+    "id": 66,
+    "common_name": "MOURNING CLOAK",
+    "scientific_name": "Nymphalis antiopa",
+    "description": "Large butterfly with dark brown wings, yellow borders, and blue spots.",
+    "habitat": "Woodlands, fields, and open areas",
+    "distribution": "North America, Europe, and Asia",
+    "wingspan": "6-10 cm",
+    "diet": "Nectar from flowers, tree sap, and rotting fruit",
+    "behavior": "Overwinters as adult. Flies from March to October. Long-lived.",
+    "lifecycle": "Eggs laid on elm, willow, and poplar trees. Spiny caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/MOURNING_CLOAK",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/mourning-cloak",
+      "butterflyidentification": "https://www.butterflyidentification.com/mourning-cloak",
+      "inaturalist": "https://www.inaturalist.org/taxa/mourning-cloak"
+    },
+    "notes": "",
+    "image_path": "data/raw/MOURNING CLOAK/001.jpg"
+  },
+  "OLEANDER HAWK MOTH": {
+    "id": 67,
+    "common_name": "OLEANDER HAWK MOTH",
+    "scientific_name": "Daphnis nerii",
+    "description": "Large moth with green and brown wings, and distinctive eye-spots.",
+    "habitat": "Tropical and subtropical areas",
+    "distribution": "Africa, Asia, and Mediterranean region",
+    "wingspan": "9-13 cm",
+    "diet": "Nectar from flowers, especially oleander",
+    "behavior": "Nocturnal. Strong flier. Migratory. Attracted to lights.",
+    "lifecycle": "Large green caterpillars feed on oleander and related plants. Cocoons are made of silk.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/OLEANDER_HAWK_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/oleander-hawk-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/oleander-hawk-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/oleander-hawk-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/OLEANDER HAWK MOTH/001.jpg"
+  },
+  "ORANGE OAKLEAF": {
+    "id": 68,
+    "common_name": "ORANGE OAKLEAF",
+    "scientific_name": "Kallima inachus",
+    "description": "Large butterfly with orange and black upperwings, and brown leaf-like undersides for camouflage.",
+    "habitat": "Tropical forests",
+    "distribution": "Southeast Asia, from India to Indonesia",
+    "wingspan": "8-12 cm",
+    "diet": "Nectar from flowers, rotting fruit",
+    "behavior": "Masters of camouflage. When wings closed, resembles dead leaf. Flies year-round.",
+    "lifecycle": "Eggs laid on various host plants. Caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/ORANGE_OAKLEAF",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/orange-oakleaf",
+      "butterflyidentification": "https://www.butterflyidentification.com/orange-oakleaf",
+      "inaturalist": "https://www.inaturalist.org/taxa/orange-oakleaf"
+    },
+    "notes": "",
+    "image_path": "data/raw/ORANGE OAKLEAF/001.jpg"
+  },
+  "ORANGE TIP": {
+    "id": 69,
+    "common_name": "ORANGE TIP",
+    "scientific_name": "Anthocharis cardamines",
+    "description": "Small butterfly with white wings, orange tips on forewings (males), and green marbling on undersides.",
+    "habitat": "Grasslands, meadows, and open areas",
+    "distribution": "Europe and Asia",
+    "wingspan": "4-5 cm",
+    "diet": "Nectar from flowers, especially cuckooflowers",
+    "behavior": "Fast flier. Flies from April to June. Single generation per year.",
+    "lifecycle": "Eggs laid on plants in the Brassicaceae family. Green caterpillars feed on seed pods.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/ORANGE_TIP",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/orange-tip",
+      "butterflyidentification": "https://www.butterflyidentification.com/orange-tip",
+      "inaturalist": "https://www.inaturalist.org/taxa/orange-tip"
+    },
+    "notes": "",
+    "image_path": "data/raw/ORANGE TIP/001.jpg"
+  },
+  "ORCHARD SWALLOW": {
+    "id": 70,
+    "common_name": "ORCHARD SWALLOW",
+    "scientific_name": "Papilio aegeus",
+    "description": "Large butterfly with black wings, white spots, and long tail-like extensions.",
+    "habitat": "Gardens, orchards, and open areas",
+    "distribution": "Australia and New Guinea",
+    "wingspan": "10-14 cm",
+    "diet": "Nectar from flowers, especially citrus",
+    "behavior": "Strong flier. Common in gardens. Flies year-round in warm areas.",
+    "lifecycle": "Eggs laid on citrus trees. Large green caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/ORCHARD_SWALLOW",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/orchard-swallow",
+      "butterflyidentification": "https://www.butterflyidentification.com/orchard-swallow",
+      "inaturalist": "https://www.inaturalist.org/taxa/orchard-swallow"
+    },
+    "notes": "",
+    "image_path": "data/raw/ORCHARD SWALLOW/001.jpg"
+  },
+  "PAINTED LADY": {
+    "id": 71,
+    "common_name": "PAINTED LADY",
+    "scientific_name": "Vanessa cardui",
+    "description": "Medium-sized butterfly with orange and black wings, white spots, and distinctive pattern.",
+    "habitat": "Open areas, fields, and gardens",
+    "distribution": "Worldwide, except Antarctica",
+    "wingspan": "5-7 cm",
+    "diet": "Nectar from flowers, especially thistles",
+    "behavior": "Long-distance migrant. Fast flier. Multiple generations per year.",
+    "lifecycle": "Eggs laid on plants in the Asteraceae family. Spiny caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/PAINTED_LADY",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/painted-lady",
+      "butterflyidentification": "https://www.butterflyidentification.com/painted-lady",
+      "inaturalist": "https://www.inaturalist.org/taxa/painted-lady"
+    },
+    "notes": "",
+    "image_path": "data/raw/PAINTED LADY/001.jpg"
+  },
+  "PAPER KITE": {
+    "id": 72,
+    "common_name": "PAPER KITE",
+    "scientific_name": "Idea leuconoe",
+    "description": "Large butterfly with white wings, black spots, and distinctive pattern.",
+    "habitat": "Tropical forests and gardens",
+    "distribution": "Southeast Asia, from Philippines to Indonesia",
+    "wingspan": "10-12 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Slow flier. Flies year-round in tropical areas. Warning colors indicate toxicity.",
+    "lifecycle": "Eggs laid on plants in the Apocynaceae family. Caterpillars are toxic.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/PAPER_KITE",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/paper-kite",
+      "butterflyidentification": "https://www.butterflyidentification.com/paper-kite",
+      "inaturalist": "https://www.inaturalist.org/taxa/paper-kite"
+    },
+    "notes": "",
+    "image_path": "data/raw/PAPER KITE/001.jpg"
+  },
+  "PEACOCK": {
+    "id": 73,
+    "common_name": "PEACOCK",
+    "scientific_name": "Aglais io",
+    "description": "Medium-sized butterfly with red and black wings, distinctive eye-spots, and jagged edges.",
+    "habitat": "Gardens, meadows, and open areas",
+    "distribution": "Europe and Asia",
+    "wingspan": "5-6 cm",
+    "diet": "Nectar from flowers, especially buddleia",
+    "behavior": "Overwinters as adult. Flies from March to October. Common in gardens.",
+    "lifecycle": "Eggs laid on nettle plants. Spiny black caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/PEACOCK",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/peacock",
+      "butterflyidentification": "https://www.butterflyidentification.com/peacock",
+      "inaturalist": "https://www.inaturalist.org/taxa/peacock"
+    },
+    "notes": "",
+    "image_path": "data/raw/PEACOCK/001.jpg"
+  },
+  "PINE WHITE": {
+    "id": 74,
+    "common_name": "PINE WHITE",
+    "scientific_name": "Neophasia menapia",
+    "description": "Medium-sized butterfly with white wings, black spots, and distinctive pattern.",
+    "habitat": "Pine forests and woodlands",
+    "distribution": "Western North America, from Canada to Mexico",
+    "wingspan": "5-6 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Fast flier. Flies from July to September. Single generation per year.",
+    "lifecycle": "Eggs laid on pine trees. Green caterpillars feed on needles.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/PINE_WHITE",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/pine-white",
+      "butterflyidentification": "https://www.butterflyidentification.com/pine-white",
+      "inaturalist": "https://www.inaturalist.org/taxa/pine-white"
+    },
+    "notes": "",
+    "image_path": "data/raw/PINE WHITE/001.jpg"
+  },
+  "PIPEVINE SWALLOW": {
+    "id": 75,
+    "common_name": "PIPEVINE SWALLOW",
+    "scientific_name": "Battus philenor",
+    "description": "Large butterfly with black wings, blue iridescence, and distinctive pattern.",
+    "habitat": "Woodlands, fields, and open areas",
+    "distribution": "North America, from Canada to Mexico",
+    "wingspan": "7-10 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Strong flier. Warning colors indicate toxicity. Flies from March to October.",
+    "lifecycle": "Eggs laid on pipevine plants. Red and black caterpillars are toxic.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/PIPEVINE_SWALLOW",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/pipevine-swallow",
+      "butterflyidentification": "https://www.butterflyidentification.com/pipevine-swallow",
+      "inaturalist": "https://www.inaturalist.org/taxa/pipevine-swallow"
+    },
+    "notes": "",
+    "image_path": "data/raw/PIPEVINE SWALLOW/001.jpg"
+  },
+  "POLYPHEMUS MOTH": {
+    "id": 76,
+    "common_name": "POLYPHEMUS MOTH",
+    "scientific_name": "Antheraea polyphemus",
+    "description": "Very large moth with brown and tan wings, distinctive eye-spots, and transparent patches.",
+    "habitat": "Deciduous forests and woodlands",
+    "distribution": "North America, from Canada to Mexico",
+    "wingspan": "10-15 cm",
+    "diet": "Adults do not feed. Caterpillars feed on various trees.",
+    "behavior": "Nocturnal. Attracted to lights. Flies from May to July.",
+    "lifecycle": "Large green caterpillars feed on host plants. Cocoons are made of silk.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/POLYPHEMUS_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/polyphemus-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/polyphemus-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/polyphemus-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/POLYPHEMUS MOTH/001.jpg"
+  },
+  "POPINJAY": {
+    "id": 77,
+    "common_name": "POPINJAY",
+    "scientific_name": "Stibochiona nicea",
+    "description": "Medium-sized butterfly with black and white wings, and distinctive pattern.",
+    "habitat": "Tropical forests",
+    "distribution": "Southeast Asia, from India to Indonesia",
+    "wingspan": "6-8 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Fast flier. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on various host plants. Caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/POPINJAY",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/popinjay",
+      "butterflyidentification": "https://www.butterflyidentification.com/popinjay",
+      "inaturalist": "https://www.inaturalist.org/taxa/popinjay"
+    },
+    "notes": "",
+    "image_path": "data/raw/POPINJAY/001.jpg"
+  },
+  "PURPLE HAIRSTREAK": {
+    "id": 78,
+    "common_name": "PURPLE HAIRSTREAK",
+    "scientific_name": "Favonius quercus",
+    "description": "Small butterfly with purple upperwings (males) or brown upperwings (females), and orange spots on hindwings.",
+    "habitat": "Oak woodlands and forests",
+    "distribution": "Europe and Asia",
+    "wingspan": "3-4 cm",
+    "diet": "Nectar from flowers, honeydew from aphids",
+    "behavior": "Flies from July to August. Perches high in trees. Rarely seen at ground level.",
+    "lifecycle": "Eggs laid on oak trees. Caterpillars feed on leaves. Overwinters as egg.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/PURPLE_HAIRSTREAK",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/purple-hairstreak",
+      "butterflyidentification": "https://www.butterflyidentification.com/purple-hairstreak",
+      "inaturalist": "https://www.inaturalist.org/taxa/purple-hairstreak"
+    },
+    "notes": "",
+    "image_path": "data/raw/PURPLE HAIRSTREAK/001.jpg"
+  },
+  "PURPLISH COPPER": {
+    "id": 79,
+    "common_name": "PURPLISH COPPER",
+    "scientific_name": "Lycaena helloides",
+    "description": "Small butterfly with orange and brown wings, purple sheen, and black spots.",
+    "habitat": "Grasslands, meadows, and open areas",
+    "distribution": "Western North America, from Canada to Mexico",
+    "wingspan": "2.5-3.5 cm",
+    "diet": "Nectar from flowers, especially clovers",
+    "behavior": "Fast flier. Multiple generations per year. Flies from May to October.",
+    "lifecycle": "Eggs laid on dock and sorrel plants. Green caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/PURPLISH_COPPER",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/purplish-copper",
+      "butterflyidentification": "https://www.butterflyidentification.com/purplish-copper",
+      "inaturalist": "https://www.inaturalist.org/taxa/purplish-copper"
+    },
+    "notes": "",
+    "image_path": "data/raw/PURPLISH COPPER/001.jpg"
+  },
+  "QUESTION MARK": {
+    "id": 80,
+    "common_name": "QUESTION MARK",
+    "scientific_name": "Polygonia interrogationis",
+    "description": "Medium-sized butterfly with orange and black wings, jagged edges, and silver question mark on hindwings.",
+    "habitat": "Woodlands, fields, and open areas",
+    "distribution": "Eastern North America",
+    "wingspan": "5-6 cm",
+    "diet": "Nectar from flowers, tree sap, and rotting fruit",
+    "behavior": "Overwinters as adult. Flies from March to November. Fast flier.",
+    "lifecycle": "Eggs laid on elm and nettle plants. Spiny caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/QUESTION_MARK",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/question-mark",
+      "butterflyidentification": "https://www.butterflyidentification.com/question-mark",
+      "inaturalist": "https://www.inaturalist.org/taxa/question-mark"
+    },
+    "notes": "",
+    "image_path": "data/raw/QUESTION MARK/001.jpg"
+  },
+  "RED ADMIRAL": {
+    "id": 81,
+    "common_name": "RED ADMIRAL",
+    "scientific_name": "Vanessa atalanta",
+    "description": "Medium-sized butterfly with black and red wings, white spots, and distinctive pattern.",
+    "habitat": "Open areas, fields, and gardens",
+    "distribution": "North America, Europe, Asia, and North Africa",
+    "wingspan": "5-7 cm",
+    "diet": "Nectar from flowers, tree sap, and rotting fruit",
+    "behavior": "Migratory. Fast flier. Overwinters as adult. Flies from March to November.",
+    "lifecycle": "Eggs laid on nettle plants. Spiny caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/RED_ADMIRAL",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/red-admiral",
+      "butterflyidentification": "https://www.butterflyidentification.com/red-admiral",
+      "inaturalist": "https://www.inaturalist.org/taxa/red-admiral"
+    },
+    "notes": "",
+    "image_path": "data/raw/RED ADMIRAL/001.jpg"
+  },
+  "RED CRACKER": {
+    "id": 82,
+    "common_name": "RED CRACKER",
+    "scientific_name": "Hamadryas amphinome",
+    "description": "Medium-sized butterfly with brown and red wings, white spots, and distinctive pattern.",
+    "habitat": "Tropical forests",
+    "distribution": "Central and South America, from Mexico to Brazil",
+    "wingspan": "6-8 cm",
+    "diet": "Nectar from flowers, rotting fruit",
+    "behavior": "Fast flier. Males make cracking sounds with wings. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on various host plants. Caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/RED_CRACKER",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/red-cracker",
+      "butterflyidentification": "https://www.butterflyidentification.com/red-cracker",
+      "inaturalist": "https://www.inaturalist.org/taxa/red-cracker"
+    },
+    "notes": "",
+    "image_path": "data/raw/RED CRACKER/001.jpg"
+  },
+  "RED POSTMAN": {
+    "id": 83,
+    "common_name": "RED POSTMAN",
+    "scientific_name": "Heliconius erato",
+    "description": "Medium-sized butterfly with black and red wings, white spots, and distinctive pattern.",
+    "habitat": "Tropical forests and gardens",
+    "distribution": "Central and South America, from Mexico to Brazil",
+    "wingspan": "6-8 cm",
+    "diet": "Nectar from flowers, especially Lantana",
+    "behavior": "Slow flier. Warning colors indicate toxicity. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on passionflower vines. Caterpillars are toxic.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/RED_POSTMAN",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/red-postman",
+      "butterflyidentification": "https://www.butterflyidentification.com/red-postman",
+      "inaturalist": "https://www.inaturalist.org/taxa/red-postman"
+    },
+    "notes": "",
+    "image_path": "data/raw/RED POSTMAN/001.jpg"
+  },
+  "RED SPOTTED PURPLE": {
+    "id": 84,
+    "common_name": "RED SPOTTED PURPLE",
+    "scientific_name": "Limenitis arthemis",
+    "description": "Large butterfly with black wings, blue iridescence, and red spots on hindwings.",
+    "habitat": "Woodlands and forest edges",
+    "distribution": "Eastern North America",
+    "wingspan": "7-10 cm",
+    "diet": "Nectar from flowers, tree sap, and rotting fruit",
+    "behavior": "Fast flier. Flies from May to September. Mimics toxic species.",
+    "lifecycle": "Eggs laid on cherry and poplar trees. Spiny caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/RED_SPOTTED_PURPLE",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/red-spotted-purple",
+      "butterflyidentification": "https://www.butterflyidentification.com/red-spotted-purple",
+      "inaturalist": "https://www.inaturalist.org/taxa/red-spotted-purple"
+    },
+    "notes": "",
+    "image_path": "data/raw/RED SPOTTED PURPLE/001.jpg"
+  },
+  "ROSY MAPLE MOTH": {
+    "id": 85,
+    "common_name": "ROSY MAPLE MOTH",
+    "scientific_name": "Dryocampa rubicunda",
+    "description": "Small moth with pink and yellow wings, and distinctive pattern.",
+    "habitat": "Deciduous forests and woodlands",
+    "distribution": "Eastern North America, from Canada to Florida",
+    "wingspan": "3-5 cm",
+    "diet": "Adults do not feed. Caterpillars feed on maple and oak trees.",
+    "behavior": "Nocturnal. Attracted to lights. Flies from May to August.",
+    "lifecycle": "Large green and yellow caterpillars feed on host plants. Cocoons are made of silk.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/ROSY_MAPLE_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/rosy-maple-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/rosy-maple-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/rosy-maple-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/ROSY MAPLE MOTH/001.jpg"
+  },
+  "SCARCE SWALLOW": {
+    "id": 86,
+    "common_name": "SCARCE SWALLOW",
+    "scientific_name": "Iphiclides podalirius",
+    "description": "Large butterfly with yellow and black wings, blue spots, and long tail-like extensions.",
+    "habitat": "Woodlands, gardens, and open areas",
+    "distribution": "Europe, Asia, and North Africa",
+    "wingspan": "8-10 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Strong flier. Flies from April to September. Males are territorial.",
+    "lifecycle": "Eggs laid on fruit trees. Large green caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/SCARCE_SWALLOW",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/scarce-swallow",
+      "butterflyidentification": "https://www.butterflyidentification.com/scarce-swallow",
+      "inaturalist": "https://www.inaturalist.org/taxa/scarce-swallow"
+    },
+    "notes": "",
+    "image_path": "data/raw/SCARCE SWALLOW/001.jpg"
+  },
+  "SILVER SPOT SKIPPER": {
+    "id": 87,
+    "common_name": "SILVER SPOT SKIPPER",
+    "scientific_name": "Hesperia comma",
+    "description": "Small butterfly with brown wings, silver spots, and distinctive pattern.",
+    "habitat": "Grasslands, meadows, and open areas",
+    "distribution": "Europe, Asia, and North America",
+    "wingspan": "2.5-3.5 cm",
+    "diet": "Nectar from flowers, especially thistles",
+    "behavior": "Fast flier. Flies from July to September. Low flier.",
+    "lifecycle": "Eggs laid on grasses. Caterpillars feed on host plant. Overwinters as egg.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/SILVER_SPOT_SKIPPER",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/silver-spot-skipper",
+      "butterflyidentification": "https://www.butterflyidentification.com/silver-spot-skipper",
+      "inaturalist": "https://www.inaturalist.org/taxa/silver-spot-skipper"
+    },
+    "notes": "",
+    "image_path": "data/raw/SILVER SPOT SKIPPER/001.jpg"
+  },
+  "SIXSPOT BURNET MOTH": {
+    "id": 88,
+    "common_name": "SIXSPOT BURNET MOTH",
+    "scientific_name": "Zygaena filipendulae",
+    "description": "Medium-sized moth with black wings, red spots, and distinctive warning colors.",
+    "habitat": "Grasslands, meadows, and open areas",
+    "distribution": "Europe and Asia",
+    "wingspan": "3-4 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Diurnal. Flies during day. Warning colors indicate toxicity. Flies from June to August.",
+    "lifecycle": "Eggs laid on plants in the Fabaceae family. Yellow and black caterpillars are toxic.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/SIXSPOT_BURNET_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/sixspot-burnet-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/sixspot-burnet-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/sixspot-burnet-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/SIXSPOT BURNET MOTH/001.jpg"
+  },
+  "SLEEPY ORANGE": {
+    "id": 89,
+    "common_name": "SLEEPY ORANGE",
+    "scientific_name": "Eurema nicippe",
+    "description": "Small butterfly with orange wings, black borders, and distinctive pattern.",
+    "habitat": "Open areas, fields, and gardens",
+    "distribution": "North America, from Canada to Mexico",
+    "wingspan": "3-4 cm",
+    "diet": "Nectar from flowers, especially clovers",
+    "behavior": "Fast flier. Multiple generations per year. Flies from March to November.",
+    "lifecycle": "Eggs laid on plants in the Fabaceae family. Green caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/SLEEPY_ORANGE",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/sleepy-orange",
+      "butterflyidentification": "https://www.butterflyidentification.com/sleepy-orange",
+      "inaturalist": "https://www.inaturalist.org/taxa/sleepy-orange"
+    },
+    "notes": "",
+    "image_path": "data/raw/SLEEPY ORANGE/001.jpg"
+  },
+  "SOOTYWING": {
+    "id": 90,
+    "common_name": "SOOTYWING",
+    "scientific_name": "Pholisora catullus",
+    "description": "Small butterfly with dark brown or black wings, white spots, and distinctive pattern.",
+    "habitat": "Open areas, fields, and disturbed areas",
+    "distribution": "North America, from Canada to Mexico",
+    "wingspan": "2-3 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Fast flier. Multiple generations per year. Flies from April to October.",
+    "lifecycle": "Eggs laid on plants in the Chenopodiaceae family. Small caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/SOOTYWING",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/sootywing",
+      "butterflyidentification": "https://www.butterflyidentification.com/sootywing",
+      "inaturalist": "https://www.inaturalist.org/taxa/sootywing"
+    },
+    "notes": "",
+    "image_path": "data/raw/SOOTYWING/001.jpg"
+  },
+  "SOUTHERN DOGFACE": {
+    "id": 91,
+    "common_name": "SOUTHERN DOGFACE",
+    "scientific_name": "Zerene cesonia",
+    "description": "Medium-sized butterfly with yellow wings, black borders, and dog face-like pattern on forewings.",
+    "habitat": "Open areas, fields, and gardens",
+    "distribution": "Southern United States and Mexico",
+    "wingspan": "5-7 cm",
+    "diet": "Nectar from flowers, especially clovers",
+    "behavior": "Fast flier. Multiple generations per year. Flies year-round in warm areas.",
+    "lifecycle": "Eggs laid on plants in the Fabaceae family. Green caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/SOUTHERN_DOGFACE",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/southern-dogface",
+      "butterflyidentification": "https://www.butterflyidentification.com/southern-dogface",
+      "inaturalist": "https://www.inaturalist.org/taxa/southern-dogface"
+    },
+    "notes": "",
+    "image_path": "data/raw/SOUTHERN DOGFACE/001.jpg"
+  },
+  "STRAITED QUEEN": {
+    "id": 92,
+    "common_name": "STRAITED QUEEN",
+    "scientific_name": "Danaus gilippus",
+    "description": "Medium-sized butterfly with orange and black wings, white spots, and distinctive pattern.",
+    "habitat": "Open areas, fields, and gardens",
+    "distribution": "North and South America, from United States to Brazil",
+    "wingspan": "7-9 cm",
+    "diet": "Nectar from flowers, especially milkweeds",
+    "behavior": "Fast flier. Warning colors indicate toxicity. Flies year-round in warm areas.",
+    "lifecycle": "Eggs laid on milkweed. Striped caterpillars are toxic.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/STRAITED_QUEEN",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/straited-queen",
+      "butterflyidentification": "https://www.butterflyidentification.com/straited-queen",
+      "inaturalist": "https://www.inaturalist.org/taxa/straited-queen"
+    },
+    "notes": "",
+    "image_path": "data/raw/STRAITED QUEEN/001.jpg"
+  },
+  "TROPICAL LEAFWING": {
+    "id": 93,
+    "common_name": "TROPICAL LEAFWING",
+    "scientific_name": "Historis odius",
+    "description": "Large butterfly with brown wings, orange patches, and leaf-like pattern on undersides.",
+    "habitat": "Tropical forests",
+    "distribution": "Central and South America, from Mexico to Brazil",
+    "wingspan": "10-12 cm",
+    "diet": "Nectar from flowers, rotting fruit",
+    "behavior": "Strong flier. Masters of camouflage. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on various host plants. Large caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/TROPICAL_LEAFWING",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/tropical-leafwing",
+      "butterflyidentification": "https://www.butterflyidentification.com/tropical-leafwing",
+      "inaturalist": "https://www.inaturalist.org/taxa/tropical-leafwing"
+    },
+    "notes": "",
+    "image_path": "data/raw/TROPICAL LEAFWING/001.jpg"
+  },
+  "TWO BARRED FLASHER": {
+    "id": 94,
+    "common_name": "TWO BARRED FLASHER",
+    "scientific_name": "Astraptes fulgerator",
+    "description": "Medium-sized butterfly with brown wings, white bars, and distinctive pattern.",
+    "habitat": "Tropical forests and gardens",
+    "distribution": "Central and South America, from Mexico to Brazil",
+    "wingspan": "4-5 cm",
+    "diet": "Nectar from flowers",
+    "behavior": "Fast flier. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on various host plants. Caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/TWO_BARRED_FLASHER",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/two-barred-flasher",
+      "butterflyidentification": "https://www.butterflyidentification.com/two-barred-flasher",
+      "inaturalist": "https://www.inaturalist.org/taxa/two-barred-flasher"
+    },
+    "notes": "",
+    "image_path": "data/raw/TWO BARRED FLASHER/001.jpg"
+  },
+  "ULYSES": {
+    "id": 95,
+    "common_name": "ULYSES",
+    "scientific_name": "Papilio ulysses",
+    "description": "Large butterfly with brilliant blue upperwings and black borders, and brown undersides.",
+    "habitat": "Tropical rainforests",
+    "distribution": "Northeastern Australia, Papua New Guinea, and Indonesia",
+    "wingspan": "10-12 cm",
+    "diet": "Nectar from flowers, especially Lantana",
+    "behavior": "Strong flier. Males are territorial. Protected species in Australia.",
+    "lifecycle": "Eggs laid on various host plants. Large green caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/ULYSES",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/ulyses",
+      "butterflyidentification": "https://www.butterflyidentification.com/ulyses",
+      "inaturalist": "https://www.inaturalist.org/taxa/ulyses"
+    },
+    "notes": "",
+    "image_path": "data/raw/ULYSES/001.jpg"
+  },
+  "VICEROY": {
+    "id": 96,
+    "common_name": "VICEROY",
+    "scientific_name": "Limenitis archippus",
+    "description": "Medium-sized butterfly with orange and black wings, white spots, and distinctive pattern. Mimics Monarch.",
+    "habitat": "Wetlands, meadows, and open areas",
+    "distribution": "North America, from Canada to Mexico",
+    "wingspan": "6-8 cm",
+    "diet": "Nectar from flowers, tree sap, and rotting fruit",
+    "behavior": "Fast flier. Mimics toxic Monarch butterfly. Flies from May to October.",
+    "lifecycle": "Eggs laid on willow and poplar trees. Spiny caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/VICEROY",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/viceroy",
+      "butterflyidentification": "https://www.butterflyidentification.com/viceroy",
+      "inaturalist": "https://www.inaturalist.org/taxa/viceroy"
+    },
+    "notes": "",
+    "image_path": "data/raw/VICEROY/001.jpg"
+  },
+  "WHITE LINED SPHINX MOTH": {
+    "id": 97,
+    "common_name": "WHITE LINED SPHINX MOTH",
+    "scientific_name": "Hyles lineata",
+    "description": "Large moth with brown and white wings, pink hindwings, and distinctive pattern.",
+    "habitat": "Open areas, fields, and gardens",
+    "distribution": "North America, from Canada to Mexico",
+    "wingspan": "6-9 cm",
+    "diet": "Nectar from flowers, especially petunias",
+    "behavior": "Nocturnal and crepuscular. Hovers like hummingbird. Attracted to lights.",
+    "lifecycle": "Large green caterpillars feed on various host plants. Cocoons are made of silk.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/WHITE_LINED_SPHINX_MOTH",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/white-lined-sphinx-moth",
+      "butterflyidentification": "https://www.butterflyidentification.com/white-lined-sphinx-moth",
+      "inaturalist": "https://www.inaturalist.org/taxa/white-lined-sphinx-moth"
+    },
+    "notes": "",
+    "image_path": "data/raw/WHITE LINED SPHINX MOTH/001.jpg"
+  },
+  "WOOD SATYR": {
+    "id": 98,
+    "common_name": "WOOD SATYR",
+    "scientific_name": "Megisto cymela",
+    "description": "Medium-sized butterfly with brown wings, eye-spots, and distinctive pattern.",
+    "habitat": "Woodlands and forest edges",
+    "distribution": "Eastern North America",
+    "wingspan": "4-5 cm",
+    "diet": "Nectar from flowers, tree sap",
+    "behavior": "Slow flier. Flies from May to September. Low flier.",
+    "lifecycle": "Eggs laid on grasses. Caterpillars feed on host plant. Overwinters as caterpillar.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/WOOD_SATYR",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/wood-satyr",
+      "butterflyidentification": "https://www.butterflyidentification.com/wood-satyr",
+      "inaturalist": "https://www.inaturalist.org/taxa/wood-satyr"
+    },
+    "notes": "",
+    "image_path": "data/raw/WOOD SATYR/001.jpg"
+  },
+  "YELLOW SWALLOW TAIL": {
+    "id": 99,
+    "common_name": "YELLOW SWALLOW TAIL",
+    "scientific_name": "Papilio machaon",
+    "description": "Large butterfly with yellow and black wings, blue spots, and long tail-like extensions.",
+    "habitat": "Open areas, fields, and gardens",
+    "distribution": "Europe, Asia, and North America",
+    "wingspan": "8-10 cm",
+    "diet": "Nectar from flowers, especially thistles",
+    "behavior": "Strong flier. Flies from April to September. Males are territorial.",
+    "lifecycle": "Eggs laid on plants in the Apiaceae family. Large green caterpillars feed on leaves.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/YELLOW_SWALLOW_TAIL",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/yellow-swallow-tail",
+      "butterflyidentification": "https://www.butterflyidentification.com/yellow-swallow-tail",
+      "inaturalist": "https://www.inaturalist.org/taxa/yellow-swallow-tail"
+    },
+    "notes": "",
+    "image_path": "data/raw/YELLOW SWALLOW TAIL/001.jpg"
+  },
+  "ZEBRA LONG WING": {
+    "id": 100,
+    "common_name": "ZEBRA LONG WING",
+    "scientific_name": "Heliconius charithonia",
+    "description": "Medium-sized butterfly with black wings, yellow stripes, and long narrow shape.",
+    "habitat": "Tropical forests and gardens",
+    "distribution": "Central and South America, from Texas to Brazil, and Florida",
+    "wingspan": "7-10 cm",
+    "diet": "Nectar from flowers, especially Lantana, and pollen",
+    "behavior": "Slow flier. Long-lived. Warning colors indicate toxicity. Flies year-round in tropical areas.",
+    "lifecycle": "Eggs laid on passionflower vines. Striped caterpillars are toxic. Adults can live for months.",
+    "links": {
+      "wikipedia": "https://en.wikipedia.org/wiki/ZEBRA_LONG_WING",
+      "butterfliesandmoths": "https://www.butterfliesandmoths.org/species/zebra-long-wing",
+      "butterflyidentification": "https://www.butterflyidentification.com/zebra-long-wing",
+      "inaturalist": "https://www.inaturalist.org/taxa/zebra-long-wing"
+    },
+    "notes": "",
+    "image_path": "data/raw/ZEBRA LONG WING/001.jpg"
+  }
+}

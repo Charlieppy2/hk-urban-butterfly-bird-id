@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="香港城市生態識別系統預覽 - 識別蝴蝶和鳥類 | HK Urban Ecological Butterfly and Bird Identification System Preview">
+    <meta name="keywords" content="香港, 生態識別, 蝴蝶, 鳥類, 人工智能, Hong Kong, Ecological Identification, Butterfly, Bird, AI">
+    <meta name="author" content="HK Urban Ecological Identification">
+    <title>🦋 HK Urban Ecological Identification - Preview | 香港城市生態識別系統預覽</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .App {
+            min-height: 100vh;
+        }
+
+        .App-header {
+            text-align: center;
+            color: white;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+        }
+
+        .App-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .App-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .App-main {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .upload-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .upload-area {
+            margin-bottom: 20px;
+        }
+
+        .upload-placeholder {
+            text-align: center;
+            padding: 60px 20px;
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            background: #f8f9ff;
+        }
+
+        .upload-placeholder p {
+            font-size: 1.3rem;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .image-preview {
+            text-align: center;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 500px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .prediction-result {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #eee;
+        }
+
+        .prediction-result h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-main {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .result-class {
+            display: block;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: capitalize;
+        }
+
+        .result-confidence {
+            display: block;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .result-details {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .result-details h3 {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .result-details ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .result-details li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .result-details li:last-child {
+            border-bottom: none;
+        }
+
+        .pred-class {
+            text-transform: capitalize;
+            font-weight: 500;
+        }
+
+        .pred-confidence {
+            opacity: 0.9;
+        }
+
+        .history-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .history-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .history-item {
+            border: 2px solid #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .history-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .history-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            background: #f0f0f0;
+        }
+
+        .history-info {
+            padding: 15px;
+            background: #f8f9ff;
+        }
+
+        .history-class {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+            text-transform: capitalize;
+        }
+
+        .history-confidence {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .history-time {
+            color: #999;
+            font-size: 0.8rem;
+        }
+
+        .demo-note {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .demo-note h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .demo-note p {
+            color: #856404;
+            margin: 5px 0;
+        }
+
+        @media (max-width: 768px) {
+            .App-header h1 {
+                font-size: 2rem;
+            }
+
+            .upload-section {
+                padding: 20px;
+            }
+
+            .result-class {
+                font-size: 1.5rem;
+            }
+
+            .history-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="App">
+        <header class="App-header">
+            <h1>🦋 HK Urban Ecological Identification</h1>
+            <p>Identify Butterflies and Birds in Hong Kong</p>
+        </header>
+
+        <main class="App-main">
+            <div class="demo-note">
+                <h3>📱 預覽模式 (Preview Mode)</h3>
+                <p>這是網站的靜態預覽版本</p>
+                <p>要使用完整功能，請安裝Node.js並運行React應用</p>
+            </div>
+
+            <div class="upload-section">
+                <div class="upload-area">
+                    <div class="upload-placeholder">
+                        <p>📷 Upload an image or use camera</p>
+                        <div class="button-group">
+                            <button class="btn btn-primary">Choose File</button>
+                            <button class="btn btn-secondary">Open Camera</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 示例：有圖片時的顯示 -->
+                <div class="image-preview" style="display: none;">
+                    <img src="" alt="Preview" id="previewImage">
+                    <div class="preview-actions">
+                        <button class="btn btn-primary">🔍 Identify</button>
+                        <button class="btn btn-secondary">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 示例：識別結果 -->
+            <div class="upload-section">
+                <div class="prediction-result">
+                    <h2>Identification Result (示例)</h2>
+                    <div class="result-card">
+                        <div class="result-main">
+                            <span class="result-class">Blue Pansy Butterfly</span>
+                            <span class="result-confidence">95.23% confidence</span>
+                        </div>
+                        
+                        <div class="result-details">
+                            <h3>Top Predictions:</h3>
+                            <ul>
+                                <li>
+                                    <span class="pred-class">Blue Pansy Butterfly</span>
+                                    <span class="pred-confidence">95.23%</span>
+                                </li>
+                                <li>
+                                    <span class="pred-class">Plain Tiger Butterfly</span>
+                                    <span class="pred-confidence">3.45%</span>
+                                </li>
+                                <li>
+                                    <span class="pred-class">Red-whiskered Bulbul</span>
+                                    <span class="pred-confidence">1.32%</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 示例：歷史記錄 -->
+            <div class="history-section">
+                <h2>Recent Identifications (示例)</h2>
+                <div class="history-grid">
+                    <div class="history-item">
+                        <div style="width: 100%; height: 150px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">🦋</div>
+                        <div class="history-info">
+                            <p class="history-class">Blue Pansy</p>
+                            <p class="history-confidence">95.2%</p>
+                            <p class="history-time">2024-11-23 19:30</p>
+                        </div>
+                    </div>
+                    <div class="history-item">
+                        <div style="width: 100%; height: 150px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">🦜</div>
+                        <div class="history-info">
+                            <p class="history-class">Red-whiskered Bulbul</p>
+                            <p class="history-confidence">88.5%</p>
+                            <p class="history-time">2024-11-23 18:15</p>
+                        </div>
+                    </div>
+                    <div class="history-item">
+                        <div style="width: 100%; height: 150px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">🦋</div>
+                        <div class="history-info">
+                            <p class="history-class">Plain Tiger</p>
+                            <p class="history-confidence">92.1%</p>
+                            <p class="history-time">2024-11-23 17:45</p>
+                        </div>
+                    </div>
+                    <div class="history-item">
+                        <div style="width: 100%; height: 150px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">🐦</div>
+                        <div class="history-info">
+                            <p class="history-class">Magpie Robin</p>
+                            <p class="history-confidence">87.3%</p>
+                            <p class="history-time">2024-11-23 16:20</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 簡單的圖片預覽功能（僅用於演示）
+        document.addEventListener('DOMContentLoaded', function() {
+            const chooseFileBtn = document.querySelector('.btn-primary');
+            const resetBtn = document.querySelector('.btn-secondary');
+            const uploadPlaceholder = document.querySelector('.upload-placeholder');
+            const imagePreview = document.querySelector('.image-preview');
+            const previewImage = document.getElementById('previewImage');
+            
+            if (chooseFileBtn) {
+                chooseFileBtn.addEventListener('click', function() {
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = 'image/*';
+                    input.onchange = function(e) {
+                        const file = e.target.files[0];
+                        if (file) {
+                            // 檢查文件大小（最大16MB）
+                            if (file.size > 16 * 1024 * 1024) {
+                                alert('文件太大，請選擇小於16MB的圖片。\nFile too large, please select an image smaller than 16MB.');
+                                return;
+                            }
+                            
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                if (uploadPlaceholder) uploadPlaceholder.style.display = 'none';
+                                if (imagePreview) imagePreview.style.display = 'block';
+                                if (previewImage) previewImage.src = e.target.result;
+                            };
+                            reader.onerror = function() {
+                                alert('讀取文件時發生錯誤。\nError reading file.');
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    };
+                    input.click();
+                });
+            }
+            
+            // Reset 按鈕功能
+            if (resetBtn && resetBtn.textContent.includes('Reset')) {
+                resetBtn.addEventListener('click', function() {
+                    if (uploadPlaceholder) uploadPlaceholder.style.display = 'block';
+                    if (imagePreview) imagePreview.style.display = 'none';
+                    if (previewImage) previewImage.src = '';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+

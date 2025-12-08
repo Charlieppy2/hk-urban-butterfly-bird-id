@@ -1,0 +1,68 @@
+[
+  {
+    "category": "identification_tips",
+    "question": "如何識別蝴蝶的性別？",
+    "answer": "To identify butterfly gender, look for these characteristics:\n\n• Wing patterns: Males often have more vibrant colors and distinct patterns\n• Size: Males are typically smaller than females\n• Behavior: Males are more territorial and active in patrolling\n• Abdomen: Females have a more rounded abdomen for egg-laying\n• Wing shape: Some species show sexual dimorphism in wing shape\n\nNote: Not all species show obvious gender differences, and identification may require close examination."
+  },
+  {
+    "category": "identification_tips",
+    "question": "What are the main differences between birds and butterflies?",
+    "answer": "Main differences between birds and butterflies:\n\nBirds:\n• Vertebrates with bones and feathers\n• Warm-blooded\n• Can fly, walk, and swim\n• Have beaks and claws\n• Lay eggs in nests\n• Active year-round (some migrate)\n\nButterflies:\n• Invertebrates (insects) with exoskeleton\n• Cold-blooded\n• Have six legs and four wings\n• Undergo complete metamorphosis (egg → caterpillar → chrysalis → butterfly)\n• Most active in warm seasons\n• Feed on nectar from flowers"
+  },
+  {
+    "category": "identification_tips",
+    "question": "如何區分不同種類的鳥類？",
+    "answer": "To distinguish different bird species, observe these key features:\n\n• Size and shape: Compare overall body size and proportions\n• Beak: Shape, size, and color (important for identification)\n• Plumage: Colors, patterns, and markings on head, body, wings, and tail\n• Legs and feet: Color, length, and structure\n• Behavior: Flight pattern, feeding habits, calls\n• Habitat: Where the bird is found\n• Time of year: Some species are seasonal visitors\n\nTake clear photos showing these features for best identification results!"
+  },
+  {
+    "category": "observation_time",
+    "question": "什麼時候最適合觀察蝴蝶？",
+    "answer": "Best times to observe butterflies:\n\nTime of Day:\n• Morning (9-11 AM): Most active period\n• Midday (11 AM-2 PM): Still active, good for photography\n• Afternoon (2-5 PM): Activity decreases but still observable\n• Avoid early morning (before 9 AM) when butterflies are still warming up\n\nWeather Conditions:\n• Sunny days are ideal\n• Temperature: 20-30°C is optimal\n• Avoid windy, rainy, or very hot days\n\nSeason:\n• Spring (March-May): Peak activity, many species emerge\n• Summer (June-August): High diversity, good for photography\n• Autumn (September-November): Some species still active\n• Winter: Fewer species, mostly in sheltered areas"
+  },
+  {
+    "category": "photo_tips",
+    "question": "拍攝鳥類照片有什麼技巧？",
+    "answer": "Tips for photographing birds:\n\n1. Use a telephoto lens (300mm or longer recommended)\n2. Be patient and wait for the bird to settle\n3. Use a fast shutter speed (1/500s or faster) to freeze motion\n4. Focus on the eye - sharp eyes make a great photo\n5. Use natural light, avoid harsh midday sun\n6. Get eye-level with the bird when possible\n7. Use continuous shooting mode for action shots\n8. Keep the background uncluttered\n9. Be quiet and move slowly to avoid scaring birds\n10. Visit locations where birds are accustomed to people\n\nFor identification, capture clear shots of:\n• Full body profile\n• Head and beak details\n• Wing patterns (when spread)\n• Tail shape and markings"
+  },
+  {
+    "category": "habitat",
+    "question": "香港哪些地方最適合觀鳥？",
+    "answer": "Best bird watching locations in Hong Kong:\n\nTop Locations:\n• Mai Po Nature Reserve: World-class wetland, many migratory birds\n• Hong Kong Wetland Park: Excellent facilities, diverse species\n• Tai Po Kau Nature Reserve: Forest birds, resident species\n• Long Valley: Agricultural area, many water birds\n• Po Toi Island: Seabirds and migratory species\n• Deep Bay: Important wetland for waterfowl\n\nUrban Areas:\n• Hong Kong Park: Central location, good for beginners\n• Kowloon Park: Urban birds, easy access\n• Victoria Park: Water birds, convenient location\n\nTips:\n• Early morning (6-9 AM) is best\n• Bring binoculars and a field guide\n• Join guided tours for better experience\n• Respect wildlife and stay on designated paths"
+  },
+  {
+    "category": "species_info",
+    "question": "這個系統識別蝴蝶的準確度如何？",
+    "answer": "Our system's accuracy for butterfly identification:\n\n• High confidence (90%+): Very reliable, likely correct identification\n• Medium-high confidence (70-90%): Probably correct, but check similar species\n• Medium confidence (50-70%): Review top predictions carefully\n• Low confidence (<50%): May need better photo or different angle\n\nFactors affecting accuracy:\n• Photo quality: Clear, well-lit photos perform best\n• Angle: Multiple angles improve accuracy\n• Species: Common species are identified more accurately\n• Similar species: Some species look very similar and may be confused\n\nAlways check the 'Similar Species' section to see alternatives!"
+  },
+  {
+    "category": "confidence",
+    "question": "如果置信度很低怎麼辦？",
+    "answer": "If confidence is low (<50%), try these steps:\n\n1. Take a better photo:\n   • Ensure good lighting (natural light is best)\n   • Get closer to the subject\n   • Focus clearly on key features\n   • Avoid shadows and blur\n\n2. Take multiple photos:\n   • Different angles (side, top, front)\n   • Show different features (wings, body, head)\n   • Capture both closed and open wings (for butterflies)\n\n3. Check similar species:\n   • Review the 'Similar Species' section\n   • Compare top 3 predictions\n   • Look for distinguishing features\n\n4. Consider conditions:\n   • Time of day and season\n   • Location and habitat\n   • Weather conditions\n\n5. If still uncertain:\n   • Try identifying at different times\n   • Consult field guides\n   • Ask experts or online communities"
+  },
+  {
+    "category": "system_info",
+    "question": "這個AI系統是如何工作的？",
+    "answer": "How our AI identification system works:\n\nTechnology:\n• Deep Learning: Uses MobileNetV2 neural network architecture\n• Transfer Learning: Pre-trained on ImageNet, fine-tuned on 300+ species\n• Image Classification: Analyzes visual features to match species\n\nProcess:\n1. You upload a photo\n2. System preprocesses the image (resize, normalize)\n3. AI model extracts features and patterns\n4. Compares against 300+ known species\n5. Returns top predictions with confidence scores\n6. Shows similar species for comparison\n\nFeatures:\n• Fast identification (usually <5 seconds)\n• Confidence scores for reliability\n• Top 3 predictions for alternatives\n• Similar species recommendations\n• Works with photos from phones or cameras\n\nNote: The system is trained on Hong Kong's common species and works best with clear, well-lit photos."
+  },
+  {
+    "category": "habitat",
+    "question": "蝴蝶最喜歡什麼樣的環境？",
+    "answer": "Butterfly habitat preferences:\n\nIdeal Environments:\n• Flowering gardens: Rich nectar sources attract butterflies\n• Forest edges: Mix of sun and shade, diverse plants\n• Meadows and grasslands: Open areas with wildflowers\n• Near water sources: Streams, ponds provide moisture\n• Sunny clearings: Butterflies need warmth to fly\n\nKey Requirements:\n• Host plants: Specific plants for caterpillars to feed on\n• Nectar plants: Flowers for adult butterflies\n• Sunlight: Most butterflies are active in sunny conditions\n• Shelter: Trees or shrubs for protection from wind and rain\n• Water: Puddles or damp soil for drinking minerals\n\nIn Hong Kong:\n• Country parks have diverse butterfly habitats\n• Urban gardens with native plants attract many species\n• Forest trails offer good observation opportunities\n• Avoid heavily polluted or disturbed areas"
+  },
+  {
+    "category": "help",
+    "question": "如何使用這個識別系統？",
+    "answer": "How to use the identification system:\n\nStep 1: Prepare Your Photo\n• Take a clear photo of the butterfly or bird\n• Ensure good lighting and focus\n• Try to capture key features (wings, body, head)\n\nStep 2: Upload Photo\n• Click 'Choose File' or use camera\n• Select your photo\n• Wait for upload to complete\n\nStep 3: Identify\n• Click 'Identify' button\n• Wait for AI analysis (usually <5 seconds)\n• View results with confidence score\n\nStep 4: Review Results\n• Check the main identification\n• Review top 3 predictions\n• Check similar species section\n• Save to favorites if desired\n\nTips:\n• Multiple angles improve accuracy\n• Use batch mode for multiple photos\n• Check statistics for your identification history\n• Use AI Assistant for questions\n\nNeed help? Click the AI Assistant button (💬) for guidance!"
+  },
+  {
+    "category": "species_info",
+    "question": "系統可以識別哪些鳥類？",
+    "answer": "Bird species our system can identify:\n\nCategories:\n• Resident birds: Year-round residents of Hong Kong\n• Migratory birds: Seasonal visitors (spring/autumn)\n• Winter visitors: Birds that spend winter in Hong Kong\n• Summer visitors: Birds that breed in Hong Kong\n\nCommon Species Include:\n• Water birds: Herons, egrets, ducks, waders\n• Forest birds: Warblers, flycatchers, thrushes\n• Urban birds: Sparrows, pigeons, mynas\n• Raptors: Eagles, hawks, kites\n• Songbirds: Robins, bulbuls, tits\n\nTotal Coverage:\n• 200+ bird species\n• All commonly found in Hong Kong\n• Includes both native and migratory species\n\nNote: The system works best with clear photos showing key identification features. Rare or very similar species may have lower confidence scores."
+  },
+  {
+    "category": "photo_tips",
+    "question": "如何提高照片識別準確度？",
+    "answer": "Tips to improve photo identification accuracy:\n\nPhoto Quality:\n• Use good lighting: Natural daylight is best\n• Avoid shadows: Ensure subject is well-lit\n• Focus clearly: Sharp images work much better\n• Fill the frame: Subject should be prominent\n• Avoid blur: Use steady hands or tripod\n\nComposition:\n• Show key features: Wings, body, head clearly visible\n• Multiple angles: Take photos from different sides\n• Include scale: Something to show size helps\n• Clean background: Less distraction is better\n\nFor Butterflies:\n• Capture both closed and open wings if possible\n• Show wing patterns clearly\n• Include body and antennae\n• Top view and side view both help\n\nFor Birds:\n• Full body profile is ideal\n• Head and beak details are crucial\n• Wing patterns when visible\n• Leg color and structure\n\nBest Practices:\n• Take multiple photos\n• Use highest resolution available\n• Avoid extreme angles\n• Ensure subject fills at least 30% of frame"
+  }
+]
+
