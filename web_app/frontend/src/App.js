@@ -1184,6 +1184,15 @@ function App() {
     setDescriptionInput('');
   };
 
+  const handleCategoryChange = (newCategory) => {
+    // Clear conversation and results when switching categories
+    setDescriptionCategory(newCategory);
+    setDescriptionConversation([]);
+    setCurrentMatches([]);
+    setDescriptionResults(null);
+    setDescriptionInput('');
+  };
+
   const handleQuickQuestion = (question) => {
     setDescriptionInput(question);
   };
@@ -1248,19 +1257,19 @@ function App() {
               <div className="category-buttons">
                 <button 
                   className={`category-btn ${descriptionCategory === 'all' ? 'active' : ''}`}
-                  onClick={() => setDescriptionCategory('all')}
+                  onClick={() => handleCategoryChange('all')}
                 >
                   🔍 All Species
                 </button>
                 <button 
                   className={`category-btn ${descriptionCategory === 'bird' ? 'active' : ''}`}
-                  onClick={() => setDescriptionCategory('bird')}
+                  onClick={() => handleCategoryChange('bird')}
                 >
                   🐦 Birds Only
                 </button>
                 <button 
                   className={`category-btn ${descriptionCategory === 'butterfly' ? 'active' : ''}`}
-                  onClick={() => setDescriptionCategory('butterfly')}
+                  onClick={() => handleCategoryChange('butterfly')}
                 >
                   🦋 Butterflies Only
                 </button>
@@ -1285,15 +1294,45 @@ function App() {
                   
                   <div className="quick-start-prompts">
                     <p>Try these examples:</p>
-                    <button onClick={() => handleQuickQuestion("I saw a small blue butterfly with orange spots near a garden")}>
-                      "Small blue butterfly with orange spots"
-                    </button>
-                    <button onClick={() => handleQuickQuestion("Large black bird with a hooked beak, seen near the coast")}>
-                      "Large black bird with hooked beak"
-                    </button>
-                    <button onClick={() => handleQuickQuestion("Yellow and black striped butterfly in a meadow")}>
-                      "Yellow and black striped butterfly"
-                    </button>
+                    {descriptionCategory === 'all' && (
+                      <>
+                        <button onClick={() => handleQuickQuestion("I saw a small blue butterfly with orange spots near a garden")}>
+                          "Small blue butterfly with orange spots"
+                        </button>
+                        <button onClick={() => handleQuickQuestion("Large black bird with a hooked beak, seen near the coast")}>
+                          "Large black bird with hooked beak"
+                        </button>
+                        <button onClick={() => handleQuickQuestion("Yellow and black striped butterfly in a meadow")}>
+                          "Yellow and black striped butterfly"
+                        </button>
+                      </>
+                    )}
+                    {descriptionCategory === 'bird' && (
+                      <>
+                        <button onClick={() => handleQuickQuestion("Large black bird with a hooked beak, seen near the coast")}>
+                          "Large black bird with hooked beak"
+                        </button>
+                        <button onClick={() => handleQuickQuestion("Small red bird with a crest on its head in the forest")}>
+                          "Small red bird with crested head"
+                        </button>
+                        <button onClick={() => handleQuickQuestion("White bird with long legs wading in shallow water")}>
+                          "White bird wading in water"
+                        </button>
+                      </>
+                    )}
+                    {descriptionCategory === 'butterfly' && (
+                      <>
+                        <button onClick={() => handleQuickQuestion("I saw a small blue butterfly with orange spots near a garden")}>
+                          "Small blue butterfly with orange spots"
+                        </button>
+                        <button onClick={() => handleQuickQuestion("Yellow and black striped butterfly in a meadow")}>
+                          "Yellow and black striped butterfly"
+                        </button>
+                        <button onClick={() => handleQuickQuestion("Large orange butterfly with black veins on its wings")}>
+                          "Large orange butterfly with black veins"
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -1310,11 +1349,23 @@ function App() {
                         <span className="message-time">{msg.timestamp}</span>
                         
                         {/* Show matches if available */}
-                        {msg.matches && msg.matches.length > 0 && (
-                          <div className="message-matches">
-                            <h4>🎯 Possible Matches:</h4>
-                            <div className="matches-grid">
-                              {msg.matches.slice(0, 3).map((match, idx) => (
+                        {msg.matches && msg.matches.length > 0 && (() => {
+                          // Filter matches by category if needed
+                          let filteredMatches = msg.matches;
+                          if (descriptionCategory === 'bird') {
+                            filteredMatches = msg.matches.filter(m => 
+                              m.category && (m.category.toLowerCase().includes('bird') || m.category === 'Bird')
+                            );
+                          } else if (descriptionCategory === 'butterfly') {
+                            filteredMatches = msg.matches.filter(m => 
+                              m.category && (m.category.toLowerCase().includes('butterfly') || m.category.toLowerCase().includes('moth') || m.category === 'Butterfly/Moth')
+                            );
+                          }
+                          return filteredMatches.length > 0 ? (
+                            <div className="message-matches">
+                              <h4>🎯 Possible Matches:</h4>
+                              <div className="matches-grid">
+                                {filteredMatches.slice(0, 3).map((match, idx) => (
                                 <div 
                                   key={idx} 
                                   className="match-card clickable"
@@ -1348,7 +1399,8 @@ function App() {
                               ))}
                             </div>
                           </div>
-                        )}
+                          ) : null;
+                        })()}
                         
                         {/* Show follow-up question buttons */}
                         {msg.followUpQuestions && msg.followUpQuestions.length > 0 && (
