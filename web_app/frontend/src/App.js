@@ -2467,15 +2467,15 @@ function App() {
                       </div>
                       {statistics.category_distribution.others > 0 && (
                         <div className="category-item">
-                          <div className="category-icon">❓</div>
+                          <div className="category-icon">⚠️</div>
                           <div className="category-info">
-                            <div className="category-label">Others</div>
+                            <div className="category-label">Others (Not Butterfly/Bird)</div>
                             <div className="category-bar">
                               <div 
                                 className="category-fill"
                                 style={{ 
                                   width: `${(statistics.category_distribution.others / statistics.total_identifications) * 100}%`,
-                                  background: '#9E9E9E'
+                                  background: '#FF9800'
                                 }}
                               >
                                 {statistics.category_distribution.others}

@@ -846,6 +846,11 @@ def get_statistics():
                 pass
         
         for item in history:
+            # 如果檢測到非蝴蝶/鳥類圖片（有 warning），直接歸類為 others
+            if 'warning' in item and item['warning'] is not None:
+                # 跳過，讓它歸類到 others（通過計算 total - bird_count - butterfly_count）
+                continue
+            
             if 'prediction' in item:
                 species = item['prediction'].get('class', '')
                 species_lower = species.lower()
