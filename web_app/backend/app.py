@@ -406,8 +406,12 @@ def is_cartoon_or_illustration(image_path):
             gradient_magnitude = np.sqrt(grad_x**2 + grad_y**2)
             avg_gradient = np.mean(gradient_magnitude)
             
-            # Cartoon detection criteria (very sensitive thresholds for better detection):
-            # Use multiple criteria with OR logic - if ANY criterion matches, it's likely a cartoon
+            # Cartoon detection criteria (more sensitive thresholds):
+            # - High edge density (>0.10) AND low texture variance (<30) = cartoon
+            # - High saturation (>0.5) AND low color diversity (<0.4) = cartoon
+            # - High average gradient (>40) AND low texture variance (<30) = cartoon
+            # - Very high saturation (>0.7) = likely cartoon
+            # - Very low texture variance (<15) = likely cartoon
             is_cartoon = False
             
             # Debug info (can be removed in production)
@@ -415,60 +419,50 @@ def is_cartoon_or_illustration(image_path):
                   f"saturation={saturation:.3f}, color_diversity={color_diversity:.3f}, avg_gradient={avg_gradient:.2f}, "
                   f"hist_peaks={avg_peaks:.1f}")
             
-            # Criterion 1: Sharp edges + uniform texture (very low thresholds)
-            if edge_density > 0.08 and texture_variance < 35:
+            # Criterion 1: Sharp edges + uniform texture (lowered thresholds)
+            if edge_density > 0.10 and texture_variance < 30:
                 is_cartoon = True
                 print("  -> Detected by: Sharp edges + uniform texture")
             
-            # Criterion 2: High saturation + few colors (very low thresholds)
-            if saturation > 0.45 and color_diversity < 0.5:
+            # Criterion 2: High saturation + few colors (lowered thresholds)
+            if saturation > 0.5 and color_diversity < 0.4:
                 is_cartoon = True
                 print("  -> Detected by: High saturation + few colors")
             
-            # Criterion 3: High gradient + low texture (very low thresholds)
-            if avg_gradient > 35 and texture_variance < 35:
+            # Criterion 3: High gradient + low texture (lowered thresholds)
+            if avg_gradient > 40 and texture_variance < 30:
                 is_cartoon = True
                 print("  -> Detected by: High gradient + low texture")
             
-            # Criterion 4: High edge density (typical of line art) - very low threshold
-            if edge_density > 0.15:
+            # Criterion 4: Very high edge density (typical of line art) (lowered threshold)
+            if edge_density > 0.20:
                 is_cartoon = True
-                print("  -> Detected by: High edge density")
+                print("  -> Detected by: Very high edge density")
             
-            # Criterion 5: High saturation (typical of cartoon colors) - lower threshold
-            if saturation > 0.65:
+            # Criterion 5: Very high saturation (typical of cartoon colors)
+            if saturation > 0.7:
                 is_cartoon = True
-                print("  -> Detected by: High saturation")
+                print("  -> Detected by: Very high saturation")
             
-            # Criterion 6: Low texture variance (flat colors typical of cartoons) - higher threshold
-            if texture_variance < 20:
+            # Criterion 6: Very low texture variance (flat colors typical of cartoons)
+            if texture_variance < 15:
                 is_cartoon = True
-                print("  -> Detected by: Low texture variance")
+                print("  -> Detected by: Very low texture variance")
             
-            # Criterion 7: Low color diversity (cartoons use limited color palette) - higher threshold
-            if color_diversity < 0.3:
+            # Criterion 7: Low color diversity (cartoons use limited color palette)
+            if color_diversity < 0.2:
                 is_cartoon = True
-                print("  -> Detected by: Low color diversity")
+                print("  -> Detected by: Very low color diversity")
             
-            # Criterion 8: Cartoon-like histogram (few distinct color peaks) - lower threshold
-            if has_cartoon_histogram and saturation > 0.45:
+            # Criterion 8: Cartoon-like histogram (few distinct color peaks)
+            if has_cartoon_histogram and saturation > 0.5:
                 is_cartoon = True
                 print("  -> Detected by: Cartoon-like histogram + high saturation")
             
-            # Criterion 9: High saturation with low texture (typical cartoon combination) - lower thresholds
-            if saturation > 0.65 and texture_variance < 25:
+            # Criterion 9: Very high saturation with low texture (typical cartoon combination)
+            if saturation > 0.75 and texture_variance < 20:
                 is_cartoon = True
-                print("  -> Detected by: High saturation + low texture")
-            
-            # Criterion 10: Very low texture with moderate saturation (flat cartoon style)
-            if texture_variance < 12 and saturation > 0.4:
-                is_cartoon = True
-                print("  -> Detected by: Very low texture + moderate saturation")
-            
-            # Criterion 11: High edge density with low color diversity (line art style)
-            if edge_density > 0.12 and color_diversity < 0.4:
-                is_cartoon = True
-                print("  -> Detected by: High edge density + low color diversity")
+                print("  -> Detected by: Very high saturation + low texture")
             
             return is_cartoon
         
@@ -488,19 +482,14 @@ def is_cartoon_or_illustration(image_path):
             print(f"Cartoon detection (fallback): texture_variance={texture_variance:.2f}, saturation={saturation:.3f}")
             
             # Simple heuristic: low texture variance + high saturation = likely cartoon
-            # Very sensitive thresholds for fallback method
-            if texture_variance < 35 and saturation > 0.45:
+            # More sensitive thresholds for fallback method
+            if texture_variance < 30 and saturation > 0.5:
                 print("  -> Detected by: Low texture + high saturation")
                 return True
             
-            # Also check for high saturation or low texture (more sensitive)
-            if saturation > 0.65 or texture_variance < 20:
-                print("  -> Detected by: High saturation or low texture")
-                return True
-            
-            # Additional check: moderate saturation with very low texture
-            if saturation > 0.4 and texture_variance < 12:
-                print("  -> Detected by: Moderate saturation + very low texture")
+            # Also check for very high saturation or very low texture
+            if saturation > 0.7 or texture_variance < 15:
+                print("  -> Detected by: Very high saturation or very low texture")
                 return True
             
             return False
@@ -757,37 +746,6 @@ def predict():
         # 檢測是否為非蝴蝶/鳥類圖片
         # 方法0: 優先檢測是否為卡通/插畫圖片（所有卡通圖片都歸類為 others）
         is_cartoon = is_cartoon_or_illustration(filepath)
-        
-        # 計算前3個預測的總置信度（用於後續檢測）
-        top3_total_confidence = sum(p['confidence'] for p in top_predictions[:3])
-        
-        # 輔助檢測：如果模型給出高置信度但預測結果看起來不合理，結合卡通檢測
-        # 例如：卡通圖片被識別為蛾子/蝴蝶，置信度很高但實際是卡通
-        # 如果卡通檢測有輕微匹配，且置信度異常高（>85%），更可能是卡通
-        if not is_cartoon and confidence > 0.85:
-            # 重新檢查一次，使用更寬鬆的標準
-            # 如果飽和度或邊緣密度較高，即使其他指標不匹配，也可能是卡通
-            try:
-                img_check = Image.open(filepath)
-                if img_check.mode != 'RGB':
-                    img_check = img_check.convert('RGB')
-                img_array_check = np.array(img_check)
-                
-                if CV2_AVAILABLE:
-                    gray_check = cv2.cvtColor(img_array_check, cv2.COLOR_RGB2GRAY)
-                    hsv_check = cv2.cvtColor(img_array_check, cv2.COLOR_RGB2HSV)
-                    saturation_check = np.mean(hsv_check[:, :, 1]) / 255.0
-                    edges_check = cv2.Canny(gray_check, 50, 150)
-                    edge_density_check = np.sum(edges_check > 0) / (edges_check.shape[0] * edges_check.shape[1])
-                    
-                    # 如果飽和度很高或邊緣密度很高，且置信度異常高，可能是卡通
-                    if (saturation_check > 0.6 or edge_density_check > 0.12) and top3_total_confidence < 0.98:
-                        is_cartoon = True
-                        print(f"  -> Secondary detection: High confidence ({confidence:.2f}) with cartoon-like features")
-            except Exception as e:
-                print(f"  -> Secondary detection failed: {e}")
-                pass  # 如果輔助檢測失敗，繼續使用原始結果
-        
         is_likely_not_target = is_cartoon
         
         # 方法1: 如果置信度低於30%，可能是其他類型的圖片
