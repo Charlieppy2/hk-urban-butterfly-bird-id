@@ -298,8 +298,8 @@ function App() {
         setWarning(null); // 清除之前的警告
       }
       
-      // Add to collection if prediction is successful
-      if (response.data.prediction && response.data.prediction.class) {
+      // 只有在無警告且存在有效分類結果時才解鎖圖鑑
+      if (!response.data.warning && response.data.prediction && response.data.prediction.class) {
         let speciesId = getSpeciesId(response.data.prediction);
         const speciesName = response.data.prediction.class;
         
@@ -314,6 +314,8 @@ function App() {
         } else {
           console.warn('⚠️ Could not get species ID from prediction:', response.data.prediction);
         }
+      } else if (response.data.warning) {
+        console.log('⏸️ Skip collection unlock due to warning:', response.data.warning?.type || 'unknown');
       }
       
       // Add to history
@@ -1293,29 +1295,6 @@ function App() {
         setDescriptionConversation(prev => [...prev, botMessage]);
         setCurrentMatches(response.data.matches || []);
         setDescriptionResults(response.data);
-        
-        // Add top match to collection if available
-        if (response.data.matches && response.data.matches.length > 0) {
-          const topMatch = response.data.matches[0];
-          // Try to get species key from match - it might be in different fields
-          let speciesId = getSpeciesId(topMatch);
-          
-          // If no ID found, try to extract from image_path
-          if (!speciesId && topMatch.image_path) {
-            const pathParts = topMatch.image_path.split('/');
-            if (pathParts.length >= 3 && pathParts[1] === 'raw') {
-              speciesId = pathParts[2]; // e.g., "001.Black_footed_Albatross"
-            }
-          }
-          
-          const speciesName = topMatch.common_name || topMatch.class || 'Unknown';
-          if (speciesId) {
-            console.log('📚 Adding match to collection:', { speciesId, speciesName, topMatch });
-            addToCollection(speciesId, speciesName);
-          } else {
-            console.warn('⚠️ Could not get species ID from match:', topMatch);
-          }
-        }
       } else {
         setError(response.data.error || 'Failed to identify species');
       }
