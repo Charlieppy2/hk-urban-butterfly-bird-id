@@ -2383,26 +2383,81 @@ function App() {
               {/* 只有在沒有警告時才顯示預測結果 */}
               {!warning && (
               <div className="result-card">
-                <div className="result-main">
-                  <span className="result-class">{prediction.class}</span>
-                  <span className="result-confidence">
+                {/* 頂部：標題 + 置信度膠囊 */}
+                <div className="result-main" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <span className="result-class" style={{ fontSize: '2rem', fontWeight: 800 }}>{prediction.class}</span>
+                    <span style={{ fontSize: '0.95rem', opacity: 0.9 }}>Top prediction</span>
+                  </div>
+                  <span 
+                    className="result-confidence" 
+                    style={{ 
+                      background: 'rgba(255,255,255,0.15)',
+                      padding: '8px 14px',
+                      borderRadius: '999px',
+                      fontWeight: 700,
+                      minWidth: '140px',
+                      textAlign: 'center',
+                      border: '1px solid rgba(255,255,255,0.25)'
+                    }}
+                  >
                     {(prediction.confidence * 100).toFixed(2)}% confidence
                   </span>
                 </div>
                 
-                <div className="result-details">
-                  <h3>Top Predictions:</h3>
-                  <p className="predictions-hint">These are the model's top predictions for this image:</p>
-                  <ul>
-                    {prediction.top_predictions.map((pred, idx) => (
-                      <li key={idx}>
-                        <span className="pred-class">{pred.class}</span>
-                        <span className="pred-confidence">
-                          {(pred.confidence * 100).toFixed(2)}%
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                {/* Top3 區塊：卡片式排列 + 進度條 */}
+                <div className="result-details" style={{ marginTop: '16px' }}>
+                  <h3 style={{ marginBottom: '6px' }}>Top Predictions</h3>
+                  <p className="predictions-hint" style={{ marginBottom: '14px' }}>
+                    These are the model's top predictions for this image:
+                  </p>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '10px' }}>
+                    {prediction.top_predictions.map((pred, idx) => {
+                      const percent = (pred.confidence * 100);
+                      return (
+                        <div 
+                          key={idx} 
+                          style={{ 
+                            background: 'rgba(255,255,255,0.08)',
+                            border: '1px solid rgba(255,255,255,0.15)',
+                            borderRadius: '10px',
+                            padding: '10px 12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px'
+                          }}
+                        >
+                          <div style={{ 
+                            width: 32, height: 32, borderRadius: '8px', 
+                            background: 'rgba(255,255,255,0.12)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontWeight: 700 
+                          }}>
+                            #{idx + 1}
+                          </div>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <span className="pred-class" style={{ fontWeight: 700 }}>{pred.class}</span>
+                              <span className="pred-confidence" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                                {percent.toFixed(2)}%
+                              </span>
+                            </div>
+                            <div style={{ marginTop: 6, height: 8, background: 'rgba(255,255,255,0.12)', borderRadius: 6 }}>
+                              <div 
+                                style={{ 
+                                  width: `${Math.max(5, percent)}%`,
+                                  height: '100%',
+                                  borderRadius: 6,
+                                  background: 'linear-gradient(90deg, #C6FFDD 0%, #FBD786 50%, #f7797d 100%)',
+                                  transition: 'width 0.3s ease'
+                                }} 
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
               </div>
             </div>
           )}
