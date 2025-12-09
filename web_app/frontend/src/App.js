@@ -1562,15 +1562,15 @@ function App() {
                     <p>Try these examples:</p>
                     {descriptionCategory === 'all' && (
                       <>
-                        <button onClick={() => handleQuickQuestion("I saw a small blue butterfly with orange spots near a garden")}>
-                          "Small blue butterfly with orange spots"
-                        </button>
-                        <button onClick={() => handleQuickQuestion("Large black bird with a hooked beak, seen near the coast")}>
-                          "Large black bird with hooked beak"
-                        </button>
-                        <button onClick={() => handleQuickQuestion("Yellow and black striped butterfly in a meadow")}>
-                          "Yellow and black striped butterfly"
-                        </button>
+                    <button onClick={() => handleQuickQuestion("I saw a small blue butterfly with orange spots near a garden")}>
+                      "Small blue butterfly with orange spots"
+                    </button>
+                    <button onClick={() => handleQuickQuestion("Large black bird with a hooked beak, seen near the coast")}>
+                      "Large black bird with hooked beak"
+                    </button>
+                    <button onClick={() => handleQuickQuestion("Yellow and black striped butterfly in a meadow")}>
+                      "Yellow and black striped butterfly"
+                    </button>
                       </>
                     )}
                     {descriptionCategory === 'bird' && (
@@ -1628,9 +1628,9 @@ function App() {
                             );
                           }
                           return filteredMatches.length > 0 ? (
-                            <div className="message-matches">
-                              <h4>🎯 Possible Matches:</h4>
-                              <div className="matches-grid">
+                          <div className="message-matches">
+                            <h4>🎯 Possible Matches:</h4>
+                            <div className="matches-grid">
                                 {filteredMatches.slice(0, 3).map((match, idx) => (
                                 <div 
                                   key={idx} 
@@ -2382,188 +2382,34 @@ function App() {
               
               {/* 只有在沒有警告時才顯示預測結果 */}
               {!warning && (
-                <div className="result-card">
-                  <div className="result-main">
-                    <span className="result-class">{prediction.class}</span>
-                    <span className="result-confidence">
-                      {(prediction.confidence * 100).toFixed(2)}% confidence
-                    </span>
-                  </div>
-                  
-                  <div className="result-details">
-                    <h3>Top Predictions:</h3>
-                    <p className="predictions-hint">These are the model's top predictions for this image:</p>
-                    <ul>
-                      {prediction.top_predictions.map((pred, idx) => (
-                        <li key={idx}>
-                          <span className="pred-class">{pred.class}</span>
-                          <span className="pred-confidence">
-                            {(pred.confidence * 100).toFixed(2)}%
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+              <div className="result-card">
+                <div className="result-main">
+                  <span className="result-class">{prediction.class}</span>
+                  <span className="result-confidence">
+                    {(prediction.confidence * 100).toFixed(2)}% confidence
+                  </span>
                 </div>
-              )}
-            </div>
-          )}
-
-          {preview && !prediction && (
-            <div className="quality-section">
-              <button 
-                className="btn btn-secondary"
-                onClick={handleAnalyzeQuality}
-                disabled={analyzingQuality}
-              >
-                {analyzingQuality ? '🔍 Analyzing...' : '📊 Analyze Image Quality'}
-              </button>
-        </div>
-          )}
-
-          {qualityAnalysis && (
-            <div className="quality-analysis-section">
-              <h2>📊 Image Quality Analysis</h2>
-              <div className="quality-card">
-                <div className="quality-overall">
-                  <div className="quality-score">
-                    <div className="score-value">{qualityAnalysis.overall_score}</div>
-                    <div className="score-label">Overall Quality Score</div>
-                    <div className="score-bar">
-                      <div 
-                        className="score-fill"
-                        style={{ 
-                          width: `${qualityAnalysis.overall_score}%`,
-                          background: qualityAnalysis.overall_score >= 80 ? 'linear-gradient(90deg, #4CAF50 0%, #45a049 100%)' :
-                                     qualityAnalysis.overall_score >= 60 ? 'linear-gradient(90deg, #FF9800 0%, #FFB74D 100%)' :
-                                     'linear-gradient(90deg, #F44336 0%, #E57373 100%)'
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="quality-metrics">
-                  <h3>Quality Metrics</h3>
-                  <div className="metrics-grid">
-                    <div className="metric-item">
-                      <div className="metric-header">
-                        <span className="metric-name">Brightness</span>
-                        <span className={`metric-status ${qualityAnalysis.metrics.brightness.status}`}>
-                          {qualityAnalysis.metrics.brightness.status === 'good' ? '✓' : '⚠'}
+                
+                <div className="result-details">
+                  <h3>Top Predictions:</h3>
+                  <p className="predictions-hint">These are the model's top predictions for this image:</p>
+                  <ul>
+                    {prediction.top_predictions.map((pred, idx) => (
+                      <li key={idx}>
+                        <span className="pred-class">{pred.class}</span>
+                        <span className="pred-confidence">
+                          {(pred.confidence * 100).toFixed(2)}%
                         </span>
-                      </div>
-                      <div className="metric-value">{qualityAnalysis.metrics.brightness.value}%</div>
-                      <div className="metric-bar">
-                        <div 
-                          className="metric-fill"
-                          style={{ 
-                            width: `${qualityAnalysis.metrics.brightness.score}%`,
-                            background: qualityAnalysis.metrics.brightness.status === 'good' ? '#4CAF50' : '#FF9800'
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-
-                    <div className="metric-item">
-                      <div className="metric-header">
-                        <span className="metric-name">Contrast</span>
-                        <span className={`metric-status ${qualityAnalysis.metrics.contrast.status}`}>
-                          {qualityAnalysis.metrics.contrast.status === 'good' ? '✓' : '⚠'}
-                        </span>
-                      </div>
-                      <div className="metric-value">{qualityAnalysis.metrics.contrast.value}%</div>
-                      <div className="metric-bar">
-                        <div 
-                          className="metric-fill"
-                          style={{ 
-                            width: `${qualityAnalysis.metrics.contrast.score}%`,
-                            background: qualityAnalysis.metrics.contrast.status === 'good' ? '#4CAF50' : '#FF9800'
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-
-                    <div className="metric-item">
-                      <div className="metric-header">
-                        <span className="metric-name">Sharpness</span>
-                        <span className={`metric-status ${qualityAnalysis.metrics.sharpness.status}`}>
-                          {qualityAnalysis.metrics.sharpness.status === 'good' ? '✓' : '⚠'}
-                        </span>
-                      </div>
-                      <div className="metric-value">{qualityAnalysis.metrics.sharpness.value.toFixed(1)}</div>
-                      <div className="metric-bar">
-                        <div 
-                          className="metric-fill"
-                          style={{ 
-                            width: `${qualityAnalysis.metrics.sharpness.score}%`,
-                            background: qualityAnalysis.metrics.sharpness.status === 'good' ? '#4CAF50' : '#F44336'
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-
-                    <div className="metric-item">
-                      <div className="metric-header">
-                        <span className="metric-name">Saturation</span>
-                        <span className={`metric-status ${qualityAnalysis.metrics.saturation.status}`}>
-                          {qualityAnalysis.metrics.saturation.status === 'good' ? '✓' : '○'}
-                        </span>
-                      </div>
-                      <div className="metric-value">{qualityAnalysis.metrics.saturation.value}%</div>
-                      <div className="metric-bar">
-                        <div 
-                          className="metric-fill"
-                          style={{ 
-                            width: `${qualityAnalysis.metrics.saturation.score}%`,
-                            background: '#4CAF50'
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-
-                    <div className="metric-item">
-                      <div className="metric-header">
-                        <span className="metric-name">Resolution</span>
-                        <span className={`metric-status ${qualityAnalysis.metrics.resolution.status}`}>
-                          {qualityAnalysis.metrics.resolution.status === 'good' ? '✓' : '○'}
-                        </span>
-                      </div>
-                      <div className="metric-value">
-                        {qualityAnalysis.metrics.resolution.width} × {qualityAnalysis.metrics.resolution.height}
-                      </div>
-                      <div className="metric-bar">
-                        <div 
-                          className="metric-fill"
-                          style={{ 
-                            width: `${qualityAnalysis.metrics.resolution.score}%`,
-                            background: '#4CAF50'
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="quality-recommendations">
-                  <h3>💡 Recommendations</h3>
-                  <div className="recommendations-list">
-                    {qualityAnalysis.recommendations.map((rec, idx) => (
-                      <div key={idx} className={`recommendation-item ${rec.severity}`}>
-                        <div className="recommendation-icon">
-                          {rec.severity === 'high' ? '⚠️' : rec.severity === 'medium' ? '⚡' : rec.severity === 'low' ? '💡' : '✓'}
-                        </div>
-                        <div className="recommendation-content">
-                          <div className="recommendation-message">{rec.message}</div>
-                          <div className="recommendation-suggestion">{rec.suggestion}</div>
-                        </div>
-                      </div>
+                      </li>
                     ))}
-                  </div>
-                </div>
+                  </ul>
               </div>
             </div>
           )}
+        </div>
+          )}
+
+          {/* Analyze Image Quality UI removed */}
         </div>
 
         {/* Favorites Tab */}
@@ -2670,7 +2516,7 @@ function App() {
                             ⚠️ Not a butterfly or bird
                           </p>
                         ) : (
-                          <p className="history-class">{item.prediction.class}</p>
+                        <p className="history-class">{item.prediction.class}</p>
                         )}
                         <p className="history-confidence">
                           {(item.prediction.confidence * 100).toFixed(2)}% confidence
@@ -2918,7 +2764,7 @@ function App() {
                         ⚠️ Not a butterfly or bird
                       </p>
                     ) : (
-                      <p className="history-class">{item.prediction.class}</p>
+                    <p className="history-class">{item.prediction.class}</p>
                     )}
                     <p className="history-confidence">
                       {(item.prediction.confidence * 100).toFixed(1)}%
