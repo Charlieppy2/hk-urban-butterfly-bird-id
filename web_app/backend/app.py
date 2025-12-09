@@ -76,21 +76,52 @@ def load_model():
     print(f"DEBUG: working_dir = {working_dir}")
     
     # Try different base directory paths
-    possible_base_dirs = [
-        # Koyeb: Working directory might be /workspace, need to find project root
-        # Check if we're in web_app/backend subdirectory
-        os.path.dirname(os.path.dirname(working_dir)) if os.path.basename(working_dir) == 'backend' else None,
-        # Check if models exist in working directory
-        working_dir if os.path.exists(os.path.join(working_dir, 'models', 'trained', 'model.h5')) else None,
-        # Check if models exist one level up
-        os.path.dirname(working_dir) if os.path.exists(os.path.join(os.path.dirname(working_dir), 'models', 'trained', 'model.h5')) else None,
-        # Check if models exist two levels up
-        os.path.dirname(os.path.dirname(working_dir)) if os.path.exists(os.path.join(os.path.dirname(os.path.dirname(working_dir)), 'models', 'trained', 'model.h5')) else None,
-        # Check relative to current file location
-        os.path.dirname(os.path.dirname(current_dir)) if os.path.exists(os.path.join(os.path.dirname(os.path.dirname(current_dir)), 'models', 'trained', 'model.h5')) else None,
-        # Check three levels up from file
-        os.path.dirname(os.path.dirname(os.path.dirname(current_file))) if os.path.exists(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(current_file))), 'models', 'trained', 'model.h5')) else None,
-    ]
+    # Priority: Check paths that are most likely to contain the model
+    possible_base_dirs = []
+    
+    # 1. If we're in web_app/backend, go up two levels to project root (most common local dev case)
+    if os.path.basename(working_dir) == 'backend':
+        parent = os.path.dirname(working_dir)
+        if os.path.basename(parent) == 'web_app':
+            project_root = os.path.dirname(parent)
+            test_path = os.path.join(project_root, 'models', 'trained', 'model.h5')
+            if os.path.exists(test_path):
+                possible_base_dirs.append(project_root)
+                print(f"DEBUG: Found project root from web_app/backend: {project_root}")
+    
+    # 2. Check if models exist in working directory (project root)
+    test_path = os.path.join(working_dir, 'models', 'trained', 'model.h5')
+    if os.path.exists(test_path):
+        possible_base_dirs.append(working_dir)
+        print(f"DEBUG: Found model in working directory: {working_dir}")
+    
+    # 3. Check if models exist one level up
+    parent_dir = os.path.dirname(working_dir)
+    test_path = os.path.join(parent_dir, 'models', 'trained', 'model.h5')
+    if os.path.exists(test_path):
+        possible_base_dirs.append(parent_dir)
+        print(f"DEBUG: Found model one level up: {parent_dir}")
+    
+    # 4. Check if models exist two levels up (from web_app/backend to project root)
+    grandparent_dir = os.path.dirname(os.path.dirname(working_dir))
+    test_path = os.path.join(grandparent_dir, 'models', 'trained', 'model.h5')
+    if os.path.exists(test_path):
+        possible_base_dirs.append(grandparent_dir)
+        print(f"DEBUG: Found model two levels up: {grandparent_dir}")
+    
+    # 5. Check relative to current file location (from web_app/backend/app.py to project root)
+    file_based_root = os.path.dirname(os.path.dirname(current_dir))
+    test_path = os.path.join(file_based_root, 'models', 'trained', 'model.h5')
+    if os.path.exists(test_path):
+        possible_base_dirs.append(file_based_root)
+        print(f"DEBUG: Found model relative to file location: {file_based_root}")
+    
+    # 6. Check three levels up from file
+    file_based_root2 = os.path.dirname(os.path.dirname(os.path.dirname(current_file)))
+    test_path = os.path.join(file_based_root2, 'models', 'trained', 'model.h5')
+    if os.path.exists(test_path):
+        possible_base_dirs.append(file_based_root2)
+        print(f"DEBUG: Found model three levels up from file: {file_based_root2}")
     
     base_dir = None
     for possible_dir in possible_base_dirs:
@@ -1996,8 +2027,8 @@ if __name__ == '__main__':
     print("Loading model...")
     load_model()
     print("Starting Flask server...")
-    # Get port from environment variable or default to 5001
-    port = int(os.environ.get('PORT', 5001))
+    # Get port from environment variable or default to 5000
+    port = int(os.environ.get('PORT', 5000))
     debug = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
     app.run(debug=debug, host='0.0.0.0', port=port)
 
