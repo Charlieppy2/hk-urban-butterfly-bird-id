@@ -1530,7 +1530,7 @@ function App() {
                   <p>Tell me about the species you want to identify. Include details like:</p>
                   <ul className="description-tips">
                     <li><strong>Colors:</strong> What colors did you notice? (e.g., "blue wings with black spots")</li>
-                    <li><strong>Size:</strong> How big was it? (e.g., "small", "about 10cm", "large wingspan")</li>
+                    <li><strong>Size:</strong> How big was it? (e.g., "small", "length: 20cm", "large wingspan")</li>
                     <li><strong>Habitat:</strong> Where did you see it? (e.g., "forest", "near water", "urban garden")</li>
                     <li><strong>Behavior:</strong> What was it doing? (e.g., "flying slowly", "feeding on flowers")</li>
                     <li><strong>Location:</strong> What region or area? (e.g., "Hong Kong", "North America")</li>

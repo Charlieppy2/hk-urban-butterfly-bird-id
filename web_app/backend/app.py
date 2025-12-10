@@ -1540,6 +1540,66 @@ def load_species_database():
     return species_db
 
 
+def check_length_match(user_description, species_size):
+    """
+    Check if user-specified length matches species size.
+    Returns True if matches (within 50% difference), False if doesn't match.
+    """
+    import re
+    
+    description_lower = user_description.lower()
+    size_text = str(species_size).lower() if species_size else ''
+    
+    # Extract length from user description
+    user_length = None
+    length_patterns = [
+        r'length\s*:?\s*(\d+(?:\.\d+)?)\s*(?:cm|centimeter|centimetre)',
+        r'(\d+(?:\.\d+)?)\s*(?:cm|centimeter|centimetre)\s*(?:long|in length)',
+        r'length\s+of\s+(\d+(?:\.\d+)?)\s*(?:cm|centimeter|centimetre)'
+    ]
+    for pattern in length_patterns:
+        match = re.search(pattern, description_lower)
+        if match:
+            try:
+                user_length = float(match.group(1))
+                break
+            except ValueError:
+                pass
+    
+    # If user didn't specify length, return True (no filtering)
+    if user_length is None:
+        return True
+    
+    # Extract length range from species size
+    length_range_match = re.search(r'length\s*:?\s*(\d+(?:\.\d+)?)\s*(?:-|to)\s*(\d+(?:\.\d+)?)\s*(?:cm|centimeter|centimetre)', size_text)
+    if length_range_match:
+        try:
+            min_length = float(length_range_match.group(1))
+            max_length = float(length_range_match.group(2))
+            avg_length = (min_length + max_length) / 2
+            
+            # Calculate difference percentage
+            if avg_length > 0:
+                diff_percent = abs(user_length - avg_length) / avg_length
+                # If difference is more than 50%, filter out
+                return diff_percent <= 0.5
+        except (ValueError, IndexError):
+            pass
+    else:
+        # Try to extract single length value
+        single_length_match = re.search(r'length\s*:?\s*(\d+(?:\.\d+)?)\s*(?:cm|centimeter|centimetre)', size_text)
+        if single_length_match:
+            try:
+                species_length = float(single_length_match.group(1))
+                diff_percent = abs(user_length - species_length) / species_length if species_length > 0 else 1
+                return diff_percent <= 0.5
+            except ValueError:
+                pass
+    
+    # If we can't extract species length, don't filter (return True)
+    return True
+
+
 def calculate_match_score(description, species_info):
     """Calculate how well a description matches a species"""
     import re
@@ -1547,6 +1607,69 @@ def calculate_match_score(description, species_info):
     description_lower = description.lower()
     score = 0
     matched_fields = []
+    
+    # Extract length from user description (e.g., "length: 20cm" -> 20)
+    user_length = None
+    length_patterns = [
+        r'length\s*:?\s*(\d+(?:\.\d+)?)\s*(?:cm|centimeter|centimetre)',
+        r'(\d+(?:\.\d+)?)\s*(?:cm|centimeter|centimetre)\s*(?:long|in length)',
+        r'length\s+of\s+(\d+(?:\.\d+)?)\s*(?:cm|centimeter|centimetre)'
+    ]
+    for pattern in length_patterns:
+        match = re.search(pattern, description_lower)
+        if match:
+            try:
+                user_length = float(match.group(1))
+                break
+            except ValueError:
+                pass
+    
+    # If user specified a length, check if it matches the species size
+    if user_length is not None:
+        size_text = str(species_info.get('size', species_info.get('wingspan', ''))).lower()
+        # Extract length range from species size (e.g., "Length: 68-74 cm" -> 68, 74)
+        length_range_match = re.search(r'length\s*:?\s*(\d+(?:\.\d+)?)\s*(?:-|to)\s*(\d+(?:\.\d+)?)\s*(?:cm|centimeter|centimetre)', size_text)
+        if length_range_match:
+            try:
+                min_length = float(length_range_match.group(1))
+                max_length = float(length_range_match.group(2))
+                avg_length = (min_length + max_length) / 2
+                
+                # Calculate difference percentage
+                if avg_length > 0:
+                    diff_percent = abs(user_length - avg_length) / avg_length
+                    # If difference is more than 50%, significantly penalize the score
+                    if diff_percent > 0.5:
+                        # Return negative score to filter out this match
+                        return -100, []
+                    # If difference is more than 30%, reduce score
+                    elif diff_percent > 0.3:
+                        score -= 50
+                    # If difference is more than 20%, slightly reduce score
+                    elif diff_percent > 0.2:
+                        score -= 20
+                    # If within 20%, boost score
+                    else:
+                        score += 30
+            except (ValueError, IndexError):
+                pass
+        else:
+            # Try to extract single length value
+            single_length_match = re.search(r'length\s*:?\s*(\d+(?:\.\d+)?)\s*(?:cm|centimeter|centimetre)', size_text)
+            if single_length_match:
+                try:
+                    species_length = float(single_length_match.group(1))
+                    diff_percent = abs(user_length - species_length) / species_length if species_length > 0 else 1
+                    if diff_percent > 0.5:
+                        return -100, []
+                    elif diff_percent > 0.3:
+                        score -= 50
+                    elif diff_percent > 0.2:
+                        score -= 20
+                    else:
+                        score += 30
+                except ValueError:
+                    pass
     
     # Define field weights
     field_weights = {
@@ -1572,40 +1695,319 @@ def calculate_match_score(description, species_info):
                   'than', 'too', 'very', 'just', 'about', 'with', 'from', 'into', 'through',
                   'during', 'before', 'after', 'above', 'below', 'between', 'under', 'over',
                   'and', 'or', 'but', 'if', 'because', 'as', 'until', 'while', 'of', 'at',
-                  'by', 'for', 'on', 'off', 'out', 'in', 'to', 'up'}
+                  'by', 'for', 'on', 'off', 'out', 'in', 'to', 'up', 'see', 'saw', 'seen'}
     
     # Extract meaningful keywords from user description
-    words = re.findall(r'\b[a-zA-Z]{3,}\b', description_lower)
-    keywords = [w for w in words if w not in stop_words]
+    # Use word boundaries for better matching
+    words = re.findall(r'\b[a-zA-Z]{2,}\b', description_lower)
+    keywords = [w for w in words if w not in stop_words and len(w) >= 2]
     
-    # Check each field for keyword matches
+    # Extract location/distribution keywords (multi-word locations)
+    # IMPORTANT: Order matters - longer phrases first to avoid partial matching
+    location_patterns = [
+        r'\b(north\s+pacific|south\s+pacific|east\s+pacific|west\s+pacific)\b',
+        r'\b(north\s+atlantic|south\s+atlantic|east\s+atlantic|west\s+atlantic)\b',
+        r'\b(north\s+america|south\s+america|central\s+america|north\s+american|south\s+american)\b',
+        r'\b(east\s+asia|south\s+east\s+asia|southeast\s+asia|south\s+asia|west\s+asia)\b',
+        r'\b(hong\s+kong|hongkong)\b',
+        r'\b(new\s+zealand|new\s+york|new\s+jersey)\b',
+        r'\b(united\s+states|united\s+kingdom)\b',
+        r'\b(pacific\s+ocean|atlantic\s+ocean|indian\s+ocean|arctic\s+ocean)\b',
+        r'\b(western\s+north\s+america|eastern\s+north\s+america|western\s+europe|eastern\s+europe)\b',
+        r'\b(china|japan|korea|india|thailand|malaysia|singapore|indonesia|philippines|vietnam)\b',
+        r'\b(australia|australian|taiwan|taipei)\b',
+        r'\b(europe|european|africa|african|asia|asian)\b',
+        r'\b(california|florida|texas|hawaii|alaska)\b',
+        r'\b(beijing|shanghai|guangzhou|shenzhen|tokyo|osaka|seoul|bangkok)\b'
+    ]
+    
+    # Extract full location phrases first (to avoid partial matching)
+    location_phrases = []
+    for pattern in location_patterns:
+        matches = re.findall(pattern, description_lower)
+        if matches:
+            for match in matches:
+                if isinstance(match, tuple):
+                    match = ' '.join(match)
+                location_phrases.append(match.replace(' ', '_'))
+    
+    # Add single-word location keywords (only if not part of a phrase)
+    location_single_words = ['hong', 'kong', 'china', 'japan', 'korea', 'india', 'thailand', 
+                            'malaysia', 'singapore', 'indonesia', 'philippines', 'vietnam',
+                            'australia', 'taiwan', 'europe', 'africa', 'asia', 'california',
+                            'florida', 'texas', 'hawaii', 'alaska', 'pacific', 'atlantic',
+                            'ocean', 'island', 'islands', 'coast', 'coastal', 'mountain',
+                            'forest', 'urban', 'rural', 'tropical', 'temperate', 'arctic',
+                            'canada', 'mexico', 'brazil', 'argentina', 'chile']
+    
+    # Only add single words if they're not part of extracted phrases
+    for word in keywords:
+        if word in location_single_words:
+            # Check if this word is already part of a phrase
+            is_part_of_phrase = False
+            for phrase in location_phrases:
+                if word in phrase.replace('_', ' '):
+                    is_part_of_phrase = True
+                    break
+            if not is_part_of_phrase:
+                location_phrases.append(word)
+    
+    location_keywords = location_phrases
+    
+    # Remove location keywords from general keywords to avoid double counting
+    keywords = [k for k in keywords if k not in location_single_words and not any(loc.replace('_', ' ') in k or k in loc.replace('_', ' ') for loc in location_keywords)]
+    
+    # Check each field for keyword matches with improved accuracy
+    total_keywords_matched = 0
     for field, weight in field_weights.items():
         if field in species_info and species_info[field]:
             field_text = str(species_info[field]).lower()
             field_match_count = 0
+            matched_keywords_list = []
             
-            for keyword in keywords:
-                if keyword in field_text:
-                    field_match_count += 1
+            # Special handling for distribution field - use location keywords
+            if field == 'distribution':
+                exact_phrase_match = False
+                partial_match_count = 0
+                
+                # First, check for exact phrase matches (highest priority)
+                for loc_keyword in location_keywords:
+                    # Replace underscore with space for matching
+                    loc_pattern = loc_keyword.replace('_', ' ')
+                    # Use word boundary for exact phrase matching
+                    pattern = r'\b' + re.escape(loc_pattern) + r'\b'
+                    if re.search(pattern, field_text, re.IGNORECASE):
+                        field_match_count += 1
+                        matched_keywords_list.append(loc_pattern)
+                        exact_phrase_match = True
+                
+                # If we have exact phrase matches, don't do partial matching
+                # This prevents "North Pacific" from matching "North America"
+                if not exact_phrase_match:
+                    # Only do partial matching if no exact phrase was found
+                    # But give much lower score for partial matches
+                    for loc_keyword in location_keywords:
+                        loc_pattern = loc_keyword.replace('_', ' ')
+                        # Check if any word from the location keyword appears in field_text
+                        words_in_keyword = loc_pattern.split()
+                        if len(words_in_keyword) > 1:
+                            # For multi-word locations, require ALL words to be present
+                            all_words_match = all(
+                                re.search(r'\b' + re.escape(word) + r'\b', field_text, re.IGNORECASE)
+                                for word in words_in_keyword
+                            )
+                            if all_words_match:
+                                # Partial match - give lower score
+                                partial_match_count += 1
+                                matched_keywords_list.append(loc_pattern + ' (partial)')
+                        else:
+                            # Single word - check if it appears
+                            pattern = r'\b' + re.escape(loc_pattern) + r'\b'
+                            if re.search(pattern, field_text, re.IGNORECASE):
+                                partial_match_count += 1
+                                matched_keywords_list.append(loc_pattern + ' (partial)')
+                
+                # Apply penalty for partial matches (they're less accurate)
+                if partial_match_count > 0 and not exact_phrase_match:
+                    # Partial matches get reduced score
+                    field_match_count = partial_match_count * 0.3  # 70% penalty for partial matches
+                
+                # Also check for general keywords in distribution (only if no location matches)
+                if field_match_count == 0:
+                    for keyword in keywords:
+                        # Use word boundary for exact word matching (not substring)
+                        pattern = r'\b' + re.escape(keyword) + r'\b'
+                        if re.search(pattern, field_text, re.IGNORECASE):
+                            field_match_count += 1
+                            matched_keywords_list.append(keyword)
+            else:
+                # For other fields, use word boundary matching for better accuracy
+                for keyword in keywords:
+                    # Use word boundary for exact word matching
+                    pattern = r'\b' + re.escape(keyword) + r'\b'
+                    if re.search(pattern, field_text, re.IGNORECASE):
+                        field_match_count += 1
+                        matched_keywords_list.append(keyword)
             
             if field_match_count > 0:
-                field_score = field_match_count * weight
+                # Calculate score based on number of matches and field importance
+                # More matches = higher score, with diminishing returns
+                base_score = field_match_count * weight
+                # Bonus for multiple matches in the same field (indicates stronger match)
+                match_bonus = min(field_match_count * 0.5, weight * 0.5)
+                field_score = base_score + match_bonus
                 score += field_score
+                total_keywords_matched += field_match_count
                 matched_fields.append({
                     'field': field,
                     'matches': field_match_count,
+                    'matched_keywords': matched_keywords_list[:5],  # Store matched keywords
                     'score': field_score
                 })
+    
+    # Calculate confidence boost based on total keywords matched
+    # More keywords matched = higher confidence
+    if total_keywords_matched > 0:
+        # Base confidence boost
+        confidence_boost = min(total_keywords_matched * 2, 20)  # Max 20 point boost
+        score += confidence_boost
+        
+        # Additional boost for matching multiple important fields
+        important_fields_matched = sum(1 for mf in matched_fields if mf['field'] in ['distribution', 'habitat', 'common_name'])
+        if important_fields_matched >= 2:
+            score += 10  # Bonus for matching multiple important fields
     
     return score, matched_fields
 
 
-def identify_by_description(description, category=None, conversation_history=None):
+def identify_by_description(description, category=None, conversation_history=None, current_matches=None):
     """
     Identify species based on text description.
     Uses semantic matching (if available) or falls back to keyword matching.
+    If current_matches is provided, only re-score those matches (progressive narrowing).
     Returns matches and follow-up questions if needed.
     """
+    
+    # If we have previous matches, only re-score those (progressive narrowing)
+    if current_matches and len(current_matches) > 0:
+        species_db = load_species_database()
+        refined_matches = []
+        
+        # Extract species keys from previous matches
+        previous_keys = set()
+        for match in current_matches:
+            key = match.get('key') or match.get('species_id') or match.get('common_name', '')
+            previous_keys.add(key)
+        
+        # Re-score only the previous matches with the new description
+        for match in current_matches:
+            species_key = match.get('key') or match.get('species_id') or match.get('common_name', '')
+            
+            # Find the species info from database
+            species_info = None
+            for cat in ['birds', 'butterflies']:
+                if species_key in species_db.get(cat, {}):
+                    species_info = species_db[cat][species_key]
+                    break
+            
+            if not species_info:
+                # Try to reconstruct from match data
+                species_info = {
+                    'common_name': match.get('common_name', ''),
+                    'scientific_name': match.get('scientific_name', ''),
+                    'description': match.get('description', ''),
+                    'habitat': match.get('habitat', ''),
+                    'distribution': match.get('distribution', ''),
+                    'behavior': match.get('behavior', ''),
+                    'size': match.get('size', ''),
+                    'diet': match.get('diet', ''),
+                    'type': 'bird' if 'Bird' in match.get('category', '') else 'butterfly'
+                }
+            
+            # Re-calculate score with accumulated description
+            score, matched_fields = calculate_match_score(description, species_info)
+            
+            if score > 0:  # Only keep matches that still score positively
+                refined_matches.append({
+                    'species_key': species_key,
+                    'species_info': species_info,
+                    'category': 'birds' if species_info.get('type') == 'bird' else 'butterflies',
+                    'score': score,
+                    'matched_fields': matched_fields
+                })
+        
+        # Sort by new score
+        refined_matches.sort(key=lambda x: x['score'], reverse=True)
+        
+        # Format results
+        formatted_matches = []
+        max_score = refined_matches[0]['score'] if refined_matches else 1
+        
+        for match in refined_matches[:5]:  # Top 5
+            info = match['species_info']
+            species_key = match['species_key']
+            
+            # Calculate confidence based on score and matched keywords (same logic as keyword matching)
+            base_score = match['score']
+            total_keywords = sum(mf.get('matches', 0) for mf in match.get('matched_fields', []))
+            
+            # Check for partial matches (especially in distribution field)
+            has_partial_match = False
+            distribution_partial_match = False
+            
+            for mf in match.get('matched_fields', []):
+                matched_keywords = mf.get('matched_keywords', [])
+                if any('(partial)' in str(kw) for kw in matched_keywords):
+                    has_partial_match = True
+                    if mf.get('field') == 'distribution':
+                        distribution_partial_match = True
+            
+            normalized_score = min(base_score / max(max_score, 1), 1.0)
+            
+            # Penalty for partial matches (especially distribution)
+            partial_penalty = 0
+            if distribution_partial_match:
+                partial_penalty = 0.4  # 40% penalty
+            elif has_partial_match:
+                partial_penalty = 0.2  # 20% penalty
+            
+            keyword_bonus = min(total_keywords * 0.05, 0.2)
+            important_fields = ['distribution', 'habitat', 'common_name']
+            
+            # Only count exact matches for important fields bonus
+            important_fields_matched = 0
+            for mf in match.get('matched_fields', []):
+                if mf.get('field') in important_fields:
+                    matched_keywords = mf.get('matched_keywords', [])
+                    is_exact = not any('(partial)' in str(kw) for kw in matched_keywords)
+                    if is_exact:
+                        important_fields_matched += 1
+            
+            field_bonus = min(important_fields_matched * 0.1, 0.3)
+            confidence_score = min(max(normalized_score + keyword_bonus + field_bonus - partial_penalty, 0), 1.0)
+            
+            # Cap confidence at 60% if distribution partial match
+            if distribution_partial_match:
+                confidence_score = min(confidence_score, 0.6)
+            
+            if total_keywords > 0:
+                confidence_score = max(confidence_score, 0.3)
+            
+            formatted_matches.append({
+                'key': species_key,
+                'species_id': species_key,
+                'common_name': info.get('common_name', species_key),
+                'scientific_name': info.get('scientific_name', ''),
+                'description': info.get('description', ''),
+                'habitat': info.get('habitat', ''),
+                'distribution': info.get('distribution', ''),
+                'behavior': info.get('behavior', ''),
+                'size': info.get('size', info.get('wingspan', '')),
+                'category': 'Bird' if match['category'] == 'birds' else 'Butterfly/Moth',
+                'confidence_score': confidence_score,
+                'image_path': info.get('image_path', ''),
+                'matched_fields': match['matched_fields'],
+                'total_keywords_matched': total_keywords,
+                'match_method': 'progressive_refinement'
+            })
+        
+        # Determine if we need more clarification
+        needs_clarification = len(formatted_matches) > 1
+        follow_up_questions = []
+        if needs_clarification:
+            follow_up_questions = [
+                "Can you provide more details to narrow it down?",
+                "What colors did you notice?",
+                "Where did you see it (habitat)?"
+            ]
+        
+        return {
+            'matches': formatted_matches,
+            'needs_clarification': needs_clarification,
+            'follow_up_questions': follow_up_questions[:3],
+            'total_searched': len(current_matches),
+            'match_method': 'progressive_refinement'
+        }
     
     # Try semantic matching first (more accurate)
     if SEMANTIC_MATCHER_AVAILABLE:
@@ -1616,9 +2018,24 @@ def identify_by_description(description, category=None, conversation_history=Non
                 species_db = load_species_database()
                 formatted_matches = []
                 
+                # If we have previous matches, filter semantic results to only include those
+                previous_keys = set()
+                if current_matches and len(current_matches) > 0:
+                    for match in current_matches:
+                        key = match.get('key') or match.get('species_id') or match.get('common_name', '')
+                        previous_keys.add(key.lower())
+                
                 for match in semantic_result.get('matches', []):
                     species_key = match.get('species_key', '')
                     species_info = match.get('species_info', {})
+                    
+                    # If we have previous matches, only include species from previous matches
+                    if previous_keys:
+                        if species_key.lower() not in previous_keys:
+                            # Also check common_name
+                            common_name = species_info.get('common_name', '').lower()
+                            if common_name not in previous_keys:
+                                continue  # Skip if not in previous matches
                     
                     # Get full species info from database
                     full_info = None
@@ -1641,6 +2058,12 @@ def identify_by_description(description, category=None, conversation_history=Non
                         full_info = species_db.get('birds', {}).get(species_key) or \
                                    species_db.get('butterflies', {}).get(species_key)
                     
+                    # LENGTH FILTERING - Skip if length doesn't match
+                    if full_info:
+                        species_size = full_info.get('size', full_info.get('wingspan', ''))
+                        if not check_length_match(description, species_size):
+                            continue  # Skip if length doesn't match
+                    
                     if full_info:
                         formatted_matches.append({
                             'key': species_key,  # Add key for collection feature
@@ -1659,12 +2082,15 @@ def identify_by_description(description, category=None, conversation_history=Non
                             'match_method': 'semantic'
                         })
                 
+                # If we filtered by previous matches, mark as progressive refinement
+                match_method = 'progressive_refinement' if (current_matches and len(current_matches) > 0 and formatted_matches) else 'semantic'
+                
                 return {
                     'matches': formatted_matches,
-                    'needs_clarification': semantic_result.get('needs_more_info', False),
+                    'needs_clarification': semantic_result.get('needs_more_info', False) if formatted_matches else True,
                     'follow_up_questions': semantic_result.get('follow_up_questions', [])[:3],
-                    'total_searched': 300,  # Total species count
-                    'match_method': 'semantic'
+                    'total_searched': len(current_matches) if (current_matches and len(current_matches) > 0) else 300,
+                    'match_method': match_method
                 }
         except Exception as e:
             print(f"Semantic matching failed, falling back to keyword: {e}")
@@ -1748,9 +2174,71 @@ def identify_by_description(description, category=None, conversation_history=Non
     
     # Format top matches for response
     formatted_matches = []
+    max_score = top_matches[0]['score'] if top_matches else 1
+    
     for match in top_matches:
         info = match['species_info']
         species_key = match['species_key']
+        
+        # Calculate confidence based on score and matched keywords
+        base_score = match['score']
+        
+        # Count total matched keywords across all fields
+        total_keywords = sum(mf.get('matches', 0) for mf in match.get('matched_fields', []))
+        
+        # Check for partial matches (especially in distribution field)
+        has_partial_match = False
+        distribution_partial_match = False
+        
+        for mf in match.get('matched_fields', []):
+            matched_keywords = mf.get('matched_keywords', [])
+            # Check if any matched keyword is marked as partial
+            if any('(partial)' in str(kw) for kw in matched_keywords):
+                has_partial_match = True
+                if mf.get('field') == 'distribution':
+                    distribution_partial_match = True
+        
+        # Calculate confidence: base score + keyword count bonus
+        # Normalize to 0-1 range, but give bonus for more keywords matched
+        normalized_score = min(base_score / max(max_score, 1), 1.0)
+        
+        # Penalty for partial matches (especially distribution)
+        partial_penalty = 0
+        if distribution_partial_match:
+            # Distribution partial match is a major issue - significant penalty
+            partial_penalty = 0.4  # 40% penalty
+        elif has_partial_match:
+            # Other partial matches - smaller penalty
+            partial_penalty = 0.2  # 20% penalty
+        
+        # Bonus for matching multiple keywords (indicates better match)
+        keyword_bonus = min(total_keywords * 0.05, 0.2)  # Max 20% bonus for keywords
+        
+        # Bonus for matching important fields (distribution, habitat, common_name)
+        # But only if it's an exact match, not partial
+        important_fields = ['distribution', 'habitat', 'common_name']
+        important_fields_matched = 0
+        for mf in match.get('matched_fields', []):
+            if mf.get('field') in important_fields:
+                # Check if this is an exact match (not partial)
+                matched_keywords = mf.get('matched_keywords', [])
+                is_exact = not any('(partial)' in str(kw) for kw in matched_keywords)
+                if is_exact:
+                    important_fields_matched += 1
+        
+        field_bonus = min(important_fields_matched * 0.1, 0.3)  # Max 30% bonus for important fields
+        
+        # Final confidence: normalized score + bonuses - penalties, capped at 1.0
+        confidence_score = min(max(normalized_score + keyword_bonus + field_bonus - partial_penalty, 0), 1.0)
+        
+        # If there's a distribution partial match, cap confidence at 60% max
+        if distribution_partial_match:
+            confidence_score = min(confidence_score, 0.6)
+        
+        # Ensure minimum confidence if we have matches
+        if total_keywords > 0:
+            confidence_score = max(confidence_score, 0.3)  # At least 30% if keywords matched
+        
         formatted_matches.append({
             'key': species_key,  # Add key for collection feature
             'species_id': species_key,  # Also add as species_id for compatibility
@@ -1762,9 +2250,10 @@ def identify_by_description(description, category=None, conversation_history=Non
             'behavior': info.get('behavior', ''),
             'size': info.get('size', info.get('wingspan', '')),
             'category': 'Bird' if match['category'] == 'birds' else 'Butterfly/Moth',
-            'confidence_score': min(match['score'] / 10, 1.0),  # Normalize to 0-1
+            'confidence_score': confidence_score,
             'image_path': info.get('image_path', ''),
             'matched_fields': match['matched_fields'],
+            'total_keywords_matched': total_keywords,  # Add for debugging/display
             'match_method': 'keyword'
         })
     
@@ -1898,49 +2387,13 @@ def description_chat():
         effective_category = detected_category or inferred_category
         
         # Perform identification with accumulated description
-        result = identify_by_description(full_description, effective_category, conversation_history)
-        
-        # If we have previous matches, narrow down to those that still match
-        if current_matches and len(current_matches) > 0:
-            previous_names = set(m.get('common_name', '').lower() for m in current_matches)
-            
-            # Also get the category of previous matches for strict filtering
-            prev_category_type = None
-            if inferred_category:
-                prev_category_type = inferred_category
-            
-            # Filter new results to prioritize species from previous matches
-            refined_matches = []
-            same_category_matches = []
-            
-            for match in result['matches']:
-                match_name = match.get('common_name', '').lower()
-                match_category = match.get('category', '')
-                
-                # Check if it's the same category as previous matches
-                is_same_category = False
-                if prev_category_type == 'bird' and 'Bird' in match_category:
-                    is_same_category = True
-                elif prev_category_type == 'butterfly' and ('Butterfly' in match_category or 'Moth' in match_category):
-                    is_same_category = True
-                
-                if match_name in previous_names:
-                    # This species was in previous results - highest priority
-                    refined_matches.append(match)
-                elif is_same_category:
-                    # Same category but different species - second priority
-                    same_category_matches.append(match)
-            
-            # Use refined matches if available, otherwise same-category matches
-            if refined_matches:
-                result['matches'] = refined_matches
-                result['narrowed_down'] = True
-            elif same_category_matches:
-                # No exact overlap, but stay within the same category
-                result['matches'] = same_category_matches[:5]
-                result['narrowed_down'] = False
-                result['stayed_in_category'] = True
-            # If neither, keep the original results (category might have changed)
+        # If we have previous matches, pass them to enable progressive narrowing
+        result = identify_by_description(
+            full_description, 
+            effective_category, 
+            conversation_history,
+            current_matches=current_matches if current_matches and len(current_matches) > 0 else None
+        )
         
         # Generate appropriate response
         if result['matches']:
