@@ -2446,7 +2446,7 @@ function App() {
         )}
 
         {/* Main Page (Identification) */}
-        {!showBirdsPage && !showButterfliesPage && !showDescriptionMode && !showCollection && (
+        {!showBirdsPage && !showButterfliesPage && !showDescriptionMode && !showCollection && !soundMode && (
           <>
         <div className="upload-section">
           <div className="upload-area">

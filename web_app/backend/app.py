@@ -81,17 +81,43 @@ def audio_to_spectrogram(audio_path, target_size=(128, 128)):
         # Try to use librosa (recommended for audio processing)
         try:
             import librosa
-            import librosa.display
             
-            # Load audio file
-            y, sr = librosa.load(audio_path, sr=None, duration=3.0)  # Load first 3 seconds
+            # Load audio file with better error handling
+            try:
+                y, sr = librosa.load(audio_path, sr=None, duration=3.0)  # Load first 3 seconds
+            except Exception as load_error:
+                print(f"❌ Error loading audio file with librosa: {load_error}")
+                print(f"   File path: {audio_path}")
+                # Try to get more info about the file
+                if os.path.exists(audio_path):
+                    file_size = os.path.getsize(audio_path)
+                    print(f"   File exists, size: {file_size} bytes")
+                # Try fallback method
+                raise load_error
+            
+            # Check if audio is empty or too short
+            if len(y) == 0:
+                print("❌ Audio file is empty or too short")
+                return None
             
             # Generate mel spectrogram
             mel_spec = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128, fmax=8000)
             mel_spec_db = librosa.power_to_db(mel_spec, ref=np.max)
             
+            # Check for invalid values
+            if np.isnan(mel_spec_db).any() or np.isinf(mel_spec_db).any():
+                print("❌ Invalid values in spectrogram (NaN or Inf)")
+                return None
+            
             # Normalize to 0-1 range
-            mel_spec_normalized = (mel_spec_db - mel_spec_db.min()) / (mel_spec_db.max() - mel_spec_db.min() + 1e-8)
+            mel_spec_min = mel_spec_db.min()
+            mel_spec_max = mel_spec_db.max()
+            if mel_spec_max - mel_spec_min < 1e-8:
+                print("⚠️ Audio signal is too quiet or constant")
+                # Use a small default range to avoid division by zero
+                mel_spec_normalized = np.zeros_like(mel_spec_db)
+            else:
+                mel_spec_normalized = (mel_spec_db - mel_spec_min) / (mel_spec_max - mel_spec_min + 1e-8)
             
             # Resize to target size (128x128)
             from scipy.ndimage import zoom
@@ -117,6 +143,7 @@ def audio_to_spectrogram(audio_path, target_size=(128, 128)):
                 else:
                     # For other formats, try to convert or use basic processing
                     print("⚠️ librosa not available. Please install librosa for better audio support: pip install librosa")
+                    print(f"   Supported format without librosa: WAV only. Your file: {os.path.basename(audio_path)}")
                     return None
                 
                 # Take first 3 seconds
@@ -159,10 +186,21 @@ def audio_to_spectrogram(audio_path, target_size=(128, 128)):
             
             except Exception as e:
                 print(f"❌ Error processing audio with scipy: {e}")
+                import traceback
+                traceback.print_exc()
                 return None
+        
+        except Exception as librosa_error:
+            # Catch any other librosa-related errors
+            print(f"❌ Error processing audio with librosa: {librosa_error}")
+            print(f"   File: {os.path.basename(audio_path)}")
+            import traceback
+            traceback.print_exc()
+            return None
     
     except Exception as e:
         print(f"❌ Error converting audio to spectrogram: {e}")
+        print(f"   File: {os.path.basename(audio_path) if audio_path else 'Unknown'}")
         import traceback
         traceback.print_exc()
         return None
