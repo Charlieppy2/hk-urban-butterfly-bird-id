@@ -1009,6 +1009,8 @@ def predict():
             return jsonify({'error': 'Failed to process image'}), 500
         
         # Make prediction - use batch_size=1 to reduce memory usage
+        # Clear TensorFlow session cache before prediction to free memory
+        tf.keras.backend.clear_session()
         predictions = model.predict(processed_image, verbose=0, batch_size=1)
         predicted_class_idx = np.argmax(predictions[0])
         confidence = float(predictions[0][predicted_class_idx])
@@ -1034,7 +1036,21 @@ def predict():
         
         # 檢測是否為非蝴蝶/鳥類圖片
         # 方法0: 優先檢測是否為卡通/插畫圖片（所有卡通圖片都歸類為 others）
-        is_cartoon = is_cartoon_or_illustration(filepath)
+        # 添加超时保护，避免卡通检测耗时过长导致服务不健康
+        is_cartoon = False
+        try:
+            # 如果置信度已经很高，可以跳过详细检测以节省时间
+            if confidence > 0.80:
+                # 高置信度时，假设不是卡通（快速路径）
+                is_cartoon = False
+                print("⏱️ Cartoon detection skipped (high confidence)")
+            else:
+                # 低置信度时，进行快速检测（限制处理时间）
+                is_cartoon = is_cartoon_or_illustration(filepath)
+        except Exception as cartoon_error:
+            print(f"⚠️ Cartoon detection error (continuing): {cartoon_error}")
+            is_cartoon = False  # 出错时假设不是卡通，继续处理
+        
         is_likely_not_target = is_cartoon
         
         # 方法1: 如果置信度低於30%，可能是其他類型的圖片
@@ -1127,7 +1143,6 @@ def predict():
         del processed_image
         del predictions
         del predictions_copy
-        gc.collect()
         
         # Clean up uploaded file immediately to save disk space and memory
         try:
@@ -1141,8 +1156,12 @@ def predict():
         # If needed, users can call /api/analyze-quality endpoint separately
         quality_analysis = None
         
-        # Force garbage collection to free memory
-        gc.collect()
+        # Aggressive memory cleanup for Koyeb (free tier has limited memory)
+        # Clear TensorFlow session cache
+        tf.keras.backend.clear_session()
+        # Force garbage collection multiple times to ensure memory is freed
+        for _ in range(2):
+            gc.collect()
         
         # Debug: Log similar species before returning
         print(f"Returning {len(similar_species)} similar species")
