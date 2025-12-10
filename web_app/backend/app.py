@@ -945,12 +945,22 @@ def analyze_image_quality(image_path):
 
 @app.route('/')
 def index():
-    """Health check endpoint"""
-    return jsonify({
-        'status': 'success',
-        'message': 'Butterfly and Bird Identification API is running',
-        'model_loaded': model is not None
-    })
+    """Health check endpoint - Must respond quickly for Koyeb health checks"""
+    try:
+        return jsonify({
+            'status': 'success',
+            'message': 'Butterfly and Bird Identification API is running',
+            'model_loaded': model is not None,
+            'bird_sound_model_loaded': bird_sound_model is not None
+        }), 200
+    except Exception as e:
+        # Even if there's an error, return a response (not 500)
+        # This prevents health check from marking service as unhealthy
+        return jsonify({
+            'status': 'degraded',
+            'message': 'Service is running but may have issues',
+            'error': str(e)
+        }), 200
 
 
 @app.route('/api/predict', methods=['POST', 'OPTIONS'])
@@ -1178,26 +1188,34 @@ def predict():
 
 @app.route('/api/health', methods=['GET'])
 def health():
-    """Health check with model status - Fast response for monitoring"""
+    """Health check with model status - Fast response for monitoring (Koyeb health check endpoint)"""
     try:
         # Quick health check - don't do heavy operations here
-        return jsonify({
+        # This endpoint is critical for Koyeb to determine if service is healthy
+        health_status = {
             'status': 'healthy',
             'model_loaded': model is not None,
             'num_classes': len(class_names) if class_names else 0,
             'bird_sound_model_loaded': bird_sound_model is not None,
             'bird_sound_classes': len(bird_sound_class_names) if bird_sound_class_names else 0,
             'message': 'Service is running'
-        }), 200
+        }
+        # Always return 200, even if models aren't loaded (degraded state)
+        return jsonify(health_status), 200
     except Exception as e:
         # Even if there's an error, return a response (not 500)
         # This prevents health check from marking service as unhealthy
         print(f"Health check error: {e}")
+        import traceback
+        traceback.print_exc()
         return jsonify({
             'status': 'degraded',
             'model_loaded': False,
             'num_classes': 0,
-            'message': 'Service is running but model may not be loaded'
+            'bird_sound_model_loaded': False,
+            'bird_sound_classes': 0,
+            'message': 'Service is running but may have issues',
+            'error': str(e)
         }), 200
 
 
@@ -3245,13 +3263,31 @@ Is this the species you were looking for? If not, please tell me what's differen
 
 
 if __name__ == '__main__':
-    print("Loading image identification model...")
-    load_model()
-    print("Loading bird sound model...")
-    load_bird_sound_model()
-    print("Starting Flask server...")
-    # Get port from environment variable or default to 5001
-    port = int(os.environ.get('PORT', 5001))
-    debug = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
-    app.run(debug=debug, host='0.0.0.0', port=port)
+    print("=" * 50)
+    print("Starting Butterfly & Bird Identification API")
+    print("=" * 50)
+    
+    try:
+        print("Loading image identification model...")
+        load_model()
+        print("Loading bird sound model...")
+        load_bird_sound_model()
+        
+        # Get port from environment variable (Koyeb uses PORT=8080)
+        port = int(os.environ.get('PORT', 8080))
+        debug = os.environ.get('FLASK_ENV', 'production').lower() == 'development'
+        
+        print(f"Starting Flask server on port {port}...")
+        print(f"Debug mode: {debug}")
+        print(f"API will be available at: http://0.0.0.0:{port}")
+        print("=" * 50)
+        
+        app.run(debug=debug, host='0.0.0.0', port=port, threaded=True)
+    except Exception as e:
+        print(f"❌ Fatal error starting server: {e}")
+        import traceback
+        traceback.print_exc()
+        # Exit with error code so Koyeb knows deployment failed
+        import sys
+        sys.exit(1)
 

@@ -77,6 +77,8 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [warning, setWarning] = useState(null); // 警告信息
+  const [apiStatus, setApiStatus] = useState('checking'); // 'checking', 'healthy', 'unhealthy'
+  const [apiErrorMessage, setApiErrorMessage] = useState('');
   const [history, setHistory] = useState([]);
   const [batchMode, setBatchMode] = useState(false);
   const [batchFiles, setBatchFiles] = useState([]);
@@ -431,8 +433,13 @@ function App() {
       let errorMessage = 'Failed to make prediction';
       if (err.code === 'ECONNABORTED') {
         errorMessage = 'Request timeout. Please check your internet connection and try again.';
-      } else if (err.message === 'Network Error') {
-        errorMessage = `Cannot connect to server. Please check if the API URL is correct: ${API_URL}`;
+      } else if (err.message === 'Network Error' || err.code === 'ERR_NETWORK') {
+        // Check if it's a production environment issue
+        if (API_URL.includes('koyeb.app')) {
+          errorMessage = `Cannot connect to Koyeb backend server. The server may be restarting or unavailable. Please try again in a few moments.`;
+        } else {
+          errorMessage = `Cannot connect to server. Please check if the API URL is correct: ${API_URL}`;
+        }
       } else if (err.response?.data?.error) {
         errorMessage = err.response.data.error;
       } else if (err.message) {
