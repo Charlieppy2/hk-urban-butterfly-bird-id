@@ -83,6 +83,11 @@ function App() {
   const [batchResults, setBatchResults] = useState([]);
   const [batchLoading, setBatchLoading] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [soundMode, setSoundMode] = useState(false); // 音频识别模式
+  const [selectedAudio, setSelectedAudio] = useState(null);
+  const [audioPreview, setAudioPreview] = useState(null);
+  const [soundPrediction, setSoundPrediction] = useState(null);
+  const [soundLoading, setSoundLoading] = useState(false);
   const [chatMessages, setChatMessages] = useState([
     {
       id: 1,
@@ -171,6 +176,71 @@ function App() {
   const streamRef = useRef(null);
   const historyExportRef = useRef(null);
   const favoritesExportRef = useRef(null);
+
+  const handleAudioSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Check file type
+      const allowedTypes = ['audio/wav', 'audio/mpeg', 'audio/mp3', 'audio/m4a', 'audio/flac', 'audio/ogg', 'audio/aac'];
+      if (!allowedTypes.includes(file.type) && !file.name.match(/\.(wav|mp3|m4a|flac|ogg|aac)$/i)) {
+        setError('Please select a valid audio file (WAV, MP3, M4A, FLAC, OGG, AAC)');
+        return;
+      }
+      
+      setSelectedAudio(file);
+      setAudioPreview(URL.createObjectURL(file));
+      setSoundPrediction(null);
+      setError(null);
+    }
+  };
+
+  const handleSoundPredict = async () => {
+    if (!selectedAudio) {
+      setError('Please select an audio file first');
+      return;
+    }
+
+    setSoundLoading(true);
+    setError(null);
+
+    const formData = new FormData();
+    formData.append('audio', selectedAudio);
+
+    try {
+      const response = await axios.post(`${API_URL}/api/predict-sound`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        timeout: 30000, // 30 seconds timeout
+      });
+
+      setSoundPrediction(response.data.prediction);
+      console.log('🎵 Sound prediction result:', response.data);
+      
+      // Add to history
+      const historyItem = {
+        id: Date.now(),
+        type: 'sound',
+        audio: audioPreview,
+        prediction: response.data.prediction,
+        timestamp: new Date().toLocaleString('en-US', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        }),
+      };
+      setHistory([historyItem, ...history].slice(0, 20));
+    } catch (err) {
+      console.error('Error predicting sound:', err);
+      setError(err.response?.data?.error || 'Failed to identify bird sound. Please try again.');
+    } finally {
+      setSoundLoading(false);
+    }
+  };
 
   const handleImageSelect = (e) => {
     const files = Array.from(e.target.files);
@@ -1450,26 +1520,38 @@ function App() {
         <p>AI-Powered Species Identification System</p>
         <div className="main-navigation">
           <button 
-            className={`nav-btn ${!showBirdsPage && !showButterfliesPage && !showDescriptionMode ? 'active' : ''}`}
-            onClick={() => { handleShowMain(); setShowDescriptionMode(false); }}
+            className={`nav-btn ${!showBirdsPage && !showButterfliesPage && !showDescriptionMode && !soundMode ? 'active' : ''}`}
+            onClick={() => { handleShowMain(); setShowDescriptionMode(false); setSoundMode(false); }}
           >
             🔍 Identify
           </button>
           <button 
             className={`nav-btn ${showDescriptionMode ? 'active' : ''}`}
-            onClick={() => { handleShowMain(); setShowDescriptionMode(true); }}
+            onClick={() => { handleShowMain(); setShowDescriptionMode(true); setSoundMode(false); }}
           >
             💬 Describe to Identify
           </button>
           <button 
+            className={`nav-btn ${soundMode ? 'active' : ''}`}
+            onClick={() => { 
+              setSoundMode(true); 
+              setShowDescriptionMode(false);
+              setShowBirdsPage(false);
+              setShowButterfliesPage(false);
+              setShowCollection(false);
+            }}
+          >
+            🎵 Bird Sound ID
+          </button>
+          <button 
             className={`nav-btn ${showBirdsPage ? 'active' : ''}`}
-            onClick={() => { handleShowBirds(); setShowDescriptionMode(false); }}
+            onClick={() => { handleShowBirds(); setShowDescriptionMode(false); setSoundMode(false); }}
           >
             🐦 Birds (200)
           </button>
           <button 
             className={`nav-btn ${showButterfliesPage ? 'active' : ''}`}
-            onClick={() => { handleShowButterflies(); setShowDescriptionMode(false); }}
+            onClick={() => { handleShowButterflies(); setShowDescriptionMode(false); setSoundMode(false); }}
           >
             🦋 Butterflies (100)
           </button>
@@ -1480,6 +1562,7 @@ function App() {
               setShowBirdsPage(false);
               setShowButterfliesPage(false);
               setShowDescriptionMode(false);
+              setSoundMode(false);
             }}
           >
             📚 Field Guide
@@ -1488,8 +1571,160 @@ function App() {
       </header>
 
       <main className="App-main">
+        {/* Bird Sound Identification Page */}
+        {soundMode && !showBirdsPage && !showButterfliesPage && !showDescriptionMode && (
+          <div className="sound-mode-page">
+            <div className="sound-header">
+              <div className="sound-header-icon">🎵</div>
+              <h2>Bird Sound Identification</h2>
+              <p>Upload an audio file to identify bird species by their sounds</p>
+              <div className="sound-header-hint">
+                <span>📋 Supported formats: WAV, MP3, M4A, FLAC, OGG, AAC</span>
+              </div>
+            </div>
+            
+            <div className="sound-upload-container">
+              <div className="sound-upload-section">
+                <input
+                  type="file"
+                  accept="audio/*"
+                  onChange={handleAudioSelect}
+                  id="audio-input"
+                  style={{ display: 'none' }}
+                />
+                <label htmlFor="audio-input" className="sound-upload-label">
+                  <div className="upload-icon-wrapper">
+                    <span className="upload-icon">🎤</span>
+                  </div>
+                  <div className="upload-text">
+                    {selectedAudio ? (
+                      <>
+                        <span className="upload-main-text">Change Audio File</span>
+                        <span className="upload-sub-text">Click to select a different file</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="upload-main-text">Select Audio File</span>
+                        <span className="upload-sub-text">Click or drag and drop your audio file here</span>
+                      </>
+                    )}
+                  </div>
+                </label>
+                
+                {audioPreview && (
+                  <div className="audio-preview-card">
+                    <div className="audio-preview-header">
+                      <span className="audio-icon">🔊</span>
+                      <div className="audio-file-info">
+                        <span className="audio-filename">{selectedAudio?.name}</span>
+                        <span className="audio-file-size">
+                          {selectedAudio?.size ? `(${(selectedAudio.size / 1024 / 1024).toFixed(2)} MB)` : ''}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="audio-player-wrapper">
+                      <audio controls src={audioPreview} className="audio-player" />
+                    </div>
+                  </div>
+                )}
+                
+                <button
+                  className="sound-predict-btn"
+                  onClick={handleSoundPredict}
+                  disabled={!selectedAudio || soundLoading}
+                >
+                  {soundLoading ? (
+                    <>
+                      <span className="btn-icon">⏳</span>
+                      <span>Analyzing Audio...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="btn-icon">🔍</span>
+                      <span>Identify Bird Sound</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+            
+            {error && (
+              <div className="sound-error-message">
+                <span className="error-icon">⚠️</span>
+                <span className="error-text">{error}</span>
+              </div>
+            )}
+            
+            {soundPrediction && (
+              <div className="sound-result-card">
+                <div className="sound-result-header">
+                  <span className="result-icon">✅</span>
+                  <h3>Identification Result</h3>
+                </div>
+                
+                <div className="sound-result-main">
+                  <div className="sound-main-prediction">
+                    <div className="sound-prediction-badge">
+                      <span className="badge-icon">🏆</span>
+                      <span className="badge-text">Top Match</span>
+                    </div>
+                    <div className="sound-prediction-content">
+                      <h2 className="sound-prediction-class">{soundPrediction.class}</h2>
+                      <div className="sound-confidence-display">
+                        <div className="confidence-circle">
+                          <span className="confidence-value">
+                            {(soundPrediction.confidence * 100).toFixed(1)}%
+                          </span>
+                          <span className="confidence-label">Confidence</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="sound-result-details">
+                  <div className="top-predictions-header">
+                    <span className="predictions-icon">📊</span>
+                    <h4>Top 3 Predictions</h4>
+                  </div>
+                  <div className="sound-top-predictions-list">
+                    {soundPrediction.top_predictions.map((pred, idx) => (
+                      <div key={idx} className="sound-prediction-item">
+                        <div className="sound-rank-badge">
+                          <span className="rank-number">#{idx + 1}</span>
+                        </div>
+                        <div className="sound-prediction-info">
+                          <span className="sound-pred-class">{pred.class}</span>
+                          <div className="sound-confidence-bar-wrapper">
+                            <div className="sound-confidence-bar-bg">
+                              <div 
+                                className="sound-confidence-bar-fill" 
+                                style={{ 
+                                  width: `${(pred.confidence * 100)}%`,
+                                  background: idx === 0 
+                                    ? 'linear-gradient(90deg, #4CAF50 0%, #66BB6A 100%)'
+                                    : idx === 1
+                                    ? 'linear-gradient(90deg, #66BB6A 0%, #81C784 100%)'
+                                    : 'linear-gradient(90deg, #81C784 0%, #A5D6A7 100%)'
+                                }}
+                              ></div>
+                            </div>
+                            <span className="sound-confidence-percentage">
+                              {(pred.confidence * 100).toFixed(1)}%
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Text Description Identification Page */}
-        {showDescriptionMode && !showBirdsPage && !showButterfliesPage && (
+        {showDescriptionMode && !showBirdsPage && !showButterfliesPage && !soundMode && (
           <div className="description-mode-page">
             <div className="description-header">
               <h2>💬 Identify Species by Description</h2>

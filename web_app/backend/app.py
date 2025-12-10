@@ -42,7 +42,9 @@ CORS(app, resources={
 # Configuration
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+ALLOWED_AUDIO_EXTENSIONS = {'wav', 'mp3', 'm4a', 'flac', 'ogg', 'aac'}
 MAX_FILE_SIZE = 16 * 1024 * 1024  # 16MB
+MAX_AUDIO_SIZE = 10 * 1024 * 1024  # 10MB for audio files
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = MAX_FILE_SIZE
@@ -55,10 +57,115 @@ model = None
 feature_extractor = None  # Feature extraction model for similarity
 class_names = []
 
+# Global variable for bird sound model
+bird_sound_model = None
+bird_sound_class_names = []
+
 
 def allowed_file(filename):
     """Check if file extension is allowed"""
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def allowed_audio_file(filename):
+    """Check if audio file extension is allowed"""
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_AUDIO_EXTENSIONS
+
+
+def audio_to_spectrogram(audio_path, target_size=(128, 128)):
+    """
+    Convert audio file to spectrogram for bird sound model input
+    Returns: numpy array of shape (1, 128, 128, 1)
+    """
+    try:
+        # Try to use librosa (recommended for audio processing)
+        try:
+            import librosa
+            import librosa.display
+            
+            # Load audio file
+            y, sr = librosa.load(audio_path, sr=None, duration=3.0)  # Load first 3 seconds
+            
+            # Generate mel spectrogram
+            mel_spec = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128, fmax=8000)
+            mel_spec_db = librosa.power_to_db(mel_spec, ref=np.max)
+            
+            # Normalize to 0-1 range
+            mel_spec_normalized = (mel_spec_db - mel_spec_db.min()) / (mel_spec_db.max() - mel_spec_db.min() + 1e-8)
+            
+            # Resize to target size (128x128)
+            from scipy.ndimage import zoom
+            current_shape = mel_spec_normalized.shape
+            zoom_factors = (target_size[0] / current_shape[0], target_size[1] / current_shape[1])
+            spectrogram = zoom(mel_spec_normalized, zoom_factors, order=1)
+            
+            # Add channel dimension and batch dimension
+            spectrogram = np.expand_dims(spectrogram, axis=-1)  # (128, 128, 1)
+            spectrogram = np.expand_dims(spectrogram, axis=0)    # (1, 128, 128, 1)
+            
+            return spectrogram.astype(np.float32)
+        
+        except ImportError:
+            # Fallback: Use scipy and basic processing
+            try:
+                from scipy.io import wavfile
+                from scipy import signal
+                
+                # Read audio file
+                if audio_path.endswith('.wav'):
+                    sample_rate, audio_data = wavfile.read(audio_path)
+                else:
+                    # For other formats, try to convert or use basic processing
+                    print("⚠️ librosa not available. Please install librosa for better audio support: pip install librosa")
+                    return None
+                
+                # Take first 3 seconds
+                max_samples = sample_rate * 3
+                if len(audio_data) > max_samples:
+                    audio_data = audio_data[:max_samples]
+                
+                # Convert to mono if stereo
+                if len(audio_data.shape) > 1:
+                    audio_data = np.mean(audio_data, axis=1)
+                
+                # Normalize
+                audio_data = audio_data.astype(np.float32)
+                if audio_data.max() > 0:
+                    audio_data = audio_data / np.abs(audio_data).max()
+                
+                # Generate spectrogram
+                frequencies, times, spectrogram = signal.spectrogram(
+                    audio_data, 
+                    fs=sample_rate,
+                    nperseg=512,
+                    noverlap=256
+                )
+                
+                # Convert to mel scale approximation and resize
+                from scipy.ndimage import zoom
+                spectrogram_db = 10 * np.log10(spectrogram + 1e-10)
+                spectrogram_normalized = (spectrogram_db - spectrogram_db.min()) / (spectrogram_db.max() - spectrogram_db.min() + 1e-8)
+                
+                # Resize to target size
+                current_shape = spectrogram_normalized.shape
+                zoom_factors = (target_size[0] / current_shape[0], target_size[1] / current_shape[1])
+                spectrogram = zoom(spectrogram_normalized, zoom_factors, order=1)
+                
+                # Add dimensions
+                spectrogram = np.expand_dims(spectrogram, axis=-1)
+                spectrogram = np.expand_dims(spectrogram, axis=0)
+                
+                return spectrogram.astype(np.float32)
+            
+            except Exception as e:
+                print(f"❌ Error processing audio with scipy: {e}")
+                return None
+    
+    except Exception as e:
+        print(f"❌ Error converting audio to spectrogram: {e}")
+        import traceback
+        traceback.print_exc()
+        return None
 
 
 def load_model():
@@ -235,6 +342,79 @@ def load_model():
         except Exception as e:
             print(f"Error loading class names: {e}")
             class_names = []
+
+
+def load_bird_sound_model():
+    """Load the bird sound identification model"""
+    global bird_sound_model, bird_sound_class_names
+    
+    # Get the base directory (project root)
+    current_file = os.path.abspath(__file__)
+    current_dir = os.path.dirname(current_file)
+    working_dir = os.getcwd()
+    
+    # Try to find bird_sound model directory
+    possible_base_dirs = []
+    
+    # If we're in web_app/backend, go up two levels to project root
+    if os.path.basename(working_dir) == 'backend':
+        parent = os.path.dirname(working_dir)
+        if os.path.basename(parent) == 'web_app':
+            project_root = os.path.dirname(parent)
+            test_path = os.path.join(project_root, 'models', 'trained', 'bird_sound', 'bird_sound_model.h5')
+            if os.path.exists(test_path):
+                possible_base_dirs.append(project_root)
+    
+    # Check if models exist in working directory
+    test_path = os.path.join(working_dir, 'models', 'trained', 'bird_sound', 'bird_sound_model.h5')
+    if os.path.exists(test_path):
+        possible_base_dirs.append(working_dir)
+    
+    # Check relative to current file location
+    file_based_root = os.path.dirname(os.path.dirname(current_dir))
+    test_path = os.path.join(file_based_root, 'models', 'trained', 'bird_sound', 'bird_sound_model.h5')
+    if os.path.exists(test_path):
+        possible_base_dirs.append(file_based_root)
+    
+    base_dir = None
+    for possible_dir in possible_base_dirs:
+        if possible_dir and os.path.exists(possible_dir):
+            test_path = os.path.join(possible_dir, 'models', 'trained', 'bird_sound', 'bird_sound_model.h5')
+            if os.path.exists(test_path):
+                base_dir = possible_dir
+                break
+    
+    if base_dir is None:
+        print("⚠️ Bird sound model not found. Bird sound identification will be unavailable.")
+        bird_sound_model = None
+        bird_sound_class_names = []
+        return
+    
+    model_path = os.path.join(base_dir, 'models', 'trained', 'bird_sound', 'bird_sound_model.h5')
+    class_names_path = os.path.join(base_dir, 'models', 'trained', 'bird_sound', 'class_names.json')
+    
+    if os.path.exists(model_path):
+        try:
+            bird_sound_model = tf.keras.models.load_model(model_path)
+            print(f"✅ Bird sound model loaded successfully from {model_path}")
+        except Exception as e:
+            print(f"❌ Error loading bird sound model: {e}")
+            bird_sound_model = None
+    else:
+        print(f"⚠️ Bird sound model not found at {model_path}")
+        bird_sound_model = None
+    
+    if os.path.exists(class_names_path):
+        try:
+            with open(class_names_path, 'r', encoding='utf-8') as f:
+                bird_sound_class_names = json.load(f)
+            print(f"✅ Bird sound class names loaded: {len(bird_sound_class_names)} classes")
+        except Exception as e:
+            print(f"❌ Error loading bird sound class names: {e}")
+            bird_sound_class_names = []
+    else:
+        print(f"⚠️ Bird sound class names not found at {class_names_path}")
+        bird_sound_class_names = []
 
 
 def preprocess_image(image_path, target_size=(224, 224)):
@@ -937,6 +1117,8 @@ def health():
             'status': 'healthy',
             'model_loaded': model is not None,
             'num_classes': len(class_names) if class_names else 0,
+            'bird_sound_model_loaded': bird_sound_model is not None,
+            'bird_sound_classes': len(bird_sound_class_names) if bird_sound_class_names else 0,
             'message': 'Service is running'
         }), 200
     except Exception as e:
@@ -957,6 +1139,93 @@ def get_classes():
     return jsonify({
         'classes': class_names if class_names else []
     })
+
+
+@app.route('/api/predict-sound', methods=['POST', 'OPTIONS'])
+def predict_sound():
+    """Handle audio file upload and bird sound identification"""
+    # Handle preflight OPTIONS request for CORS
+    if request.method == 'OPTIONS':
+        response = jsonify({'status': 'ok'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        return response
+    
+    if bird_sound_model is None:
+        return jsonify({
+            'error': 'Bird sound model not loaded. Please ensure the model file exists.'
+        }), 503
+    
+    if 'audio' not in request.files:
+        return jsonify({'error': 'No audio file provided'}), 400
+    
+    file = request.files['audio']
+    
+    if file.filename == '':
+        return jsonify({'error': 'No file selected'}), 400
+    
+    if not allowed_audio_file(file.filename):
+        return jsonify({'error': f'Invalid file type. Allowed: {", ".join(ALLOWED_AUDIO_EXTENSIONS)}'}), 400
+    
+    try:
+        # Save uploaded file
+        filename = secure_filename(file.filename)
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        filename = f"{timestamp}_{filename}"
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        
+        # Convert audio to spectrogram
+        spectrogram = audio_to_spectrogram(filepath)
+        
+        if spectrogram is None:
+            return jsonify({'error': 'Failed to process audio file. Please ensure the file is a valid audio format.'}), 500
+        
+        # Make prediction
+        predictions = bird_sound_model.predict(spectrogram, verbose=0)
+        predicted_class_idx = np.argmax(predictions[0])
+        confidence = float(predictions[0][predicted_class_idx])
+        
+        # Get class name
+        if bird_sound_class_names and predicted_class_idx < len(bird_sound_class_names):
+            predicted_class = bird_sound_class_names[predicted_class_idx]
+        else:
+            predicted_class = f"Class_{predicted_class_idx}"
+        
+        # Get top 3 predictions
+        top_indices = np.argsort(predictions[0])[-3:][::-1]
+        top_predictions = []
+        for idx in top_indices:
+            if bird_sound_class_names and idx < len(bird_sound_class_names):
+                class_name = bird_sound_class_names[idx]
+            else:
+                class_name = f"Class_{idx}"
+            top_predictions.append({
+                'class': class_name,
+                'confidence': float(predictions[0][idx])
+            })
+        
+        # Clean up uploaded file
+        try:
+            os.remove(filepath)
+        except:
+            pass
+        
+        return jsonify({
+            'status': 'success',
+            'prediction': {
+                'class': predicted_class,
+                'confidence': confidence,
+                'top_predictions': top_predictions
+            }
+        })
+    
+    except Exception as e:
+        print(f"Error in sound prediction: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': f'Failed to process audio: {str(e)}'}), 500
 
 
 @app.route('/api/analyze-quality', methods=['POST'])
@@ -2477,8 +2746,10 @@ Is this the species you were looking for? If not, please tell me what's differen
 
 
 if __name__ == '__main__':
-    print("Loading model...")
+    print("Loading image identification model...")
     load_model()
+    print("Loading bird sound model...")
+    load_bird_sound_model()
     print("Starting Flask server...")
     # Get port from environment variable or default to 5001
     port = int(os.environ.get('PORT', 5001))
