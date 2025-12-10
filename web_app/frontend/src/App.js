@@ -524,6 +524,39 @@ function App() {
     });
   };
 
+  // API Health Check on component mount
+  useEffect(() => {
+    const checkApiHealth = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/health`, { timeout: 5000 });
+        if (response.data.status === 'healthy' && response.data.model_loaded) {
+          setApiStatus('healthy');
+          setApiErrorMessage('');
+          console.log('✅ Backend API is healthy and model is loaded.');
+        } else {
+          setApiStatus('unhealthy');
+          setApiErrorMessage(response.data.message || 'Backend API is not fully functional.');
+          console.error('❌ Backend API is not fully functional:', response.data);
+        }
+      } catch (error) {
+        setApiStatus('unhealthy');
+        let message = 'Cannot connect to backend server.';
+        if (error.code === 'ECONNABORTED') {
+          message = 'Backend connection timed out.';
+        } else if (error.message === 'Network Error' || error.code === 'ERR_NETWORK') {
+          if (API_URL.includes('koyeb.app')) {
+            message = 'Cannot connect to Koyeb backend server. The server may be restarting or unavailable. Please try again in a few moments.';
+          } else {
+            message = 'Network error. Please check your internet connection.';
+          }
+        }
+        setApiErrorMessage(`${message} Please check if the API URL is correct: ${API_URL}`);
+        console.error('❌ Failed to connect to backend API:', error);
+      }
+    };
+    checkApiHealth();
+  }, []); // Run once on mount
+
   // Close export menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
