@@ -1845,13 +1845,24 @@ def check_length_match(user_description, species_size):
         try:
             min_length = float(length_range_match.group(1))
             max_length = float(length_range_match.group(2))
-            avg_length = (min_length + max_length) / 2
             
-            # Calculate difference percentage
-            if avg_length > 0:
-                diff_percent = abs(user_length - avg_length) / avg_length
-                # If difference is more than 50%, filter out
-                return diff_percent <= 0.5
+            # First check if user length is within the range
+            if min_length <= user_length <= max_length:
+                # User length is within range - match
+                return True
+            else:
+                # User length is outside range - calculate how far off
+                if user_length < min_length:
+                    # User length is smaller than minimum
+                    diff = min_length - user_length
+                    diff_percent = diff / min_length if min_length > 0 else 1
+                else:
+                    # User length is larger than maximum
+                    diff = user_length - max_length
+                    diff_percent = diff / max_length if max_length > 0 else 1
+                
+                # If user length is outside range, filter out unless very close (within 5%)
+                return diff_percent <= 0.05
         except (ValueError, IndexError):
             pass
     else:
@@ -1860,8 +1871,16 @@ def check_length_match(user_description, species_size):
         if single_length_match:
             try:
                 species_length = float(single_length_match.group(1))
-                diff_percent = abs(user_length - species_length) / species_length if species_length > 0 else 1
-                return diff_percent <= 0.5
+                # For single length value, allow some tolerance (±5%)
+                tolerance = species_length * 0.05
+                if abs(user_length - species_length) <= tolerance:
+                    # Within tolerance - match
+                    return True
+                else:
+                    # Outside tolerance - calculate difference
+                    diff_percent = abs(user_length - species_length) / species_length if species_length > 0 else 1
+                    # If difference is more than 5%, filter out
+                    return diff_percent <= 0.05
             except ValueError:
                 pass
     
@@ -1902,24 +1921,29 @@ def calculate_match_score(description, species_info):
             try:
                 min_length = float(length_range_match.group(1))
                 max_length = float(length_range_match.group(2))
-                avg_length = (min_length + max_length) / 2
                 
-                # Calculate difference percentage
-                if avg_length > 0:
-                    diff_percent = abs(user_length - avg_length) / avg_length
-                    # If difference is more than 50%, significantly penalize the score
-                    if diff_percent > 0.5:
+                # First check if user length is within the range
+                if min_length <= user_length <= max_length:
+                    # User length is within range - give high score boost
+                    score += 50
+                else:
+                    # User length is outside range - calculate how far off
+                    if user_length < min_length:
+                        # User length is smaller than minimum
+                        diff = min_length - user_length
+                        diff_percent = diff / min_length if min_length > 0 else 1
+                    else:
+                        # User length is larger than maximum
+                        diff = user_length - max_length
+                        diff_percent = diff / max_length if max_length > 0 else 1
+                    
+                    # If user length is outside range, filter out unless very close (within 5%)
+                    if diff_percent > 0.05:
                         # Return negative score to filter out this match
                         return -100, []
-                    # If difference is more than 30%, reduce score
-                    elif diff_percent > 0.3:
-                        score -= 50
-                    # If difference is more than 20%, slightly reduce score
-                    elif diff_percent > 0.2:
-                        score -= 20
-                    # If within 20%, boost score
+                    # If very close to range (within 5%), slightly reduce score
                     else:
-                        score += 30
+                        score -= 10
             except (ValueError, IndexError):
                 pass
         else:
@@ -1928,15 +1952,20 @@ def calculate_match_score(description, species_info):
             if single_length_match:
                 try:
                     species_length = float(single_length_match.group(1))
-                    diff_percent = abs(user_length - species_length) / species_length if species_length > 0 else 1
-                    if diff_percent > 0.5:
-                        return -100, []
-                    elif diff_percent > 0.3:
-                        score -= 50
-                    elif diff_percent > 0.2:
-                        score -= 20
+                    # For single length value, allow some tolerance (±5%)
+                    tolerance = species_length * 0.05
+                    if abs(user_length - species_length) <= tolerance:
+                        # Within tolerance - give high score boost
+                        score += 50
                     else:
-                        score += 30
+                        # Outside tolerance - calculate difference
+                        diff_percent = abs(user_length - species_length) / species_length if species_length > 0 else 1
+                        # If difference is more than 5%, filter out
+                        if diff_percent > 0.05:
+                            return -100, []
+                        # If very close (within 5%), slightly reduce score
+                        else:
+                            score -= 10
                 except ValueError:
                     pass
     
@@ -1974,6 +2003,16 @@ def calculate_match_score(description, species_info):
     # Extract location/distribution keywords (multi-word locations)
     # IMPORTANT: Order matters - longer phrases first to avoid partial matching
     location_patterns = [
+        # Africa patterns (must come before single-word patterns)
+        r'\b(west\s+and\s+central\s+africa|west\s+central\s+africa|western\s+and\s+central\s+africa)\b',
+        r'\b(east\s+and\s+central\s+africa|east\s+central\s+africa|eastern\s+and\s+central\s+africa)\b',
+        r'\b(north\s+and\s+central\s+africa|north\s+central\s+africa|northern\s+and\s+central\s+africa)\b',
+        r'\b(south\s+and\s+central\s+africa|south\s+central\s+africa|southern\s+and\s+central\s+africa)\b',
+        r'\b(west\s+africa|western\s+africa|east\s+africa|eastern\s+africa|north\s+africa|northern\s+africa|south\s+africa|southern\s+africa|central\s+africa)\b',
+        # America patterns (must come before single-word patterns)
+        r'\b(central\s+and\s+south\s+america|central\s+south\s+america)\b',
+        r'\b(north\s+and\s+central\s+america|north\s+central\s+america)\b',
+        r'\b(south\s+and\s+central\s+america|south\s+central\s+america)\b',
         r'\b(north\s+pacific|south\s+pacific|east\s+pacific|west\s+pacific)\b',
         r'\b(north\s+atlantic|south\s+atlantic|east\s+atlantic|west\s+atlantic)\b',
         r'\b(north\s+america|south\s+america|central\s+america|north\s+american|south\s+american)\b',
@@ -2038,6 +2077,7 @@ def calculate_match_score(description, species_info):
             if field == 'distribution':
                 exact_phrase_match = False
                 partial_match_count = 0
+                single_word_match = False
                 
                 # First, check for exact phrase matches (highest priority)
                 for loc_keyword in location_keywords:
@@ -2070,11 +2110,26 @@ def calculate_match_score(description, species_info):
                                 partial_match_count += 1
                                 matched_keywords_list.append(loc_pattern + ' (partial)')
                         else:
-                            # Single word - check if it appears
+                            # Single word match - this is problematic for Distribution
+                            # Single words like "central", "west", "north" are too ambiguous
+                            # Check if it's a common ambiguous word
+                            ambiguous_words = ['central', 'west', 'east', 'north', 'south', 'western', 'eastern', 
+                                             'northern', 'southern', 'pacific', 'atlantic']
+                            if loc_pattern.lower() in ambiguous_words:
+                                # Single ambiguous word match - this is likely wrong, skip it
+                                single_word_match = True
+                                continue
+                            # For non-ambiguous single words (country names, etc.), allow matching
                             pattern = r'\b' + re.escape(loc_pattern) + r'\b'
                             if re.search(pattern, field_text, re.IGNORECASE):
                                 partial_match_count += 1
                                 matched_keywords_list.append(loc_pattern + ' (partial)')
+                
+                # If only single ambiguous word matched (like "central" matching "Central America" when user said "Central Africa")
+                # This is a false positive - return negative score
+                if single_word_match and not exact_phrase_match and partial_match_count == 0:
+                    # This is a false match - return negative score to filter it out
+                    return -100, []
                 
                 # Apply penalty for partial matches (they're less accurate)
                 if partial_match_count > 0 and not exact_phrase_match:
@@ -2084,6 +2139,10 @@ def calculate_match_score(description, species_info):
                 # Also check for general keywords in distribution (only if no location matches)
                 if field_match_count == 0:
                     for keyword in keywords:
+                        # Skip ambiguous words that could cause false matches
+                        if keyword.lower() in ['central', 'west', 'east', 'north', 'south', 'western', 'eastern', 
+                                             'northern', 'southern']:
+                            continue
                         # Use word boundary for exact word matching (not substring)
                         pattern = r'\b' + re.escape(keyword) + r'\b'
                         if re.search(pattern, field_text, re.IGNORECASE):
@@ -2188,6 +2247,12 @@ def identify_by_description(description, category=None, conversation_history=Non
         # Sort by new score
         refined_matches.sort(key=lambda x: x['score'], reverse=True)
         
+        # Filter out weak matches to enforce narrowing
+        if refined_matches:
+            max_score = refined_matches[0]['score']
+            score_threshold = max_score * 0.6  # keep only matches within 60% of top score
+            refined_matches = [m for m in refined_matches if m['score'] >= score_threshold]
+        
         # Format results
         formatted_matches = []
         max_score = refined_matches[0]['score'] if refined_matches else 1
@@ -2269,6 +2334,9 @@ def identify_by_description(description, category=None, conversation_history=Non
                 "What colors did you notice?",
                 "Where did you see it (habitat)?"
             ]
+        
+        # Sort by confidence_score (highest first)
+        formatted_matches.sort(key=lambda x: x['confidence_score'], reverse=True)
         
         return {
             'matches': formatted_matches,
@@ -2353,6 +2421,9 @@ def identify_by_description(description, category=None, conversation_history=Non
                 
                 # If we filtered by previous matches, mark as progressive refinement
                 match_method = 'progressive_refinement' if (current_matches and len(current_matches) > 0 and formatted_matches) else 'semantic'
+                
+                # Sort by confidence_score (highest first)
+                formatted_matches.sort(key=lambda x: x['confidence_score'], reverse=True)
                 
                 return {
                     'matches': formatted_matches,
@@ -2526,6 +2597,9 @@ def identify_by_description(description, category=None, conversation_history=Non
             'match_method': 'keyword'
         })
     
+    # Sort by confidence_score (highest first)
+    formatted_matches.sort(key=lambda x: x['confidence_score'], reverse=True)
+    
     return {
         'matches': formatted_matches,
         'needs_clarification': needs_clarification,
@@ -2677,7 +2751,7 @@ def description_chat():
                 result['matches'][0]['confidence_score'] > result['matches'][1]['confidence_score'] * 1.5
             ):
                 # High confidence single match
-                confidence_pct = int(top_match['confidence_score'] * 100)
+                confidence_pct = round(top_match['confidence_score'] * 100)
                 response_text = f"""🎯 Based on all the information you've provided, I'm {confidence_pct}% confident this is:
 
 **{top_match['common_name']}** ({top_match['scientific_name']})
@@ -2697,8 +2771,8 @@ Is this the species you were looking for? If not, please tell me what's differen
                 else:
                     response_text = f"I found {num_matches} possible matches:\n\n"
                 
-                for i, match in enumerate(result['matches'][:3], 1):
-                    conf = int(match['confidence_score'] * 100)
+                for i, match in enumerate(result['matches'], 1):
+                    conf = round(match['confidence_score'] * 100)
                     response_text += f"{i}. **{match['common_name']}** ({match['category']}) - {conf}% match\n"
                     response_text += f"   _{match['description'][:80]}..._\n\n"
                 
@@ -2712,8 +2786,9 @@ Is this the species you were looking for? If not, please tell me what's differen
                 else:
                     response_text = f"📋 I found {num_matches} possible matches:\n\n"
                 
-                for i, match in enumerate(result['matches'][:3], 1):
-                    conf = int(match['confidence_score'] * 100)
+                display_limit = min(len(result['matches']), 5)  # show up to 5
+                for i, match in enumerate(result['matches'][:display_limit], 1):
+                    conf = round(match['confidence_score'] * 100)
                     response_text += f"{i}. **{match['common_name']}** ({match['category']}) - {conf}% match\n"
                 
                 if result.get('follow_up_questions'):

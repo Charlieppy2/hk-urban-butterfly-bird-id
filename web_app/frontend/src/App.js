@@ -1817,35 +1817,40 @@ function App() {
                 </div>
               ) : (
                 <div className="conversation-messages">
-                  {descriptionConversation.map((msg, index) => (
+                  {descriptionConversation.map((msg, index) => {
+                    // Use all matches for display (do not filter out to keep count consistent)
+                    let filteredMatches = msg.matches || [];
+                    
+                    // Sort by confidence_score (highest first)
+                    filteredMatches = [...filteredMatches].sort((a, b) => {
+                      const scoreA = a.confidence_score || 0;
+                      const scoreB = b.confidence_score || 0;
+                      return scoreB - scoreA; // Descending order
+                    });
+                    
+                    // Fix mismatch between reported count and displayed matches
+                    let displayContent = msg.content;
+                    if (msg.role === 'assistant' && msg.matches && msg.matches.length > 0 && typeof msg.content === 'string') {
+                      displayContent = msg.content.replace(/I found \\d+ possible matches:/i, `I found ${msg.matches.length} possible matches:`);
+                    }
+
+                    return (
                     <div key={index} className={`conversation-message ${msg.role}`}>
                       <div className="message-avatar">
                         {msg.role === 'user' ? '👤' : '🤖'}
                       </div>
                       <div className="message-content">
                         <div className="message-text" dangerouslySetInnerHTML={{ 
-                          __html: msg.content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br/>') 
+                          __html: displayContent.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br/>') 
                         }} />
                         <span className="message-time">{msg.timestamp}</span>
                         
                         {/* Show matches if available */}
-                        {msg.matches && msg.matches.length > 0 && (() => {
-                          // Filter matches by category if needed
-                          let filteredMatches = msg.matches;
-                          if (descriptionCategory === 'bird') {
-                            filteredMatches = msg.matches.filter(m => 
-                              m.category && (m.category.toLowerCase().includes('bird') || m.category === 'Bird')
-                            );
-                          } else if (descriptionCategory === 'butterfly') {
-                            filteredMatches = msg.matches.filter(m => 
-                              m.category && (m.category.toLowerCase().includes('butterfly') || m.category.toLowerCase().includes('moth') || m.category === 'Butterfly/Moth')
-                            );
-                          }
-                          return filteredMatches.length > 0 ? (
+                        {filteredMatches.length > 0 ? (
                           <div className="message-matches">
                             <h4>🎯 Possible Matches:</h4>
                             <div className="matches-grid">
-                                {filteredMatches.slice(0, 3).map((match, idx) => (
+                                {filteredMatches.map((match, idx) => (
                                 <div 
                                   key={idx} 
                                   className="match-card clickable"
@@ -1879,27 +1884,35 @@ function App() {
                               ))}
                             </div>
                           </div>
-                          ) : null;
-                        })()}
+                          ) : null}
                         
-                        {/* Show follow-up question buttons */}
+                        {/* Show follow-up question suggestions (non-clickable) */}
                         {msg.followUpQuestions && msg.followUpQuestions.length > 0 && (
                           <div className="follow-up-questions">
                             <p>💡 Help me narrow it down:</p>
                             {msg.followUpQuestions.map((q, qIdx) => (
-                              <button 
+                              <div 
                                 key={qIdx} 
-                                className="follow-up-btn"
-                                onClick={() => handleQuickQuestion(q)}
+                                className="follow-up-suggestion"
+                                style={{ 
+                                  padding: '8px 12px',
+                                  margin: '4px 0',
+                                  backgroundColor: '#f5f5f5',
+                                  borderRadius: '4px',
+                                  fontSize: '0.9rem',
+                                  color: '#666',
+                                  cursor: 'default'
+                                }}
                               >
                                 {q}
-                              </button>
+                              </div>
                             ))}
                           </div>
                         )}
                       </div>
                     </div>
-                  ))}
+                  );
+                })}
                   
                   {descriptionLoading && (
                     <div className="conversation-message assistant">
