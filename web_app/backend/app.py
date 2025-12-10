@@ -1246,9 +1246,12 @@ def predict_sound():
         
         # Convert audio to spectrogram
         try:
+            print(f"🔄 Processing audio file: {filename}")
             spectrogram = audio_to_spectrogram(filepath)
+            print(f"✅ Audio processed successfully, spectrogram shape: {spectrogram.shape if spectrogram is not None else 'None'}")
         except Exception as e:
-            print(f"❌ Error in audio_to_spectrogram: {e}")
+            error_msg = str(e)
+            print(f"❌ Error in audio_to_spectrogram: {error_msg}")
             import traceback
             traceback.print_exc()
             # Clean up uploaded file
@@ -1256,9 +1259,15 @@ def predict_sound():
                 os.remove(filepath)
             except:
                 pass
-            return jsonify({
-                'error': f'Failed to process audio file: {str(e)}. Please ensure the file is a valid audio format (WAV, MP3, M4A, FLAC, OGG, AAC).'
-            }), 500
+            # Provide more helpful error message
+            if 'NoBackendError' in error_msg or 'audioread' in error_msg.lower():
+                return jsonify({
+                    'error': 'MP3 codec support is missing. The server may need to be redeployed with ffmpeg support. Please try uploading a WAV file instead, or contact the administrator.'
+                }), 500
+            else:
+                return jsonify({
+                    'error': f'Failed to process audio file: {error_msg}. Please ensure the file is a valid audio format (WAV, MP3, M4A, FLAC, OGG, AAC).'
+                }), 500
         
         if spectrogram is None:
             # Clean up uploaded file

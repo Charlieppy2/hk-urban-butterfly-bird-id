@@ -236,7 +236,18 @@ function App() {
       setHistory([historyItem, ...history].slice(0, 20));
     } catch (err) {
       console.error('Error predicting sound:', err);
-      setError(err.response?.data?.error || 'Failed to identify bird sound. Please try again.');
+      console.error('Error response:', err.response);
+      console.error('Error data:', err.response?.data);
+      
+      // Get detailed error message
+      let errorMessage = 'Failed to identify bird sound. Please try again.';
+      if (err.response?.data?.error) {
+        errorMessage = err.response.data.error;
+      } else if (err.message) {
+        errorMessage = `Error: ${err.message}`;
+      }
+      
+      setError(errorMessage);
     } finally {
       setSoundLoading(false);
     }
