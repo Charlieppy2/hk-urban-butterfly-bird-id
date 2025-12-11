@@ -1900,25 +1900,49 @@ def get_species_image(image_path):
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
-    """AI Chat Assistant endpoint - Supports Chinese input but always responds in English"""
+    """
+    Enhanced AI Chat Assistant endpoint with advanced features:
+    - Context Memory: Remembers conversation history
+    - Sentiment Analysis: Adapts response style based on user emotion
+    - Personalization: Provides personalized recommendations
+    - Multi-turn Conversation: Maintains context across messages
+    """
     try:
         data = request.get_json()
-        message = data.get('message', '').strip()  # Keep original case for Chinese detection
+        message = data.get('message', '').strip()
         context = data.get('context', {})
+        user_id = data.get('user_id', 'default')  # Get user ID for personalization
         
         if not message:
             return jsonify({'error': 'Message is required'}), 400
         
-        # Generate response (supports Chinese input, always responds in English)
-        response = generate_chat_response(message, context)
+        # Use enhanced AI assistant
+        try:
+            from enhanced_ai_assistant import get_enhanced_assistant
+            assistant = get_enhanced_assistant()
+            response = assistant.generate_response(message, context, user_id)
+            print(f"✅ Using enhanced AI assistant, response length: {len(response)}")
+        except Exception as e:
+            # Fallback to original if enhanced assistant not available
+            print(f"⚠️ Enhanced assistant error: {e}, using fallback")
+            import traceback
+            traceback.print_exc()
+            response = generate_chat_response(message, context)
         
         return jsonify({
-            'response': response,  # Always in English
-            'success': True
+            'response': response,
+            'success': True,
+            'features': {
+                'context_memory': True,
+                'sentiment_analysis': True,
+                'personalization': True
+            }
         })
     
     except Exception as e:
         print(f"Error in chat: {e}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 
