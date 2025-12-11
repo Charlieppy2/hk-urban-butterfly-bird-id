@@ -3468,143 +3468,141 @@ function App() {
                       );
                     })}
                   </div>
-              </div>
-              
-              {/* 識別結果反饋機制 */}
-              {prediction && (
-                <div className="feedback-section" style={{ marginTop: '20px', paddingTop: '20px', borderTop: '2px solid rgba(255,255,255,0.2)' }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <p style={{ fontSize: '0.95rem', opacity: 0.9, marginBottom: '8px' }}>
-                      Was this identification correct?
-                    </p>
-                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                      <button
-                        className="feedback-btn feedback-correct"
-                        onClick={() => handleFeedbackSubmit('correct')}
-                        disabled={feedbackStatus === 'submitted' || feedbackSubmitting}
-                        style={{
-                          padding: '10px 20px',
-                          borderRadius: '8px',
-                          border: 'none',
-                          background: feedbackStatus === 'correct' ? '#4CAF50' : 'rgba(255,255,255,0.2)',
-                          color: 'white',
-                          cursor: feedbackStatus === 'submitted' ? 'not-allowed' : 'pointer',
-                          fontWeight: 600,
-                          transition: 'all 0.3s ease',
-                          opacity: feedbackStatus === 'submitted' ? 0.6 : 1
-                        }}
-                      >
-                        ✅ Correct
-                      </button>
-                      <button
-                        className="feedback-btn feedback-incorrect"
-                        onClick={() => {
-                          setShowCorrectSpeciesSelector(true);
-                          setFeedbackStatus('incorrect');
-                        }}
-                        disabled={feedbackStatus === 'submitted' || feedbackSubmitting}
-                        style={{
-                          padding: '10px 20px',
-                          borderRadius: '8px',
-                          border: 'none',
-                          background: feedbackStatus === 'incorrect' ? '#F44336' : 'rgba(255,255,255,0.2)',
-                          color: 'white',
-                          cursor: feedbackStatus === 'submitted' ? 'not-allowed' : 'pointer',
-                          fontWeight: 600,
-                          transition: 'all 0.3s ease',
-                          opacity: feedbackStatus === 'submitted' ? 0.6 : 1
-                        }}
-                      >
-                        ❌ Incorrect
-                      </button>
-                    </div>
-                    
-                    {/* 如果選擇錯誤，顯示正確物種選擇器 */}
-                    {showCorrectSpeciesSelector && (
-                      <div className="correct-species-selector" style={{
-                        marginTop: '15px',
-                        padding: '15px',
-                        background: 'rgba(255,255,255,0.15)',
-                        borderRadius: '10px',
-                        border: '1px solid rgba(255,255,255,0.25)'
-                      }}>
-                        <label style={{ display: 'block', marginBottom: '10px', fontSize: '0.9rem', opacity: 0.9 }}>
-                          What is the correct species?
-                        </label>
-                        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '10px' }}>
-                          <input
-                            type="text"
-                            placeholder="Enter species name..."
-                            value={selectedCorrectSpecies}
-                            onChange={(e) => setSelectedCorrectSpecies(e.target.value)}
-                            style={{
-                              flex: 1,
-                              minWidth: '200px',
-                              padding: '10px',
-                              borderRadius: '8px',
-                              border: '1px solid rgba(255,255,255,0.3)',
-                              background: 'rgba(255,255,255,0.1)',
-                              color: 'white',
-                              fontSize: '0.95rem'
-                            }}
-                          />
-                          <button
-                            onClick={() => handleFeedbackSubmit('incorrect', selectedCorrectSpecies)}
-                            disabled={!selectedCorrectSpecies.trim() || feedbackSubmitting}
-                            style={{
-                              padding: '10px 20px',
-                              borderRadius: '8px',
-                              border: 'none',
-                              background: selectedCorrectSpecies.trim() ? '#FF9800' : 'rgba(255,255,255,0.2)',
-                              color: 'white',
-                              cursor: selectedCorrectSpecies.trim() ? 'pointer' : 'not-allowed',
-                              fontWeight: 600,
-                              opacity: selectedCorrectSpecies.trim() ? 1 : 0.6
-                            }}
-                          >
-                            {feedbackSubmitting ? 'Submitting...' : 'Submit'}
-                          </button>
-                          <button
-                            onClick={() => {
-                              setShowCorrectSpeciesSelector(false);
-                              setSelectedCorrectSpecies('');
-                              setFeedbackStatus(null);
-                            }}
-                            style={{
-                              padding: '10px 20px',
-                              borderRadius: '8px',
-                              border: '1px solid rgba(255,255,255,0.3)',
-                              background: 'rgba(255,255,255,0.1)',
-                              color: 'white',
-                              cursor: 'pointer',
-                              fontWeight: 600
-                            }}
-                          >
-                            Cancel
-                          </button>
+                  
+                  {/* 識別結果反饋機制 */}
+                  <div className="feedback-section" style={{ marginTop: '25px', paddingTop: '20px', borderTop: '2px solid rgba(255,255,255,0.2)' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      <p style={{ fontSize: '0.95rem', opacity: 0.9, marginBottom: '8px' }}>
+                        Was this identification correct?
+                      </p>
+                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <button
+                          className="feedback-btn feedback-correct"
+                          onClick={() => handleFeedbackSubmit('correct')}
+                          disabled={feedbackStatus === 'submitted' || feedbackSubmitting}
+                          style={{
+                            padding: '10px 20px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            background: feedbackStatus === 'correct' ? '#4CAF50' : 'rgba(255,255,255,0.2)',
+                            color: 'white',
+                            cursor: feedbackStatus === 'submitted' ? 'not-allowed' : 'pointer',
+                            fontWeight: 600,
+                            transition: 'all 0.3s ease',
+                            opacity: feedbackStatus === 'submitted' ? 0.6 : 1
+                          }}
+                        >
+                          ✅ Correct
+                        </button>
+                        <button
+                          className="feedback-btn feedback-incorrect"
+                          onClick={() => {
+                            setShowCorrectSpeciesSelector(true);
+                            setFeedbackStatus('incorrect');
+                          }}
+                          disabled={feedbackStatus === 'submitted' || feedbackSubmitting}
+                          style={{
+                            padding: '10px 20px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            background: feedbackStatus === 'incorrect' ? '#F44336' : 'rgba(255,255,255,0.2)',
+                            color: 'white',
+                            cursor: feedbackStatus === 'submitted' ? 'not-allowed' : 'pointer',
+                            fontWeight: 600,
+                            transition: 'all 0.3s ease',
+                            opacity: feedbackStatus === 'submitted' ? 0.6 : 1
+                          }}
+                        >
+                          ❌ Incorrect
+                        </button>
+                      </div>
+                      
+                      {/* 如果選擇錯誤，顯示正確物種選擇器 */}
+                      {showCorrectSpeciesSelector && (
+                        <div className="correct-species-selector" style={{
+                          marginTop: '15px',
+                          padding: '15px',
+                          background: 'rgba(255,255,255,0.15)',
+                          borderRadius: '10px',
+                          border: '1px solid rgba(255,255,255,0.25)'
+                        }}>
+                          <label style={{ display: 'block', marginBottom: '10px', fontSize: '0.9rem', opacity: 0.9 }}>
+                            What is the correct species?
+                          </label>
+                          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '10px' }}>
+                            <input
+                              type="text"
+                              placeholder="Enter species name..."
+                              value={selectedCorrectSpecies}
+                              onChange={(e) => setSelectedCorrectSpecies(e.target.value)}
+                              style={{
+                                flex: 1,
+                                minWidth: '200px',
+                                padding: '10px',
+                                borderRadius: '8px',
+                                border: '1px solid rgba(255,255,255,0.3)',
+                                background: 'rgba(255,255,255,0.1)',
+                                color: 'white',
+                                fontSize: '0.95rem'
+                              }}
+                            />
+                            <button
+                              onClick={() => handleFeedbackSubmit('incorrect', selectedCorrectSpecies)}
+                              disabled={!selectedCorrectSpecies.trim() || feedbackSubmitting}
+                              style={{
+                                padding: '10px 20px',
+                                borderRadius: '8px',
+                                border: 'none',
+                                background: selectedCorrectSpecies.trim() ? '#FF9800' : 'rgba(255,255,255,0.2)',
+                                color: 'white',
+                                cursor: selectedCorrectSpecies.trim() ? 'pointer' : 'not-allowed',
+                                fontWeight: 600,
+                                opacity: selectedCorrectSpecies.trim() ? 1 : 0.6
+                              }}
+                            >
+                              {feedbackSubmitting ? 'Submitting...' : 'Submit'}
+                            </button>
+                            <button
+                              onClick={() => {
+                                setShowCorrectSpeciesSelector(false);
+                                setSelectedCorrectSpecies('');
+                                setFeedbackStatus(null);
+                              }}
+                              style={{
+                                padding: '10px 20px',
+                                borderRadius: '8px',
+                                border: '1px solid rgba(255,255,255,0.3)',
+                                background: 'rgba(255,255,255,0.1)',
+                                color: 'white',
+                                cursor: 'pointer',
+                                fontWeight: 600
+                              }}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                          <p style={{ fontSize: '0.85rem', opacity: 0.8, marginTop: '8px' }}>
+                            💡 You can also select from Top-3 predictions above
+                          </p>
                         </div>
-                        <p style={{ fontSize: '0.85rem', opacity: 0.8, marginTop: '8px' }}>
-                          💡 You can also select from Top-3 predictions above
-                        </p>
-                      </div>
-                    )}
-                    
-                    {/* 反饋提交成功提示 */}
-                    {feedbackStatus === 'submitted' && (
-                      <div style={{
-                        marginTop: '10px',
-                        padding: '10px',
-                        background: 'rgba(76, 175, 80, 0.3)',
-                        borderRadius: '8px',
-                        border: '1px solid rgba(76, 175, 80, 0.5)',
-                        fontSize: '0.9rem'
-                      }}>
-                        ✅ Thank you for your feedback! This helps improve the model.
-                      </div>
-                    )}
+                      )}
+                      
+                      {/* 反饋提交成功提示 */}
+                      {feedbackStatus === 'submitted' && (
+                        <div style={{
+                          marginTop: '10px',
+                          padding: '10px',
+                          background: 'rgba(76, 175, 80, 0.3)',
+                          borderRadius: '8px',
+                          border: '1px solid rgba(76, 175, 80, 0.5)',
+                          fontSize: '0.9rem'
+                        }}>
+                          ✅ Thank you for your feedback! This helps improve the model.
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+              </div>
             </div>
           )}
         </div>
