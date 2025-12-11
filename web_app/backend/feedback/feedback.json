@@ -7,5 +7,23 @@
     "correct_species": "AFRICAN GIANT SWALLOWTAIL",
     "timestamp": "2025-12-11T09:24:10.132Z",
     "image_path": "blob:http://localhost:3000/2cda21bb-907a-4ab0-93a3-295a3e1ad0c7"
+  },
+  {
+    "prediction_id": 1765446070617,
+    "predicted_species": "145.Elegant_Tern",
+    "predicted_confidence": 0.4269278645515442,
+    "feedback_type": "incorrect",
+    "correct_species": "Artic_Tern",
+    "timestamp": "2025-12-11T09:41:10.617Z",
+    "image_path": "blob:http://localhost:3000/14f2d42c-5de7-42ac-b7f5-0c177212a979"
+  },
+  {
+    "prediction_id": 1765446085338,
+    "predicted_species": "145.Elegant_Tern",
+    "predicted_confidence": 0.4269278645515442,
+    "feedback_type": "incorrect",
+    "correct_species": "Artic_Tern",
+    "timestamp": "2025-12-11T09:41:25.338Z",
+    "image_path": "blob:http://localhost:3000/5cc8db03-0811-49b1-beb0-04a9661e7f29"
   }
 ]

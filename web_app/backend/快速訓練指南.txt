@@ -1,0 +1,75 @@
+========================================
+AI Assistant 訓練腳本 - 快速指南
+========================================
+
+正確的項目路徑：
+d:\School_IVE\IVE-HD IT114118\04_Sem04\ITP4221_IT_ICT_1( Artificial Intelligence Technologies ) by TUNG CHI CHEUNG\EA_project\hk-urban-butterfly-bird-id\web_app\backend
+
+========================================
+方法 1: 使用批處理文件（最簡單）
+========================================
+
+1. 在文件資源管理器中找到：
+   web_app\backend\運行訓練腳本.bat
+
+2. 雙擊運行
+
+3. 選擇選項（1-4）
+
+========================================
+方法 2: 在終端中運行
+========================================
+
+1. 打開命令提示符 (CMD) 或 PowerShell
+
+2. 切換到正確的目錄：
+   cd "d:\School_IVE\IVE-HD IT114118\04_Sem04\ITP4221_IT_ICT_1( Artificial Intelligence Technologies ) by TUNG CHI CHEUNG\EA_project\hk-urban-butterfly-bird-id\web_app\backend"
+
+3. 運行訓練腳本：
+   
+   a) 互動式訓練：
+      python train_assistant.py
+   
+   b) 從文件訓練：
+      python train_assistant.py train training_data.json
+   
+   c) 查看統計：
+      python train_assistant.py stats
+   
+   d) 創建模板：
+      python train_assistant.py template
+
+========================================
+方法 3: 使用 VS Code 終端
+========================================
+
+1. 在 VS Code 中打開項目
+
+2. 打開終端 (Ctrl + `)
+
+3. 運行：
+   cd web_app/backend
+   python train_assistant.py
+
+========================================
+常用命令
+========================================
+
+互動式模式命令：
+- add        : 添加新的問答對
+- stats      : 查看知識庫統計
+- load <file>: 從文件加載訓練數據
+- template   : 創建訓練模板
+- quit       : 退出
+
+========================================
+注意事項
+========================================
+
+1. 確保在正確的目錄中運行
+2. 問題可以是中文或英文
+3. 回答必須是英文
+4. 訓練後會自動保存到 knowledge_base.json
+
+========================================
+

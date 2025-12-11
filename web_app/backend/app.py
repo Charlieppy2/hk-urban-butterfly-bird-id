@@ -569,7 +569,7 @@ def decode_imagenet_predictions(predictions, top=3):
 
 
 def preprocess_image(image_path, target_size=(224, 224)):
-    """Preprocess image for model prediction - Optimized for speed"""
+    """Preprocess image for model prediction - Memory optimized"""
     try:
         img = Image.open(image_path)
         
@@ -577,9 +577,8 @@ def preprocess_image(image_path, target_size=(224, 224)):
         if img.mode != 'RGB':
             img = img.convert('RGB')
         
-        # 優化：使用更快的resize方法（NEAREST比LANCZOS快，但質量稍差）
-        # 對於224x224的輸入，質量差異可以接受
-        img = img.resize(target_size, Image.Resampling.NEAREST)
+        # Resize image to reduce memory usage
+        img = img.resize(target_size, Image.Resampling.LANCZOS)
         
         # Convert to array and normalize
         img_array = np.array(img, dtype=np.float32) / 255.0
@@ -722,28 +721,20 @@ def is_cartoon_or_illustration(image_path):
         img_array = np.array(img)
         
         if CV2_AVAILABLE:
-            # 優化：縮小圖像尺寸以加快處理速度
-            # Resize image to smaller size for faster processing (保持比例)
-            h, w = img_array.shape[:2]
-            if h > 400 or w > 400:
-                scale = min(400 / h, 400 / w)
-                new_h, new_w = int(h * scale), int(w * scale)
-                img_array = cv2.resize(img_array, (new_w, new_h), interpolation=cv2.INTER_AREA)
-            
             # Convert to grayscale for edge detection
             gray = cv2.cvtColor(img_array, cv2.COLOR_RGB2GRAY)
             
-            # 1. Edge detection - cartoons have very sharp, clear edges (優化：使用更快的參數)
+            # 1. Edge detection - cartoons have very sharp, clear edges
             edges = cv2.Canny(gray, 50, 150)
             edge_density = np.sum(edges > 0) / (edges.shape[0] * edges.shape[1])
             
-            # 2. Color uniformity - cartoons have large uniform color regions (優化：減少patch數量)
+            # 2. Color uniformity - cartoons have large uniform color regions
+            # Calculate color variance in small patches
             h, w = gray.shape
-            patch_size = min(64, h // 4, w // 4)  # 增大patch size，減少計算量
+            patch_size = min(32, h // 8, w // 8)
             patches = []
-            step = patch_size  # 跳過更多patch以加快速度
-            for i in range(0, h - patch_size, step):
-                for j in range(0, w - patch_size, step):
+            for i in range(0, h - patch_size, patch_size):
+                for j in range(0, w - patch_size, patch_size):
                     patch = gray[i:i+patch_size, j:j+patch_size]
                     patches.append(np.std(patch))
             texture_variance = np.mean(patches) if patches else 0
@@ -752,20 +743,26 @@ def is_cartoon_or_illustration(image_path):
             hsv = cv2.cvtColor(img_array, cv2.COLOR_RGB2HSV)
             saturation = np.mean(hsv[:, :, 1]) / 255.0
             
-            # 4. Color count - cartoons typically have fewer distinct colors (優化：使用更小的圖像)
-            small_img = cv2.resize(img_array, (64, 64))  # 從100x100減小到64x64
+            # 4. Color count - cartoons typically have fewer distinct colors
+            # Resize for faster processing
+            small_img = cv2.resize(img_array, (100, 100))
             unique_colors = len(np.unique(small_img.reshape(-1, 3), axis=0))
-            color_diversity = unique_colors / (64 * 64)  # Normalize
+            color_diversity = unique_colors / (100 * 100)  # Normalize
             
-            # 5. Color histogram analysis - 優化：跳過詳細的histogram分析以加快速度
-            # 簡化：只檢查一個通道的histogram
-            hist_g = cv2.calcHist([img_array], [1], None, [128], [0, 256])  # 減少bins從256到128
+            # 5. Color histogram analysis - cartoons have distinct color peaks
+            # Calculate histogram for each channel
+            hist_b = cv2.calcHist([img_array], [0], None, [256], [0, 256])
+            hist_g = cv2.calcHist([img_array], [1], None, [256], [0, 256])
+            hist_r = cv2.calcHist([img_array], [2], None, [256], [0, 256])
+            # Find peaks in histogram (cartoons have fewer but stronger peaks)
+            hist_peaks_b = len([x for x in hist_b if x > np.max(hist_b) * 0.1])
             hist_peaks_g = len([x for x in hist_g if x > np.max(hist_g) * 0.1])
-            avg_peaks = hist_peaks_g  # 只使用一個通道
+            hist_peaks_r = len([x for x in hist_r if x > np.max(hist_r) * 0.1])
+            avg_peaks = (hist_peaks_b + hist_peaks_g + hist_peaks_r) / 3
+            # Cartoons typically have fewer histogram peaks (< 30)
             has_cartoon_histogram = avg_peaks < 30
             
-            # 6. Gradient analysis - 優化：跳過詳細的gradient分析以加快速度
-            # 簡化：只計算簡單的梯度
+            # 6. Gradient analysis - cartoons have sharp transitions
             grad_x = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
             grad_y = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
             gradient_magnitude = np.sqrt(grad_x**2 + grad_y**2)
@@ -1096,7 +1093,8 @@ def predict():
             return jsonify({'error': 'Failed to process image'}), 500
         
         # Make prediction - use batch_size=1 to reduce memory usage
-        # Optimize prediction: use smaller batch and faster processing
+        # Clear TensorFlow session cache before prediction to free memory
+        tf.keras.backend.clear_session()
         predictions = model.predict(processed_image, verbose=0, batch_size=1)
         predicted_class_idx = np.argmax(predictions[0])
         confidence = float(predictions[0][predicted_class_idx])
@@ -1121,16 +1119,37 @@ def predict():
             })
         
         # 檢測是否為非蝴蝶/鳥類圖片
-        # 如果置信度很低，嘗試使用通用模型識別
-        is_likely_not_target = False
+        # 方法0: 優先檢測是否為卡通/插畫圖片（所有卡通圖片都歸類為 others）
+        # 添加超时保护，避免卡通检测耗时过长导致服务不健康
+        is_cartoon = False
+        try:
+            # 如果置信度已经很高，可以跳过详细检测以节省时间
+            if confidence > 0.80:
+                # 高置信度时，假设不是卡通（快速路径）
+                is_cartoon = False
+                print("⏱️ Cartoon detection skipped (high confidence)")
+            else:
+                # 低置信度时，进行快速检测（限制处理时间）
+                is_cartoon = is_cartoon_or_illustration(filepath)
+        except Exception as cartoon_error:
+            print(f"⚠️ Cartoon detection error (continuing): {cartoon_error}")
+            is_cartoon = False  # 出错时假设不是卡通，继续处理
+        
+        is_likely_not_target = is_cartoon
         general_prediction = None
         
         # 計算前3個預測的總置信度
         top3_total_confidence = sum(p['confidence'] for p in top_predictions[:3])
         
-        # 如果置信度很低（<30%），嘗試使用通用模型識別
+        # 方法1: 如果置信度低於30%，可能是其他類型的圖片
         LOW_CONFIDENCE_THRESHOLD = 0.30
-        if confidence < LOW_CONFIDENCE_THRESHOLD and general_model is not None:
+        is_likely_not_target = is_likely_not_target or confidence < LOW_CONFIDENCE_THRESHOLD
+        
+        # 方法2: 計算前3個預測的總置信度，如果都很低，更可能是非目標圖片
+        is_likely_not_target = is_likely_not_target or top3_total_confidence < 0.50
+        
+        # 如果置信度很低（<30%），嘗試使用通用模型識別
+        if confidence < LOW_CONFIDENCE_THRESHOLD and general_model is not None and not is_cartoon:
             print("🔄 Low confidence in butterfly/bird model, trying general image recognition...")
             try:
                 # Preprocess for ImageNet
@@ -1151,14 +1170,46 @@ def predict():
             except Exception as e:
                 print(f"⚠️ Error in general model prediction: {e}")
         
-        # 如果置信度非常低（<20%），也顯示警告
-        if confidence < 0.20 and top3_total_confidence < 0.40:
+        # 方法3: 即使置信度高，如果預測的類別不在已知類別列表中，也可能是錯誤識別
+        # 檢查預測的類別是否在 class_names 列表中
+        if class_names and predicted_class not in class_names:
             is_likely_not_target = True
+        
+        # 方法4: 如果置信度雖然高（>70%），但前3個預測的類別都不在已知類別列表中，也可能是錯誤識別
+        if confidence > 0.70 and class_names:
+            all_top3_invalid = all(p['class'] not in class_names for p in top_predictions[:3])
+            if all_top3_invalid:
+                is_likely_not_target = True
+        
+        # 方法5: 如果置信度高但前3個預測的總置信度異常低（說明模型不確定），也可能是錯誤識別
+        # 例如：置信度92%但前3個總和只有95%（正常應該接近100%）
+        # 如果前3個總置信度 < 98%，即使單個置信度高，也可能是錯誤識別
+        if confidence > 0.70 and top3_total_confidence < 0.98:
+            # 如果最高置信度很高，但前3個總和較低，說明模型可能錯誤地給某個類別很高的分數
+            # 這種情況下，即使置信度高，也可能是錯誤識別
+            confidence_ratio = confidence / top3_total_confidence if top3_total_confidence > 0 else 1.0
+            # 如果最高預測佔了前3個總和的90%以上，且總和 < 98%，可能是錯誤識別
+            if confidence_ratio > 0.90:
+                is_likely_not_target = True
         
         # 生成警告信息或通用識別結果
         warning_message = None
         if is_likely_not_target:
-            if general_prediction:
+            # 如果是卡通/插畫圖片，使用特殊的警告消息
+            if is_cartoon:
+                warning_message = {
+                    'type': 'cartoon',
+                    'title': '⚠️ Cartoon/Illustration Detected',
+                    'message': 'This appears to be a cartoon, illustration, or non-photographic image. This system is designed to identify real butterflies and birds from photographs.',
+                    'suggestions': [
+                        'Please upload a real photograph of a butterfly or bird',
+                        'Cartoon or illustrated images cannot be accurately identified',
+                        'Try using a clear photo taken with a camera'
+                    ],
+                    'confidence': confidence,
+                    'top3_total_confidence': top3_total_confidence
+                }
+            elif general_prediction:
                 # 使用通用模型識別結果
                 warning_message = {
                     'type': 'general_identification',
@@ -1230,10 +1281,12 @@ def predict():
         # If needed, users can call /api/analyze-quality endpoint separately
         quality_analysis = None
         
-        # 優化：減少內存清理次數以加快速度（只在必要時清理）
-        # 只在內存壓力大時才進行深度清理
-        # 輕量級清理：只清理一次
-        gc.collect()
+        # Aggressive memory cleanup for Koyeb (free tier has limited memory)
+        # Clear TensorFlow session cache
+        tf.keras.backend.clear_session()
+        # Force garbage collection multiple times to ensure memory is freed
+        for _ in range(2):
+            gc.collect()
         
         # Debug: Log similar species before returning
         print(f"Returning {len(similar_species)} similar species")
