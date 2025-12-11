@@ -151,7 +151,7 @@ function App() {
   });
   const [showFavorites, setShowFavorites] = useState(false);
   
-  // Collection (Field Guide) States
+  // Collection (My Discovery) States
   const [collectedSpecies, setCollectedSpecies] = useState(() => {
     // Load collected species IDs from localStorage
     const saved = localStorage.getItem('collectedSpecies');
@@ -2309,7 +2309,7 @@ function App() {
       
       // Show notification animation
       setCollectionNotification({
-        message: `+1 Added to your Field Guide!`,
+        message: `+1 Added to your My Discovery!`,
         speciesName: speciesName
       });
       
@@ -2437,7 +2437,7 @@ function App() {
               🎵 Bird Sound ID
             </button>
             <button 
-              className={`nav-btn ${showCollection ? 'active' : ''}`}
+              className={`nav-btn field-guide-btn ${showCollection ? 'active' : ''}`}
               onClick={() => { 
                 setShowCollection(true); 
                 setShowBirdsPage(false);
@@ -2446,7 +2446,12 @@ function App() {
                 setSoundMode(false);
               }}
             >
-              📚 Field Guide
+              <span className="field-guide-icon">
+                <span className="guide-book guide-book-1"></span>
+                <span className="guide-book guide-book-2"></span>
+                <span className="guide-book guide-book-3"></span>
+              </span>
+              <span className="field-guide-text">My Discovery</span>
             </button>
           </div>
         </div>
@@ -3397,22 +3402,21 @@ function App() {
           </div>
         )}
 
-        {/* Field Guide (Collection) Page */}
+        {/* My Discovery (Collection) Page */}
         {showCollection && (
           <div className="collection-page">
             <div className="collection-header">
-              <h2>📚 My Field Guide</h2>
+              <div className="collection-header-title">
+                <span className="collection-header-icon">
+                  <span className="guide-book guide-book-1"></span>
+                  <span className="guide-book guide-book-2"></span>
+                  <span className="guide-book guide-book-3"></span>
+                </span>
+                <h2>My Discovery</h2>
+              </div>
               <p className="collection-stats">
                 Collected: <strong>{collectedSpecies.size}</strong> species
               </p>
-            </div>
-            
-            <div className="collection-tabs">
-              <button 
-                className="collection-tab active"
-              >
-                All Species
-              </button>
             </div>
 
             {/* Sort Options */}
