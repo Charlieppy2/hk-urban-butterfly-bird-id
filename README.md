@@ -13,11 +13,28 @@ This is a web application system developed using deep learning technology to ide
 - **Batch Identification**: Upload multiple images at once for batch processing
 - **Smart Recognition**: Deep learning-based image classification with Top-3 predictions and confidence scores
 - **Low Confidence Warning**: Automatically detects and warns when uploaded images are not butterflies or birds, or when image quality is insufficient
+- **Cartoon Detection**: Automatically detects and filters out cartoon/illustration images
 
-### 📊 Image Quality Analysis
-- **Multi-dimensional Analysis**: Brightness, contrast, sharpness, saturation, resolution
-- **Quality Score**: Overall quality score (0-100)
-- **Smart Recommendations**: Provide improvement suggestions based on image quality issues
+### 🎵 Bird Sound Identification
+- **Audio Upload**: Support WAV, MP3, M4A, FLAC, OGG, AAC formats
+- **Real-time Processing**: Fast audio-to-spectrogram conversion
+- **16 Bird Species**: Identify birds by their sounds
+- **Top-3 Predictions**: Display multiple possible matches with confidence scores
+
+### 💬 Text-Based Identification (Describe to Identify)
+- **Natural Language Input**: Describe species characteristics in natural language
+- **Conversation History**: Maintain conversation context for better matching
+- **Category Filtering**: Filter by birds, butterflies, or all species
+- **Swipe to Delete**: Swipe left on conversation items to delete
+- **Quick Questions**: Pre-defined quick question buttons
+- **Progressive Refinement**: AI helps narrow down results through conversation
+
+### 📚 Species Field Guide
+- **Birds Catalog**: Browse 200 bird species with detailed information
+- **Butterflies Catalog**: Browse 100+ butterfly/moth species
+- **Search & Filter**: Search by name, filter by category
+- **Species Details**: View detailed information including habitat, behavior, size, distribution
+- **Collection Tracking**: Track which species you've identified
 
 ### 💬 AI Chat Assistant
 - **Intelligent Q&A**: Answer questions about species identification, observation tips, etc.
@@ -26,20 +43,23 @@ This is a web application system developed using deep learning technology to ide
 
 ### 📈 Statistical Analysis
 - **Identification History Statistics**: Total identifications, unique species count, average confidence
-- **Category Distribution**: Statistics for birds and butterflies/moths
+- **Category Distribution**: Statistics for birds, butterflies/moths, and others
 - **Confidence Distribution**: Charts showing high/medium/low confidence distribution
 - **Top Species**: Leaderboard of most frequently identified species
 - **Time Distribution**: Trends in identification activity over time
+- **PDF Export**: Export statistics report as PDF
 
 ### ❤️ Favorites Feature
 - **Save Species**: One-click save for interesting identification results
 - **Favorites Management**: View and manage all saved species
 - **Data Persistence**: Use localStorage to save favorite data
+- **Export Options**: Export favorites as PDF or JSON
 
 ### 📜 History Records
 - **Identification History**: Automatically save recent identification records
 - **Quick View**: Quickly browse historical identification results
 - **Tab Switching**: Easy switching between history and favorites
+- **Export Options**: Export history as PDF or JSON
 
 ## Tech Stack
 
@@ -52,11 +72,16 @@ This is a web application system developed using deep learning technology to ide
 ### Web Application
 - **Frontend**: React 18.2.0
   - Axios: HTTP client
+  - jsPDF: PDF generation for exports
   - Responsive design, mobile-friendly
+  - Touch gestures support (swipe to delete)
 - **Backend**: Flask 3.0.0
   - Flask-CORS: Cross-origin support
-  - TensorFlow: Model inference
+  - TensorFlow: Model inference (image + audio)
   - PIL/OpenCV: Image processing
+  - librosa: Audio processing for bird sound identification
+  - scipy: Scientific computing
+  - pydub: Audio format conversion
 
 ## Project Structure
 
@@ -73,8 +98,11 @@ butterfly-bird-identifier/
 │   │   ├── test_model.py       # Model testing
 │   │   └── check_training.py   # Training progress check
 │   └── trained/          # Trained models
-│       ├── model.h5           # Trained model (using Git LFS)
-│       └── class_names.json   # Class names list
+│       ├── model.h5           # Trained image classification model (using Git LFS)
+│       ├── class_names.json   # Class names list
+│       └── bird_sound/        # Bird sound classification model
+│           ├── bird_sound_model.h5  # Trained bird sound model
+│           └── class_names.json     # Bird sound class names
 ├── web_app/
 │   ├── frontend/         # React frontend application
 │   │   ├── src/
@@ -240,17 +268,63 @@ You should see the main application interface with upload area and buttons.
 
 ## 📖 User Guide
 
-### Identify Species
+### Identify Species by Image
 
 1. **Upload Image**:
+   - Click "🔍 Identify" button
    - Click "Choose File" button to select image
    - Or drag and drop image to upload area
 
 2. **View Results**:
    - System will display identification results and confidence
    - Show Top-3 predictions
-   - Automatically perform image quality analysis
    - If the image is not a butterfly or bird, or confidence is low, a warning message will be displayed with suggestions
+   - Cartoon/illustration images are automatically detected and filtered
+
+### Identify Species by Sound
+
+1. **Upload Audio**:
+   - Click "🎵 Bird Sound ID" button
+   - Click to select audio file (WAV, MP3, M4A, FLAC, OGG, AAC)
+   - Audio should be 3-10 seconds for best results
+
+2. **View Results**:
+   - System will display bird species identification
+   - Show Top-3 predictions with confidence scores
+
+### Identify Species by Description
+
+1. **Enter Description**:
+   - Click "💬 Describe to Identify" button
+   - Type a description of the species (e.g., "small bird with red head and black wings")
+   - Select category filter (All, Birds, or Butterflies)
+
+2. **Conversation**:
+   - AI will show matching species based on your description
+   - Continue the conversation to refine results
+   - Use quick question buttons for common queries
+   - Swipe left on conversation items to delete
+
+3. **View Matches**:
+   - Click on species cards to view detailed information
+   - View habitat, behavior, size, and distribution details
+
+### Browse Species Catalog
+
+1. **View Birds**:
+   - Click "🐦 Birds (200)" button
+   - Browse all 200 bird species
+   - Search by name or filter by characteristics
+
+2. **View Butterflies**:
+   - Click "🦋 Butterflies (100)" button
+   - Browse all 100+ butterfly/moth species
+   - Search by name or filter by characteristics
+
+3. **Field Guide**:
+   - Click "📚 Field Guide" button
+   - View your collection of identified species
+   - Track your progress
 
 ### Use AI Assistant
 
@@ -266,9 +340,11 @@ You should see the main application interface with upload area and buttons.
 1. Click "📊 View Statistics" in the history section
 2. View:
    - Total identifications
-   - Category distribution (birds/butterflies)
+   - Category distribution (birds/butterflies/others)
    - Confidence distribution
    - Top identified species
+   - Time distribution trends
+3. Export statistics as PDF
 
 ### Favorites Feature
 
@@ -282,6 +358,9 @@ You should see the main application interface with upload area and buttons.
 3. **Remove Favorites**:
    - Click "❌ Remove" button in favorites list
    - Or click ❤️ button again to unfavorite
+
+4. **Export Favorites**:
+   - Export favorites as PDF or JSON
 
 ## 🎓 Model Training
 
@@ -358,12 +437,16 @@ python train_assistant.py
 ### Backend API
 
 - `GET /` - Health check
-- `GET /api/health` - Model status
+- `GET /api/health` - Model status (includes both image and bird sound model status)
 - `GET /api/classes` - Get all class names
 - `POST /api/predict` - Image identification
+- `POST /api/predict-sound` - Bird sound identification
+- `POST /api/description-chat` - Text-based species identification
 - `POST /api/analyze-quality` - Image quality analysis
 - `POST /api/statistics` - Get statistics
 - `POST /api/chat` - AI chat assistant
+- `GET /api/birds` - Get all bird species data
+- `GET /api/butterflies` - Get all butterfly species data
 
 ## 🛠️ Development Environment
 
@@ -456,8 +539,26 @@ For Koyeb backend deployment:
 
 ## 📝 Changelog
 
-### v1.1.0 (Latest)
+### v1.3.0 (Latest)
+- ✨ Added Bird Sound Identification feature (16 bird species)
+- ✨ Added Text-Based Identification (Describe to Identify) with conversation history
+- ✨ Added Species Field Guide (Birds & Butterflies catalogs)
+- ✨ Added swipe-to-delete for conversation history
+- ✨ Improved navigation layout (Birds & Butterflies on first row)
+- 🔧 Optimized memory management for Koyeb deployment
+- 🔧 Enhanced mobile device timeout handling
+- 🔧 Improved health check endpoints for better reliability
+- 🐛 Fixed WebSocket errors from React dev server
+- 🐛 Fixed mobile connection issues
+
+### v1.2.0
+- ✨ Added conversation history for text-based identification
+- ✨ Added category filtering for description matching
+- ✨ Improved UI/UX for description identification feature
+
+### v1.1.0
 - ✨ Added low confidence warning system for non-target images
+- ✨ Added cartoon/illustration detection
 - ✨ Improved UI to conditionally show results based on confidence
 - 🔧 Changed backend default port to 5001 to avoid macOS conflicts
 - 🚀 Deployed to production (Vercel + Koyeb)

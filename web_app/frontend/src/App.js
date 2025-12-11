@@ -91,8 +91,25 @@ function App() {
   const [soundPrediction, setSoundPrediction] = useState(null);
   const [soundLoading, setSoundLoading] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [feedbackStatus, setFeedbackStatus] = useState(null); // 'correct', 'incorrect', 'submitted'
+  const [showCorrectSpeciesSelector, setShowCorrectSpeciesSelector] = useState(false);
+  const [selectedCorrectSpecies, setSelectedCorrectSpecies] = useState('');
+  const [feedbackSubmitting, setFeedbackSubmitting] = useState(false);
   const [timelineData, setTimelineData] = useState([]);
   const [smoothedResult, setSmoothedResult] = useState(null);
+  const [showShareMenu, setShowShareMenu] = useState(false);
+  const [shareMessage, setShareMessage] = useState('');
+  const [showPreprocessTool, setShowPreprocessTool] = useState(false);
+  const [preprocessedImage, setPreprocessedImage] = useState(null);
+  const [cropArea, setCropArea] = useState(null);
+  const [rotation, setRotation] = useState(0);
+  const [brightness, setBrightness] = useState(100);
+  const [contrast, setContrast] = useState(100);
+  const [saturation, setSaturation] = useState(100);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const preprocessCanvasRef = useRef(null);
+  const preprocessImageRef = useRef(null);
   const audioContextRef = useRef(null);
   const isAnalyzingRef = useRef(false);
   const [chatMessages, setChatMessages] = useState([
@@ -134,7 +151,7 @@ function App() {
   });
   const [showFavorites, setShowFavorites] = useState(false);
   
-  // Collection (Field Guide) States
+  // Collection (My Discovery) States
   const [collectedSpecies, setCollectedSpecies] = useState(() => {
     // Load collected species IDs from localStorage
     const saved = localStorage.getItem('collectedSpecies');
@@ -148,6 +165,7 @@ function App() {
     }
   });
   const [showCollection, setShowCollection] = useState(false);
+  const [collectionSort, setCollectionSort] = useState('default'); // 'default', 'birds-first', 'butterflies-first'
   const [collectionNotification, setCollectionNotification] = useState(null); // For animation
   const [enlargedImage, setEnlargedImage] = useState(null); // { url, title }
   const [showBirdsPage, setShowBirdsPage] = useState(false);
@@ -171,6 +189,11 @@ function App() {
   const [descriptionLoading, setDescriptionLoading] = useState(false);
   const [descriptionConversation, setDescriptionConversation] = useState([]);
   const [currentMatches, setCurrentMatches] = useState([]);
+  // Conversation history management
+  const [conversationHistory, setConversationHistory] = useState([]);
+  const [currentConversationId, setCurrentConversationId] = useState(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [conversationToDelete, setConversationToDelete] = useState(null);
   
   // Species Detail Modal State
   const [selectedSpeciesDetail, setSelectedSpeciesDetail] = useState(null);
@@ -183,6 +206,7 @@ function App() {
   const streamRef = useRef(null);
   const historyExportRef = useRef(null);
   const favoritesExportRef = useRef(null);
+  const shareMenuRef = useRef(null);
 
   const handleAudioSelect = (e) => {
     const file = e.target.files[0];
@@ -715,6 +739,11 @@ function App() {
       setPrediction(response.data.prediction);
       console.log('🔍 Full response data:', response.data);
       
+      // 重置反饋狀態
+      setFeedbackStatus(null);
+      setShowCorrectSpeciesSelector(false);
+      setSelectedCorrectSpecies('');
+      
       // 保存警告信息（如果有）
       if (response.data.warning) {
         setWarning(response.data.warning);
@@ -899,7 +928,7 @@ function App() {
     checkApiHealth();
   }, []); // Run once on mount
 
-  // Close export menus when clicking outside
+  // Close export menus and share menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (historyExportRef.current && !historyExportRef.current.contains(event.target)) {
@@ -907,6 +936,9 @@ function App() {
       }
       if (favoritesExportRef.current && !favoritesExportRef.current.contains(event.target)) {
         setShowFavoritesExportMenu(false);
+      }
+      if (shareMenuRef.current && !shareMenuRef.current.contains(event.target)) {
+        setShowShareMenu(false);
       }
     };
 
@@ -1728,6 +1760,11 @@ function App() {
   const handleDescriptionSubmit = async () => {
     if (!descriptionInput.trim() || descriptionLoading) return;
 
+    // Create new conversation if none exists
+    if (!currentConversationId) {
+      createNewConversation();
+    }
+
     const userMessage = {
       role: 'user',
       content: descriptionInput,
@@ -1777,30 +1814,478 @@ function App() {
     }
   };
 
-  const handleStartNewDescriptionChat = () => {
+  // Load conversation history from localStorage on mount
+  useEffect(() => {
+    const savedHistory = localStorage.getItem('descriptionConversationHistory');
+    if (savedHistory) {
+      try {
+        const history = JSON.parse(savedHistory);
+        setConversationHistory(history);
+        // If there's history, load the most recent conversation
+        if (history.length > 0) {
+          const mostRecent = history[history.length - 1];
+          setCurrentConversationId(mostRecent.id);
+          setDescriptionConversation(mostRecent.messages || []);
+          setCurrentMatches(mostRecent.matches || []);
+          setDescriptionCategory(mostRecent.category || 'all');
+        }
+      } catch (e) {
+        console.error('Error loading conversation history:', e);
+      }
+    }
+  }, []);
+
+  // Save conversation history to localStorage whenever it changes
+  useEffect(() => {
+    if (conversationHistory.length > 0) {
+      localStorage.setItem('descriptionConversationHistory', JSON.stringify(conversationHistory));
+    }
+  }, [conversationHistory]);
+
+  // Save current conversation whenever it changes
+  useEffect(() => {
+    if (currentConversationId && descriptionConversation.length > 0) {
+      setConversationHistory(prev => {
+        const updated = prev.map(conv => 
+          conv.id === currentConversationId
+            ? { ...conv, messages: descriptionConversation, matches: currentMatches, updatedAt: new Date().toISOString() }
+            : conv
+        );
+        return updated;
+      });
+    }
+  }, [descriptionConversation, currentMatches, currentConversationId]);
+
+  const createNewConversation = (category = descriptionCategory) => {
+    const newId = Date.now().toString();
+    const newConversation = {
+      id: newId,
+      category: category,
+      messages: [],
+      matches: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    
+    setConversationHistory(prev => [...prev, newConversation]);
+    setCurrentConversationId(newId);
     setDescriptionConversation([]);
     setCurrentMatches([]);
     setDescriptionResults(null);
     setDescriptionInput('');
+    setDescriptionCategory(category);
+  };
+
+  const loadConversation = (conversationId) => {
+    const conversation = conversationHistory.find(conv => conv.id === conversationId);
+    if (conversation) {
+      setCurrentConversationId(conversationId);
+      setDescriptionConversation(conversation.messages || []);
+      setCurrentMatches(conversation.matches || []);
+      setDescriptionCategory(conversation.category || 'all');
+      setDescriptionResults(null);
+      setDescriptionInput('');
+    }
+  };
+
+  // Check if "don't ask today" is set
+  const shouldSkipDeleteConfirm = () => {
+    const skipUntil = localStorage.getItem('skipDeleteConfirmUntil');
+    if (skipUntil) {
+      const skipUntilDate = new Date(skipUntil);
+      const now = new Date();
+      // Check if we're still within the same day
+      if (now < skipUntilDate) {
+        return true;
+      } else {
+        // Expired, remove it
+        localStorage.removeItem('skipDeleteConfirmUntil');
+      }
+    }
+    return false;
+  };
+
+  // Set "don't ask today"
+  const setSkipDeleteConfirmToday = () => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0); // Start of tomorrow
+    localStorage.setItem('skipDeleteConfirmUntil', tomorrow.toISOString());
+  };
+
+  const handleDeleteClick = (conversationId) => {
+    // Check if we should skip confirmation
+    if (shouldSkipDeleteConfirm()) {
+      deleteConversation(conversationId);
+    } else {
+      // Show confirmation dialog
+      setConversationToDelete(conversationId);
+      setShowDeleteConfirm(true);
+    }
+  };
+
+  const confirmDelete = (skipToday = false) => {
+    if (skipToday) {
+      setSkipDeleteConfirmToday();
+    }
+    if (conversationToDelete) {
+      deleteConversation(conversationToDelete);
+    }
+    setShowDeleteConfirm(false);
+    setConversationToDelete(null);
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirm(false);
+    setConversationToDelete(null);
+  };
+
+  const deleteConversation = (conversationId) => {
+    const willBeEmpty = conversationHistory.length === 1;
+    setConversationHistory(prev => prev.filter(conv => conv.id !== conversationId));
+    
+    if (currentConversationId === conversationId) {
+      if (willBeEmpty) {
+        // If deleting the last conversation, clear all state and show "no history" message
+        setCurrentConversationId(null);
+        setDescriptionConversation([]);
+        setCurrentMatches([]);
+        setDescriptionResults(null);
+        setDescriptionInput('');
+      } else {
+        // If deleting current conversation but there are others, create a new one
+        createNewConversation();
+      }
+    }
+  };
+
+  const handleStartNewDescriptionChat = () => {
+    // Only create new conversation if current conversation has messages
+    if (descriptionConversation.length > 0) {
+      createNewConversation();
+    }
+    // If current conversation is empty, do nothing
   };
 
   const handleCategoryChange = (newCategory) => {
-    // Clear conversation and results when switching categories
-    setDescriptionCategory(newCategory);
-    setDescriptionConversation([]);
-    setCurrentMatches([]);
-    setDescriptionResults(null);
-    setDescriptionInput('');
+    // Only create a new conversation when switching categories if current conversation has messages
+    if (descriptionConversation.length > 0) {
+      createNewConversation(newCategory);
+    } else {
+      // If current conversation is empty, just change the category
+      setDescriptionCategory(newCategory);
+    }
   };
 
   const handleQuickQuestion = (question) => {
     setDescriptionInput(question);
   };
 
+  // 處理識別結果反饋
+  const handleFeedbackSubmit = async (feedbackType, correctSpecies = null) => {
+    if (!prediction) return;
+    
+    setFeedbackSubmitting(true);
+    
+    // 定義 feedbackData 在函數作用域內，這樣 catch 塊也能訪問
+    const feedbackData = {
+      prediction_id: Date.now(), // 使用時間戳作為ID
+      predicted_species: prediction.class,
+      predicted_confidence: prediction.confidence,
+      feedback_type: feedbackType, // 'correct' or 'incorrect'
+      correct_species: correctSpecies || (feedbackType === 'correct' ? prediction.class : null),
+      timestamp: new Date().toISOString(),
+      image_path: preview // 圖片預覽URL
+    };
+    
+    try {
+      const response = await axios.post(`${API_URL}/api/feedback`, feedbackData, {
+        timeout: 10000
+      });
+      
+      if (response.data.success) {
+        setFeedbackStatus('submitted');
+        setShowCorrectSpeciesSelector(false);
+        console.log('✅ Feedback submitted successfully');
+      } else {
+        setError('Failed to submit feedback. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error submitting feedback:', err);
+      // 即使提交失敗，也顯示已提交狀態（本地記錄）
+      setFeedbackStatus('submitted');
+      setShowCorrectSpeciesSelector(false);
+      // 可以選擇將反饋保存到localStorage作為備份
+      try {
+        const existingFeedback = JSON.parse(localStorage.getItem('feedback_backup') || '[]');
+        existingFeedback.push({
+          ...feedbackData,
+          submitted_at: new Date().toISOString(),
+          synced: false
+        });
+        localStorage.setItem('feedback_backup', JSON.stringify(existingFeedback));
+      } catch (e) {
+        console.error('Failed to save feedback to localStorage:', e);
+      }
+    } finally {
+      setFeedbackSubmitting(false);
+    }
+  };
+
   // Handle clicking on a species card to view details
   const handleSpeciesCardClick = (species) => {
     setSelectedSpeciesDetail(species);
     setShowSpeciesModal(true);
+  };
+
+  // 圖片預處理工具函數
+  const loadImageToCanvas = (imageSrc, canvas) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        resolve(img);
+      };
+      img.src = imageSrc;
+    });
+  };
+
+  const applyImageFilters = (canvas, brightness, contrast, saturation, rotation) => {
+    const ctx = canvas.getContext('2d');
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+    
+    // Apply brightness and contrast
+    const brightnessFactor = brightness / 100;
+    const contrastFactor = contrast / 100;
+    const intercept = 128 * (1 - contrastFactor);
+    
+    for (let i = 0; i < data.length; i += 4) {
+      // Brightness
+      data[i] = Math.min(255, Math.max(0, data[i] * brightnessFactor));
+      data[i + 1] = Math.min(255, Math.max(0, data[i + 1] * brightnessFactor));
+      data[i + 2] = Math.min(255, Math.max(0, data[i + 2] * brightnessFactor));
+      
+      // Contrast
+      data[i] = Math.min(255, Math.max(0, data[i] * contrastFactor + intercept));
+      data[i + 1] = Math.min(255, Math.max(0, data[i + 1] * contrastFactor + intercept));
+      data[i + 2] = Math.min(255, Math.max(0, data[i + 2] * contrastFactor + intercept));
+      
+      // Saturation
+      const gray = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+      const satFactor = saturation / 100;
+      data[i] = Math.min(255, Math.max(0, gray + (data[i] - gray) * satFactor));
+      data[i + 1] = Math.min(255, Math.max(0, gray + (data[i + 1] - gray) * satFactor));
+      data[i + 2] = Math.min(255, Math.max(0, gray + (data[i + 2] - gray) * satFactor));
+    }
+    
+    ctx.putImageData(imageData, 0, 0);
+    
+    // Apply rotation if needed
+    if (rotation !== 0) {
+      const rotatedCanvas = document.createElement('canvas');
+      const rotatedCtx = rotatedCanvas.getContext('2d');
+      const rad = (rotation * Math.PI) / 180;
+      const cos = Math.abs(Math.cos(rad));
+      const sin = Math.abs(Math.sin(rad));
+      rotatedCanvas.width = canvas.width * cos + canvas.height * sin;
+      rotatedCanvas.height = canvas.width * sin + canvas.height * cos;
+      
+      rotatedCtx.translate(rotatedCanvas.width / 2, rotatedCanvas.height / 2);
+      rotatedCtx.rotate(rad);
+      rotatedCtx.drawImage(canvas, -canvas.width / 2, -canvas.height / 2);
+      
+      canvas.width = rotatedCanvas.width;
+      canvas.height = rotatedCanvas.height;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(rotatedCanvas, 0, 0);
+    }
+  };
+
+  const updatePreprocessedImage = () => {
+    if (!preview || !preprocessCanvasRef.current) return;
+    
+    const canvas = preprocessCanvasRef.current;
+    loadImageToCanvas(preview, canvas).then(() => {
+      applyImageFilters(canvas, brightness, contrast, saturation, rotation);
+      
+      // Apply crop if cropArea is set
+      if (cropArea) {
+        const croppedCanvas = document.createElement('canvas');
+        const croppedCtx = croppedCanvas.getContext('2d');
+        croppedCanvas.width = cropArea.width;
+        croppedCanvas.height = cropArea.height;
+        croppedCtx.drawImage(
+          canvas,
+          cropArea.x, cropArea.y, cropArea.width, cropArea.height,
+          0, 0, cropArea.width, cropArea.height
+        );
+        setPreprocessedImage(croppedCanvas.toDataURL('image/jpeg', 0.95));
+      } else {
+        setPreprocessedImage(canvas.toDataURL('image/jpeg', 0.95));
+      }
+    });
+  };
+
+  const handleOpenPreprocessTool = () => {
+    setShowPreprocessTool(true);
+    setPreprocessedImage(null);
+    setCropArea(null);
+    setRotation(0);
+    setBrightness(100);
+    setContrast(100);
+    setSaturation(100);
+    setTimeout(() => {
+      if (preview && preprocessCanvasRef.current) {
+        updatePreprocessedImage();
+      }
+    }, 100);
+  };
+
+  const handleApplyPreprocess = () => {
+    if (preprocessedImage) {
+      // Convert data URL to blob and update preview
+      fetch(preprocessedImage)
+        .then(res => res.blob())
+        .then(blob => {
+          const newPreview = URL.createObjectURL(blob);
+          setPreview(newPreview);
+          setShowPreprocessTool(false);
+          setPreprocessedImage(null);
+        });
+    }
+  };
+
+  const handleResetPreprocess = () => {
+    setRotation(0);
+    setBrightness(100);
+    setContrast(100);
+    setSaturation(100);
+    setCropArea(null);
+    setTimeout(() => updatePreprocessedImage(), 100);
+  };
+
+  const handleRotate = (degrees) => {
+    setRotation((prev) => (prev + degrees) % 360);
+    setTimeout(() => updatePreprocessedImage(), 50);
+  };
+
+  const handleAutoCrop = () => {
+    // Simple auto-crop: detect edges and crop to content
+    if (!preprocessCanvasRef.current) return;
+    
+    const canvas = preprocessCanvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+    
+    let minX = canvas.width, minY = canvas.height, maxX = 0, maxY = 0;
+    
+    // Find bounding box of non-transparent/non-white content
+    for (let y = 0; y < canvas.height; y++) {
+      for (let x = 0; x < canvas.width; x++) {
+        const idx = (y * canvas.width + x) * 4;
+        const r = data[idx];
+        const g = data[idx + 1];
+        const b = data[idx + 2];
+        const a = data[idx + 3];
+        
+        // Check if pixel is not white/transparent (simple threshold)
+        if (a > 10 && (r < 250 || g < 250 || b < 250)) {
+          minX = Math.min(minX, x);
+          minY = Math.min(minY, y);
+          maxX = Math.max(maxX, x);
+          maxY = Math.max(maxY, y);
+        }
+      }
+    }
+    
+    if (minX < maxX && minY < maxY) {
+      setCropArea({
+        x: Math.max(0, minX - 10),
+        y: Math.max(0, minY - 10),
+        width: Math.min(canvas.width, maxX - minX + 20),
+        height: Math.min(canvas.height, maxY - minY + 20)
+      });
+      setTimeout(() => updatePreprocessedImage(), 50);
+    }
+  };
+
+  // Update preprocessed image when filters change
+  useEffect(() => {
+    if (showPreprocessTool && preview) {
+      const timer = setTimeout(() => updatePreprocessedImage(), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [brightness, contrast, saturation, rotation, cropArea, showPreprocessTool, preview]);
+
+  // 處理識別結果分享
+  const handleShare = async (method = 'copy') => {
+    if (!prediction || !preview) return;
+
+    const shareText = `🦋 I identified this as: ${prediction.class} (${(prediction.confidence * 100).toFixed(1)}% confidence)\n\nTop Predictions:\n${prediction.top_predictions.slice(0, 3).map((p, idx) => `${idx + 1}. ${p.class} (${(p.confidence * 100).toFixed(1)}%)`).join('\n')}\n\nIdentified using Butterfly & Bird Identifier 🐦`;
+
+    try {
+      if (method === 'copy') {
+        // 複製到剪貼板
+        await navigator.clipboard.writeText(shareText);
+        setShareMessage('✅ Copied to clipboard!');
+        setTimeout(() => setShareMessage(''), 3000);
+      } else if (method === 'native') {
+        // 使用原生分享API（移動端）
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: `Identified: ${prediction.class}`,
+              text: shareText,
+              url: window.location.href
+            });
+            setShareMessage('✅ Shared successfully!');
+            setTimeout(() => setShareMessage(''), 3000);
+          } catch (err) {
+            if (err.name !== 'AbortError') {
+              // 如果用戶取消分享，不顯示錯誤
+              console.error('Error sharing:', err);
+              // 降級到複製
+              await navigator.clipboard.writeText(shareText);
+              setShareMessage('✅ Copied to clipboard!');
+              setTimeout(() => setShareMessage(''), 3000);
+            }
+          }
+        } else {
+          // 不支持原生分享，降級到複製
+          await navigator.clipboard.writeText(shareText);
+          setShareMessage('✅ Copied to clipboard!');
+          setTimeout(() => setShareMessage(''), 3000);
+        }
+      } else if (method === 'twitter') {
+        // 分享到Twitter
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(window.location.href)}`;
+        window.open(twitterUrl, '_blank', 'width=550,height=420');
+        setShareMessage('✅ Opening Twitter...');
+        setTimeout(() => setShareMessage(''), 3000);
+      } else if (method === 'facebook') {
+        // 分享到Facebook
+        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(shareText)}`;
+        window.open(facebookUrl, '_blank', 'width=550,height=420');
+        setShareMessage('✅ Opening Facebook...');
+        setTimeout(() => setShareMessage(''), 3000);
+      } else if (method === 'whatsapp') {
+        // 分享到WhatsApp
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText + '\n\n' + window.location.href)}`;
+        window.open(whatsappUrl, '_blank');
+        setShareMessage('✅ Opening WhatsApp...');
+        setTimeout(() => setShareMessage(''), 3000);
+      }
+    } catch (err) {
+      console.error('Error sharing:', err);
+      setShareMessage('❌ Failed to share. Please try again.');
+      setTimeout(() => setShareMessage(''), 3000);
+    }
+    setShowShareMenu(false);
   };
 
   // Add species to collection
@@ -1824,7 +2309,7 @@ function App() {
       
       // Show notification animation
       setCollectionNotification({
-        message: `+1 Added to your Field Guide!`,
+        message: `+1 Added to your My Discovery!`,
         speciesName: speciesName
       });
       
@@ -1912,54 +2397,63 @@ function App() {
         <h1>🦋🐦 Butterfly & Bird Identifier</h1>
         <p>AI-Powered Species Identification System</p>
         <div className="main-navigation">
-          <button 
-            className={`nav-btn ${!showBirdsPage && !showButterfliesPage && !showDescriptionMode && !soundMode ? 'active' : ''}`}
-            onClick={() => { handleShowMain(); setShowDescriptionMode(false); setSoundMode(false); }}
-          >
-            🔍 Identify
-          </button>
-          <button 
-            className={`nav-btn ${showDescriptionMode ? 'active' : ''}`}
-            onClick={() => { handleShowMain(); setShowDescriptionMode(true); setSoundMode(false); }}
-          >
-            💬 Describe to Identify
-          </button>
-          <button 
-            className={`nav-btn ${soundMode ? 'active' : ''}`}
-            onClick={() => { 
-              setSoundMode(true); 
-              setShowDescriptionMode(false);
-              setShowBirdsPage(false);
-              setShowButterfliesPage(false);
-              setShowCollection(false);
-            }}
-          >
-            🎵 Bird Sound ID
-          </button>
-          <button 
-            className={`nav-btn ${showBirdsPage ? 'active' : ''}`}
-            onClick={() => { handleShowBirds(); setShowDescriptionMode(false); setSoundMode(false); }}
-          >
-            🐦 Birds (200)
-          </button>
-          <button 
-            className={`nav-btn ${showButterfliesPage ? 'active' : ''}`}
-            onClick={() => { handleShowButterflies(); setShowDescriptionMode(false); setSoundMode(false); }}
-          >
-            🦋 Butterflies (100)
-          </button>
-          <button 
-            className={`nav-btn ${showCollection ? 'active' : ''}`}
-            onClick={() => { 
-              setShowCollection(true); 
-              setShowBirdsPage(false);
-              setShowButterfliesPage(false);
-              setShowDescriptionMode(false);
-              setSoundMode(false);
-            }}
-          >
-            📚 Field Guide
-          </button>
+          <div className="nav-row nav-row-primary">
+            <button 
+              className={`nav-btn ${showBirdsPage ? 'active' : ''}`}
+              onClick={() => { handleShowBirds(); setShowDescriptionMode(false); setSoundMode(false); }}
+            >
+              🐦 Birds (200)
+            </button>
+            <button 
+              className={`nav-btn ${showButterfliesPage ? 'active' : ''}`}
+              onClick={() => { handleShowButterflies(); setShowDescriptionMode(false); setSoundMode(false); }}
+            >
+              🦋 Butterflies (100)
+            </button>
+          </div>
+          <div className="nav-row nav-row-secondary">
+            <button 
+              className={`nav-btn ${!showBirdsPage && !showButterfliesPage && !showDescriptionMode && !soundMode ? 'active' : ''}`}
+              onClick={() => { handleShowMain(); setShowDescriptionMode(false); setSoundMode(false); }}
+            >
+              🔍 Identify
+            </button>
+            <button 
+              className={`nav-btn ${showDescriptionMode ? 'active' : ''}`}
+              onClick={() => { handleShowMain(); setShowDescriptionMode(true); setSoundMode(false); }}
+            >
+              💬 Describe to Identify
+            </button>
+            <button 
+              className={`nav-btn ${soundMode ? 'active' : ''}`}
+              onClick={() => { 
+                setSoundMode(true); 
+                setShowDescriptionMode(false);
+                setShowBirdsPage(false);
+                setShowButterfliesPage(false);
+                setShowCollection(false);
+              }}
+            >
+              🎵 Bird Sound ID
+            </button>
+            <button 
+              className={`nav-btn field-guide-btn ${showCollection ? 'active' : ''}`}
+              onClick={() => { 
+                setShowCollection(true); 
+                setShowBirdsPage(false);
+                setShowButterfliesPage(false);
+                setShowDescriptionMode(false);
+                setSoundMode(false);
+              }}
+            >
+              <span className="field-guide-icon">
+                <span className="guide-book guide-book-1"></span>
+                <span className="guide-book guide-book-2"></span>
+                <span className="guide-book guide-book-3"></span>
+              </span>
+              <span className="field-guide-text">My Discovery</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -2193,6 +2687,67 @@ function App() {
               <p>Describe what you saw - habitat, colors, behavior, features - and I'll help identify the species!</p>
             </div>
 
+            <div className="description-layout">
+              {/* Conversation History Sidebar */}
+              <div className="conversation-history-sidebar">
+                <div className="history-header">
+                  <h3>📝 History</h3>
+                  <button 
+                    className="new-conversation-btn"
+                    onClick={handleStartNewDescriptionChat}
+                    title="Create new conversation"
+                  >
+                    ➕
+                  </button>
+                </div>
+                <div className="history-list">
+                  {conversationHistory.length === 0 ? (
+                    <div className="no-history">
+                      <p>No conversation history yet</p>
+                      <p className="hint">Start a new conversation to begin!</p>
+                    </div>
+                  ) : (
+                    conversationHistory.map((conv) => (
+                      <div
+                        key={conv.id}
+                        className={`history-item ${currentConversationId === conv.id ? 'active' : ''}`}
+                        onClick={() => loadConversation(conv.id)}
+                      >
+                        <div className="history-item-header">
+                          <span className="history-category">
+                            {conv.category === 'bird' ? '🐦' : conv.category === 'butterfly' ? '🦋' : '🔍'}
+                          </span>
+                          <button
+                            className="delete-history-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteClick(conv.id);
+                            }}
+                            title="Delete conversation"
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14zM10 11v6M14 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          </button>
+                        </div>
+                        <div className="history-item-content">
+                          <p className="history-preview">
+                            {conv.messages && conv.messages.length > 0
+                              ? conv.messages[0].content.substring(0, 50) + (conv.messages[0].content.length > 50 ? '...' : '')
+                              : 'Empty conversation'}
+                          </p>
+                          <span className="history-time">
+                            {new Date(conv.updatedAt || conv.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              {/* Main Content Area */}
+              <div className="description-main-content">
             {/* Category Selection */}
             <div className="description-category-selector">
               <label>Looking for:</label>
@@ -2244,8 +2799,8 @@ function App() {
                     <button onClick={() => handleQuickQuestion("Large black bird with a hooked beak, seen near the coast")}>
                       "Large black bird with hooked beak"
                     </button>
-                    <button onClick={() => handleQuickQuestion("Yellow and black striped butterfly in a meadow")}>
-                      "Yellow and black striped butterfly"
+                    <button onClick={() => handleQuickQuestion("Small white butterfly with black spots in a garden")}>
+                      "Small white butterfly with black spots"
                     </button>
                       </>
                     )}
@@ -2267,8 +2822,8 @@ function App() {
                         <button onClick={() => handleQuickQuestion("I saw a small blue butterfly with orange spots near a garden")}>
                           "Small blue butterfly with orange spots"
                         </button>
-                        <button onClick={() => handleQuickQuestion("Yellow and black striped butterfly in a meadow")}>
-                          "Yellow and black striped butterfly"
+                        <button onClick={() => handleQuickQuestion("Small white butterfly with black spots in a garden")}>
+                          "Small white butterfly with black spots"
                         </button>
                         <button onClick={() => handleQuickQuestion("Large orange butterfly with black veins on its wings")}>
                           "Large orange butterfly with black veins"
@@ -2397,9 +2952,9 @@ function App() {
               <button 
                 className="new-chat-btn"
                 onClick={handleStartNewDescriptionChat}
-                title="Start new identification"
+                title="Create new conversation"
               >
-                🔄
+                ➕
               </button>
               <textarea
                 value={descriptionInput}
@@ -2417,12 +2972,52 @@ function App() {
                 {descriptionLoading ? '🔄' : '🔍'}
               </button>
             </div>
+              </div>
+            </div>
 
             {error && (
               <div className="error-message">
                 ⚠️ {error}
               </div>
             )}
+          </div>
+        )}
+
+        {/* Delete Confirmation Modal */}
+        {showDeleteConfirm && (
+          <div className="delete-confirm-overlay" onClick={cancelDelete}>
+            <div className="delete-confirm-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="delete-confirm-header">
+                <h3>🗑️ Delete Conversation</h3>
+              </div>
+              <div className="delete-confirm-content">
+                <p>Are you sure you want to delete this conversation? This action cannot be undone.</p>
+                <label className="skip-confirm-checkbox">
+                  <input
+                    type="checkbox"
+                    id="skipConfirmToday"
+                  />
+                  <span>Don't ask again today</span>
+                </label>
+              </div>
+              <div className="delete-confirm-buttons">
+                <button
+                  className="delete-confirm-cancel"
+                  onClick={cancelDelete}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="delete-confirm-delete"
+                  onClick={() => {
+                    const skipToday = document.getElementById('skipConfirmToday')?.checked || false;
+                    confirmDelete(skipToday);
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
@@ -2807,22 +3402,46 @@ function App() {
           </div>
         )}
 
-        {/* Field Guide (Collection) Page */}
+        {/* My Discovery (Collection) Page */}
         {showCollection && (
           <div className="collection-page">
             <div className="collection-header">
-              <h2>📚 My Field Guide</h2>
+              <div className="collection-header-title">
+                <span className="collection-header-icon">
+                  <span className="guide-book guide-book-1"></span>
+                  <span className="guide-book guide-book-2"></span>
+                  <span className="guide-book guide-book-3"></span>
+                </span>
+                <h2>My Discovery</h2>
+              </div>
               <p className="collection-stats">
                 Collected: <strong>{collectedSpecies.size}</strong> species
               </p>
             </div>
-            
-            <div className="collection-tabs">
-              <button 
-                className="collection-tab active"
-              >
-                All Species
-              </button>
+
+            {/* Sort Options */}
+            <div className="collection-sort-options">
+              <label>Sort by:</label>
+              <div className="sort-buttons">
+                <button
+                  className={`sort-btn ${collectionSort === 'default' ? 'active' : ''}`}
+                  onClick={() => setCollectionSort('default')}
+                >
+                  A-Z
+                </button>
+                <button
+                  className={`sort-btn ${collectionSort === 'birds-first' ? 'active' : ''}`}
+                  onClick={() => setCollectionSort('birds-first')}
+                >
+                  🐦 Birds First
+                </button>
+                <button
+                  className={`sort-btn ${collectionSort === 'butterflies-first' ? 'active' : ''}`}
+                  onClick={() => setCollectionSort('butterflies-first')}
+                >
+                  🦋 Butterflies First
+                </button>
+              </div>
             </div>
 
             <div className="collection-grid">
@@ -2832,21 +3451,48 @@ function App() {
                 // Show all species (no filtering by category)
                 let filteredSpecies = allSpecies;
 
-                // Sort: collected species first, then uncollected
+                // Create sets for efficient lookup
+                const birdIds = new Set(birdsData.map(bird => getSpeciesId(bird)));
+                const butterflyIds = new Set(butterfliesData.map(butterfly => getSpeciesId(butterfly)));
+                
+                // Sort: collected species first, then by selected sort option
                 const sortedSpecies = filteredSpecies.sort((a, b) => {
                   const aId = getSpeciesId(a);
                   const bId = getSpeciesId(b);
                   const aCollected = isSpeciesCollected(aId);
                   const bCollected = isSpeciesCollected(bId);
                   
-                  // Collected species come first
+                  // Collected species always come first
                   if (aCollected && !bCollected) return -1;
                   if (!aCollected && bCollected) return 1;
                   
-                  // If both have same collection status, sort alphabetically by common name
-                  const aName = a.common_name || '';
-                  const bName = b.common_name || '';
-                  return aName.localeCompare(bName);
+                  // If both have same collection status, apply selected sort
+                  if (collectionSort === 'birds-first') {
+                    // Birds first, then butterflies
+                    const aIsBird = birdIds.has(aId);
+                    const bIsBird = birdIds.has(bId);
+                    if (aIsBird && !bIsBird) return -1;
+                    if (!aIsBird && bIsBird) return 1;
+                    // Same category, sort alphabetically
+                    const aName = a.common_name || '';
+                    const bName = b.common_name || '';
+                    return aName.localeCompare(bName);
+                  } else if (collectionSort === 'butterflies-first') {
+                    // Butterflies first, then birds
+                    const aIsButterfly = butterflyIds.has(aId);
+                    const bIsButterfly = butterflyIds.has(bId);
+                    if (aIsButterfly && !bIsButterfly) return -1;
+                    if (!aIsButterfly && bIsButterfly) return 1;
+                    // Same category, sort alphabetically
+                    const aName = a.common_name || '';
+                    const bName = b.common_name || '';
+                    return aName.localeCompare(bName);
+                  } else {
+                    // Default: A-Z alphabetical
+                    const aName = a.common_name || '';
+                    const bName = b.common_name || '';
+                    return aName.localeCompare(bName);
+                  }
                 });
 
 
@@ -2854,12 +3500,18 @@ function App() {
                   const speciesId = getSpeciesId(species);
                   const isCollected = isSpeciesCollected(speciesId);
                   
+                  // Determine category based on which dataset the species belongs to
+                  const isBird = birdIds.has(speciesId);
+                  const category = isBird ? 'Bird' : 'Butterfly/Moth';
+                  
                   // Debug logging for first few species
                   if (idx < 3) {
                     console.log('🔍 Collection check:', {
                       common_name: species.common_name,
                       speciesId,
                       isCollected,
+                      isBird,
+                      category,
                       hasKey: !!species.key,
                       image_path: species.image_path
                     });
@@ -2895,8 +3547,8 @@ function App() {
                         {species.scientific_name && (
                           <p className="collection-scientific">{species.scientific_name}</p>
                         )}
-                        <span className={`collection-category ${(species.category || species.type || '').toLowerCase()}`}>
-                          {species.category || (species.type === 'bird' ? 'Bird' : 'Butterfly/Moth')}
+                        <span className={`collection-category ${category.toLowerCase().replace('/', '-')}`}>
+                          {category}
                         </span>
                       </div>
                     </div>
@@ -2952,12 +3604,259 @@ function App() {
               <div className="image-preview">
                 <img src={preview} alt="Preview" />
                 <div className="preview-actions">
+                  <button 
+                    className="btn btn-secondary" 
+                    onClick={handleOpenPreprocessTool}
+                    style={{ marginRight: '10px' }}
+                  >
+                    ✂️ Edit Image
+                  </button>
                   <button className="btn btn-primary" onClick={handlePredict} disabled={loading}>
                     {loading ? '🔍 Analyzing...' : '🔍 Identify'}
                   </button>
                   <button className="btn btn-secondary" onClick={handleReset}>
                     Reset
                   </button>
+                </div>
+              </div>
+            )}
+
+            {/* 圖片預處理工具 */}
+            {showPreprocessTool && preview && (
+              <div className="preprocess-modal" style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'rgba(0,0,0,0.9)',
+                zIndex: 2000,
+                display: 'flex',
+                flexDirection: 'column',
+                padding: '20px',
+                overflow: 'auto'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                  <h2 style={{ color: 'white', margin: 0 }}>✂️ Image Preprocessing Tool</h2>
+                  <button
+                    onClick={() => setShowPreprocessTool(false)}
+                    style={{
+                      background: 'rgba(255,255,255,0.2)',
+                      border: '1px solid rgba(255,255,255,0.3)',
+                      borderRadius: '8px',
+                      padding: '8px 16px',
+                      color: 'white',
+                      cursor: 'pointer',
+                      fontSize: '1rem'
+                    }}
+                  >
+                    ✕ Close
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', gap: '20px', flex: 1, flexWrap: 'wrap' }}>
+                  {/* 左側：圖片預覽 */}
+                  <div style={{ flex: 1, minWidth: '300px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                    <div style={{ 
+                      background: 'rgba(255,255,255,0.1)', 
+                      borderRadius: '12px', 
+                      padding: '15px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      minHeight: '400px'
+                    }}>
+                      {preprocessedImage ? (
+                        <img 
+                          src={preprocessedImage} 
+                          alt="Processed" 
+                          style={{ maxWidth: '100%', maxHeight: '500px', borderRadius: '8px' }}
+                        />
+                      ) : (
+                        <div style={{ color: 'white', opacity: 0.7 }}>Loading preview...</div>
+                      )}
+                    </div>
+                    <canvas ref={preprocessCanvasRef} style={{ display: 'none' }} />
+                  </div>
+
+                  {/* 右側：控制面板 */}
+                  <div style={{ 
+                    flex: '0 0 350px', 
+                    background: 'rgba(255,255,255,0.1)', 
+                    borderRadius: '12px', 
+                    padding: '20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '20px'
+                  }}>
+                    <h3 style={{ color: 'white', margin: 0, fontSize: '1.2rem' }}>Adjustments</h3>
+
+                    {/* 旋轉 */}
+                    <div>
+                      <label style={{ color: 'white', display: 'block', marginBottom: '8px' }}>
+                        Rotation: {rotation}°
+                      </label>
+                      <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                        <button
+                          onClick={() => handleRotate(-90)}
+                          style={{
+                            padding: '8px 12px',
+                            background: 'rgba(255,255,255,0.2)',
+                            border: '1px solid rgba(255,255,255,0.3)',
+                            borderRadius: '6px',
+                            color: 'white',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          ↺ -90°
+                        </button>
+                        <button
+                          onClick={() => handleRotate(90)}
+                          style={{
+                            padding: '8px 12px',
+                            background: 'rgba(255,255,255,0.2)',
+                            border: '1px solid rgba(255,255,255,0.3)',
+                            borderRadius: '6px',
+                            color: 'white',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          ↻ +90°
+                        </button>
+                        <button
+                          onClick={() => setRotation(0)}
+                          style={{
+                            padding: '8px 12px',
+                            background: 'rgba(255,255,255,0.2)',
+                            border: '1px solid rgba(255,255,255,0.3)',
+                            borderRadius: '6px',
+                            color: 'white',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          Reset
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* 亮度 */}
+                    <div>
+                      <label style={{ color: 'white', display: 'block', marginBottom: '8px' }}>
+                        Brightness: {brightness}%
+                      </label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="200"
+                        value={brightness}
+                        onChange={(e) => setBrightness(parseInt(e.target.value))}
+                        style={{ width: '100%' }}
+                      />
+                    </div>
+
+                    {/* 對比度 */}
+                    <div>
+                      <label style={{ color: 'white', display: 'block', marginBottom: '8px' }}>
+                        Contrast: {contrast}%
+                      </label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="200"
+                        value={contrast}
+                        onChange={(e) => setContrast(parseInt(e.target.value))}
+                        style={{ width: '100%' }}
+                      />
+                    </div>
+
+                    {/* 飽和度 */}
+                    <div>
+                      <label style={{ color: 'white', display: 'block', marginBottom: '8px' }}>
+                        Saturation: {saturation}%
+                      </label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="200"
+                        value={saturation}
+                        onChange={(e) => setSaturation(parseInt(e.target.value))}
+                        style={{ width: '100%' }}
+                      />
+                    </div>
+
+                    {/* 裁剪 */}
+                    <div>
+                      <label style={{ color: 'white', display: 'block', marginBottom: '8px' }}>
+                        Crop
+                      </label>
+                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <button
+                          onClick={handleAutoCrop}
+                          style={{
+                            padding: '8px 16px',
+                            background: 'rgba(76, 175, 80, 0.3)',
+                            border: '1px solid rgba(76, 175, 80, 0.5)',
+                            borderRadius: '6px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            flex: 1
+                          }}
+                        >
+                          ✂️ Auto Crop
+                        </button>
+                        <button
+                          onClick={() => setCropArea(null)}
+                          style={{
+                            padding: '8px 16px',
+                            background: 'rgba(255,255,255,0.2)',
+                            border: '1px solid rgba(255,255,255,0.3)',
+                            borderRadius: '6px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            flex: 1
+                          }}
+                        >
+                          Clear Crop
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* 操作按鈕 */}
+                    <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+                      <button
+                        onClick={handleResetPreprocess}
+                        style={{
+                          padding: '12px 20px',
+                          background: 'rgba(255,255,255,0.2)',
+                          border: '1px solid rgba(255,255,255,0.3)',
+                          borderRadius: '8px',
+                          color: 'white',
+                          cursor: 'pointer',
+                          flex: 1,
+                          fontWeight: 600
+                        }}
+                      >
+                        ↺ Reset All
+                      </button>
+                      <button
+                        onClick={handleApplyPreprocess}
+                        disabled={!preprocessedImage}
+                        style={{
+                          padding: '12px 20px',
+                          background: preprocessedImage ? 'rgba(76, 175, 80, 0.8)' : 'rgba(255,255,255,0.2)',
+                          border: '1px solid rgba(76, 175, 80, 0.5)',
+                          borderRadius: '8px',
+                          color: 'white',
+                          cursor: preprocessedImage ? 'pointer' : 'not-allowed',
+                          flex: 1,
+                          fontWeight: 600,
+                          opacity: preprocessedImage ? 1 : 0.6
+                        }}
+                      >
+                        ✓ Apply Changes
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -3026,14 +3925,164 @@ function App() {
             <div className="prediction-result">
               <div className="result-header">
               <h2>Identification Result</h2>
-                <button
-                  className={`favorite-btn ${isCurrentFavorite() ? 'favorited' : ''}`}
-                  onClick={handleToggleFavorite}
-                  title={isCurrentFavorite() ? 'Remove from favorites' : 'Add to favorites'}
-                >
-                  {isCurrentFavorite() ? '❤️' : '🤍'}
-                </button>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                  <div style={{ position: 'relative' }} ref={shareMenuRef}>
+                    <button
+                      className="share-btn"
+                      onClick={() => setShowShareMenu(!showShareMenu)}
+                      title="Share identification result"
+                      style={{
+                        background: 'rgba(255,255,255,0.15)',
+                        border: '1px solid rgba(255,255,255,0.3)',
+                        borderRadius: '8px',
+                        padding: '8px 12px',
+                        color: 'white',
+                        cursor: 'pointer',
+                        fontSize: '1.2rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        transition: 'all 0.3s ease'
+                      }}
+                    >
+                      📤 Share
+                    </button>
+                    {showShareMenu && (
+                      <div className="share-menu" style={{
+                        position: 'absolute',
+                        top: '100%',
+                        right: 0,
+                        marginTop: '8px',
+                        background: 'rgba(30,30,30,0.98)',
+                        border: '1px solid rgba(255,255,255,0.2)',
+                        borderRadius: '12px',
+                        padding: '12px',
+                        minWidth: '200px',
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
+                        zIndex: 1000,
+                        animation: 'fadeIn 0.2s ease-out'
+                      }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          {navigator.share && (
+                            <button
+                              onClick={() => handleShare('native')}
+                              style={{
+                                padding: '10px 15px',
+                                background: 'rgba(255,255,255,0.1)',
+                                border: '1px solid rgba(255,255,255,0.2)',
+                                borderRadius: '8px',
+                                color: 'white',
+                                cursor: 'pointer',
+                                textAlign: 'left',
+                                fontSize: '0.95rem',
+                                transition: 'all 0.2s ease'
+                              }}
+                              onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
+                              onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
+                            >
+                              📱 Share (Native)
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleShare('copy')}
+                            style={{
+                              padding: '10px 15px',
+                              background: 'rgba(255,255,255,0.1)',
+                              border: '1px solid rgba(255,255,255,0.2)',
+                              borderRadius: '8px',
+                              color: 'white',
+                              cursor: 'pointer',
+                              textAlign: 'left',
+                              fontSize: '0.95rem',
+                              transition: 'all 0.2s ease'
+                            }}
+                            onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
+                            onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
+                          >
+                            📋 Copy Text
+                          </button>
+                          <button
+                            onClick={() => handleShare('twitter')}
+                            style={{
+                              padding: '10px 15px',
+                              background: 'rgba(29,161,242,0.2)',
+                              border: '1px solid rgba(29,161,242,0.4)',
+                              borderRadius: '8px',
+                              color: 'white',
+                              cursor: 'pointer',
+                              textAlign: 'left',
+                              fontSize: '0.95rem',
+                              transition: 'all 0.2s ease'
+                            }}
+                            onMouseEnter={(e) => e.target.style.background = 'rgba(29,161,242,0.3)'}
+                            onMouseLeave={(e) => e.target.style.background = 'rgba(29,161,242,0.2)'}
+                          >
+                            🐦 Twitter
+                          </button>
+                          <button
+                            onClick={() => handleShare('facebook')}
+                            style={{
+                              padding: '10px 15px',
+                              background: 'rgba(24,119,242,0.2)',
+                              border: '1px solid rgba(24,119,242,0.4)',
+                              borderRadius: '8px',
+                              color: 'white',
+                              cursor: 'pointer',
+                              textAlign: 'left',
+                              fontSize: '0.95rem',
+                              transition: 'all 0.2s ease'
+                            }}
+                            onMouseEnter={(e) => e.target.style.background = 'rgba(24,119,242,0.3)'}
+                            onMouseLeave={(e) => e.target.style.background = 'rgba(24,119,242,0.2)'}
+                          >
+                            📘 Facebook
+                          </button>
+                          <button
+                            onClick={() => handleShare('whatsapp')}
+                            style={{
+                              padding: '10px 15px',
+                              background: 'rgba(37,211,102,0.2)',
+                              border: '1px solid rgba(37,211,102,0.4)',
+                              borderRadius: '8px',
+                              color: 'white',
+                              cursor: 'pointer',
+                              textAlign: 'left',
+                              fontSize: '0.95rem',
+                              transition: 'all 0.2s ease'
+                            }}
+                            onMouseEnter={(e) => e.target.style.background = 'rgba(37,211,102,0.3)'}
+                            onMouseLeave={(e) => e.target.style.background = 'rgba(37,211,102,0.2)'}
+                          >
+                            💬 WhatsApp
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    className={`favorite-btn ${isCurrentFavorite() ? 'favorited' : ''}`}
+                    onClick={handleToggleFavorite}
+                    title={isCurrentFavorite() ? 'Remove from favorites' : 'Add to favorites'}
+                  >
+                    {isCurrentFavorite() ? '❤️' : '🤍'}
+                  </button>
+                </div>
               </div>
+              {shareMessage && (
+                <div style={{
+                  marginTop: '10px',
+                  padding: '10px 15px',
+                  background: shareMessage.includes('✅') ? 'rgba(76, 175, 80, 0.3)' : 'rgba(244, 67, 54, 0.3)',
+                  border: `1px solid ${shareMessage.includes('✅') ? 'rgba(76, 175, 80, 0.5)' : 'rgba(244, 67, 54, 0.5)'}`,
+                  borderRadius: '8px',
+                  color: 'white',
+                  fontSize: '0.9rem',
+                  textAlign: 'center',
+                  animation: 'fadeIn 0.3s ease-out'
+                }}>
+                  {shareMessage}
+                </div>
+              )}
               
               {/* 顯示警告信息（如果是非蝴蝶/鳥類圖片） */}
               {warning && (
@@ -3125,11 +4174,32 @@ function App() {
                             #{idx + 1}
                           </div>
                           <div style={{ flex: 1 }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}>
                               <span className="pred-class" style={{ fontWeight: 700 }}>{pred.class}</span>
-                              <span className="pred-confidence" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                                {percent.toFixed(2)}%
-                              </span>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                <span className="pred-confidence" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                                  {percent.toFixed(2)}%
+                                </span>
+                                {showCorrectSpeciesSelector && (
+                                  <button
+                                    onClick={() => {
+                                      setSelectedCorrectSpecies(pred.class);
+                                    }}
+                                    style={{
+                                      padding: '4px 8px',
+                                      fontSize: '0.75rem',
+                                      borderRadius: '4px',
+                                      border: '1px solid rgba(255,255,255,0.3)',
+                                      background: selectedCorrectSpecies === pred.class ? '#FF9800' : 'rgba(255,255,255,0.1)',
+                                      color: 'white',
+                                      cursor: 'pointer',
+                                      fontWeight: 600
+                                    }}
+                                  >
+                                    Select
+                                  </button>
+                                )}
+                              </div>
                             </div>
                             <div style={{ marginTop: 6, height: 8, background: 'rgba(255,255,255,0.12)', borderRadius: 6 }}>
                               <div 
@@ -3146,6 +4216,140 @@ function App() {
                         </div>
                       );
                     })}
+                  </div>
+                  
+                  {/* 識別結果反饋機制 */}
+                  <div className="feedback-section" style={{ marginTop: '25px', paddingTop: '20px', borderTop: '2px solid rgba(255,255,255,0.2)' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      <p style={{ fontSize: '0.95rem', opacity: 0.9, marginBottom: '8px' }}>
+                        Was this identification correct?
+                      </p>
+                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <button
+                          className="feedback-btn feedback-correct"
+                          onClick={() => handleFeedbackSubmit('correct')}
+                          disabled={feedbackStatus === 'submitted' || feedbackSubmitting}
+                          style={{
+                            padding: '10px 20px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            background: feedbackStatus === 'correct' ? '#4CAF50' : 'rgba(255,255,255,0.2)',
+                            color: 'white',
+                            cursor: feedbackStatus === 'submitted' ? 'not-allowed' : 'pointer',
+                            fontWeight: 600,
+                            transition: 'all 0.3s ease',
+                            opacity: feedbackStatus === 'submitted' ? 0.6 : 1
+                          }}
+                        >
+                          ✅ Correct
+                        </button>
+                        <button
+                          className="feedback-btn feedback-incorrect"
+                          onClick={() => {
+                            setShowCorrectSpeciesSelector(true);
+                            setFeedbackStatus('incorrect');
+                          }}
+                          disabled={feedbackStatus === 'submitted' || feedbackSubmitting}
+                          style={{
+                            padding: '10px 20px',
+                            borderRadius: '8px',
+                            border: 'none',
+                            background: feedbackStatus === 'incorrect' ? '#F44336' : 'rgba(255,255,255,0.2)',
+                            color: 'white',
+                            cursor: feedbackStatus === 'submitted' ? 'not-allowed' : 'pointer',
+                            fontWeight: 600,
+                            transition: 'all 0.3s ease',
+                            opacity: feedbackStatus === 'submitted' ? 0.6 : 1
+                          }}
+                        >
+                          ❌ Incorrect
+                        </button>
+                      </div>
+                      
+                      {/* 如果選擇錯誤，顯示正確物種選擇器 */}
+                      {showCorrectSpeciesSelector && (
+                        <div className="correct-species-selector" style={{
+                          marginTop: '15px',
+                          padding: '15px',
+                          background: 'rgba(255,255,255,0.15)',
+                          borderRadius: '10px',
+                          border: '1px solid rgba(255,255,255,0.25)'
+                        }}>
+                          <label style={{ display: 'block', marginBottom: '10px', fontSize: '0.9rem', opacity: 0.9 }}>
+                            What is the correct species?
+                          </label>
+                          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '10px' }}>
+                            <input
+                              type="text"
+                              placeholder="Enter species name..."
+                              value={selectedCorrectSpecies}
+                              onChange={(e) => setSelectedCorrectSpecies(e.target.value)}
+                              style={{
+                                flex: 1,
+                                minWidth: '200px',
+                                padding: '10px',
+                                borderRadius: '8px',
+                                border: '1px solid rgba(255,255,255,0.3)',
+                                background: 'rgba(255,255,255,0.1)',
+                                color: 'white',
+                                fontSize: '0.95rem'
+                              }}
+                            />
+                            <button
+                              onClick={() => handleFeedbackSubmit('incorrect', selectedCorrectSpecies)}
+                              disabled={!selectedCorrectSpecies.trim() || feedbackSubmitting}
+                              style={{
+                                padding: '10px 20px',
+                                borderRadius: '8px',
+                                border: 'none',
+                                background: selectedCorrectSpecies.trim() ? '#FF9800' : 'rgba(255,255,255,0.2)',
+                                color: 'white',
+                                cursor: selectedCorrectSpecies.trim() ? 'pointer' : 'not-allowed',
+                                fontWeight: 600,
+                                opacity: selectedCorrectSpecies.trim() ? 1 : 0.6
+                              }}
+                            >
+                              {feedbackSubmitting ? 'Submitting...' : 'Submit'}
+                            </button>
+                            <button
+                              onClick={() => {
+                                setShowCorrectSpeciesSelector(false);
+                                setSelectedCorrectSpecies('');
+                                setFeedbackStatus(null);
+                              }}
+                              style={{
+                                padding: '10px 20px',
+                                borderRadius: '8px',
+                                border: '1px solid rgba(255,255,255,0.3)',
+                                background: 'rgba(255,255,255,0.1)',
+                                color: 'white',
+                                cursor: 'pointer',
+                                fontWeight: 600
+                              }}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                          <p style={{ fontSize: '0.85rem', opacity: 0.8, marginTop: '8px' }}>
+                            💡 You can also select from Top-3 predictions above
+                          </p>
+                        </div>
+                      )}
+                      
+                      {/* 反饋提交成功提示 */}
+                      {feedbackStatus === 'submitted' && (
+                        <div style={{
+                          marginTop: '10px',
+                          padding: '10px',
+                          background: 'rgba(76, 175, 80, 0.3)',
+                          borderRadius: '8px',
+                          border: '1px solid rgba(76, 175, 80, 0.5)',
+                          fontSize: '0.9rem'
+                        }}>
+                          ✅ Thank you for your feedback! This helps improve the model.
+                        </div>
+                      )}
+                    </div>
                   </div>
               </div>
             </div>

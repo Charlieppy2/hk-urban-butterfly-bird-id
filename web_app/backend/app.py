@@ -73,6 +73,14 @@ class_names = []
 bird_sound_model = None
 bird_sound_class_names = []
 
+# Global variable for general image recognition model (ImageNet)
+general_model = None
+imagenet_class_names = []
+
+# Global variable for general image recognition model (ImageNet)
+general_model = None
+imagenet_class_names = []
+
 
 def allowed_file(filename):
     """Check if file extension is allowed"""
@@ -508,6 +516,69 @@ def load_bird_sound_model():
         bird_sound_class_names = []
 
 
+def load_general_model():
+    """Load ImageNet pre-trained model for general image recognition"""
+    global general_model, imagenet_class_names
+    
+    try:
+        # Load MobileNetV2 pre-trained on ImageNet
+        print("Loading ImageNet pre-trained model for general image recognition...")
+        general_model = tf.keras.applications.MobileNetV2(
+            weights='imagenet',
+            input_shape=(224, 224, 3),
+            include_top=True
+        )
+        print("✅ General image recognition model loaded successfully")
+        
+        # Load ImageNet class names
+        # ImageNet has 1000 classes, we'll use a simplified mapping
+        # For now, we'll use a basic list of common categories
+        imagenet_class_names = []
+        # We'll generate class names on-the-fly using tf.keras.applications.imagenet_utils
+        print("✅ General model ready (1000 ImageNet classes)")
+        return True
+    except Exception as e:
+        print(f"❌ Error loading general model: {e}")
+        general_model = None
+        imagenet_class_names = []
+        return False
+
+
+def preprocess_image_for_imagenet(image_path, target_size=(224, 224)):
+    """Preprocess image for ImageNet model (uses different normalization)"""
+    try:
+        img = Image.open(image_path)
+        if img.mode != 'RGB':
+            img = img.convert('RGB')
+        img = img.resize(target_size, Image.Resampling.LANCZOS)
+        img_array = np.array(img, dtype=np.float32)
+        img.close()
+        
+        # ImageNet preprocessing: normalize to [-1, 1] range
+        img_array = tf.keras.applications.mobilenet_v2.preprocess_input(img_array)
+        img_array = np.expand_dims(img_array, axis=0)
+        return img_array
+    except Exception as e:
+        print(f"Error preprocessing image for ImageNet: {e}")
+        return None
+
+
+def decode_imagenet_predictions(predictions, top=3):
+    """Decode ImageNet predictions to human-readable labels"""
+    try:
+        decoded = tf.keras.applications.imagenet_utils.decode_predictions(predictions, top=top)
+        results = []
+        for (imagenet_id, label, score) in decoded[0]:
+            results.append({
+                'class': label.replace('_', ' ').title(),
+                'confidence': float(score)
+            })
+        return results
+    except Exception as e:
+        print(f"Error decoding ImageNet predictions: {e}")
+        return []
+
+
 def preprocess_image(image_path, target_size=(224, 224)):
     """Preprocess image for model prediction - Memory optimized"""
     try:
@@ -708,12 +779,12 @@ def is_cartoon_or_illustration(image_path):
             gradient_magnitude = np.sqrt(grad_x**2 + grad_y**2)
             avg_gradient = np.mean(gradient_magnitude)
             
-            # Cartoon detection criteria (more sensitive thresholds):
-            # - High edge density (>0.10) AND low texture variance (<30) = cartoon
-            # - High saturation (>0.5) AND low color diversity (<0.4) = cartoon
-            # - High average gradient (>40) AND low texture variance (<30) = cartoon
-            # - Very high saturation (>0.7) = likely cartoon
-            # - Very low texture variance (<15) = likely cartoon
+            # Cartoon detection criteria (more conservative thresholds to avoid false positives):
+            # - High edge density (>0.15) AND low texture variance (<20) = cartoon
+            # - High saturation (>0.65) AND low color diversity (<0.3) = cartoon
+            # - High average gradient (>50) AND low texture variance (<20) = cartoon
+            # - Very high saturation (>0.85) = likely cartoon
+            # - Very low texture variance (<10) = likely cartoon
             is_cartoon = False
             
             # Debug info (can be removed in production)
@@ -721,48 +792,48 @@ def is_cartoon_or_illustration(image_path):
                   f"saturation={saturation:.3f}, color_diversity={color_diversity:.3f}, avg_gradient={avg_gradient:.2f}, "
                   f"hist_peaks={avg_peaks:.1f}")
             
-            # Criterion 1: Sharp edges + uniform texture (lowered thresholds)
-            if edge_density > 0.10 and texture_variance < 30:
+            # Criterion 1: Sharp edges + uniform texture (more conservative)
+            if edge_density > 0.15 and texture_variance < 20:
                 is_cartoon = True
                 print("  -> Detected by: Sharp edges + uniform texture")
             
-            # Criterion 2: High saturation + few colors (lowered thresholds)
-            if saturation > 0.5 and color_diversity < 0.4:
+            # Criterion 2: High saturation + few colors (more conservative)
+            if saturation > 0.65 and color_diversity < 0.3:
                 is_cartoon = True
                 print("  -> Detected by: High saturation + few colors")
             
-            # Criterion 3: High gradient + low texture (lowered thresholds)
-            if avg_gradient > 40 and texture_variance < 30:
+            # Criterion 3: High gradient + low texture (more conservative)
+            if avg_gradient > 50 and texture_variance < 20:
                 is_cartoon = True
                 print("  -> Detected by: High gradient + low texture")
             
-            # Criterion 4: Very high edge density (typical of line art) (lowered threshold)
-            if edge_density > 0.20:
+            # Criterion 4: Very high edge density (typical of line art) (more conservative)
+            if edge_density > 0.30:
                 is_cartoon = True
                 print("  -> Detected by: Very high edge density")
             
-            # Criterion 5: Very high saturation (typical of cartoon colors)
-            if saturation > 0.7:
+            # Criterion 5: Very high saturation (typical of cartoon colors) (more conservative)
+            if saturation > 0.85:
                 is_cartoon = True
                 print("  -> Detected by: Very high saturation")
             
-            # Criterion 6: Very low texture variance (flat colors typical of cartoons)
-            if texture_variance < 15:
+            # Criterion 6: Very low texture variance (flat colors typical of cartoons) (more conservative)
+            if texture_variance < 10:
                 is_cartoon = True
                 print("  -> Detected by: Very low texture variance")
             
-            # Criterion 7: Low color diversity (cartoons use limited color palette)
-            if color_diversity < 0.2:
+            # Criterion 7: Low color diversity (cartoons use limited color palette) (more conservative)
+            if color_diversity < 0.15:
                 is_cartoon = True
                 print("  -> Detected by: Very low color diversity")
             
-            # Criterion 8: Cartoon-like histogram (few distinct color peaks)
-            if has_cartoon_histogram and saturation > 0.5:
+            # Criterion 8: Cartoon-like histogram (few distinct color peaks) (more conservative)
+            if has_cartoon_histogram and saturation > 0.65:
                 is_cartoon = True
                 print("  -> Detected by: Cartoon-like histogram + high saturation")
             
-            # Criterion 9: Very high saturation with low texture (typical cartoon combination)
-            if saturation > 0.75 and texture_variance < 20:
+            # Criterion 9: Very high saturation with low texture (typical cartoon combination) (more conservative)
+            if saturation > 0.85 and texture_variance < 15:
                 is_cartoon = True
                 print("  -> Detected by: Very high saturation + low texture")
             
@@ -784,13 +855,13 @@ def is_cartoon_or_illustration(image_path):
             print(f"Cartoon detection (fallback): texture_variance={texture_variance:.2f}, saturation={saturation:.3f}")
             
             # Simple heuristic: low texture variance + high saturation = likely cartoon
-            # More sensitive thresholds for fallback method
-            if texture_variance < 30 and saturation > 0.5:
+            # More conservative thresholds for fallback method to avoid false positives
+            if texture_variance < 20 and saturation > 0.65:
                 print("  -> Detected by: Low texture + high saturation")
                 return True
             
-            # Also check for very high saturation or very low texture
-            if saturation > 0.7 or texture_variance < 15:
+            # Also check for very high saturation or very low texture (more conservative)
+            if saturation > 0.85 or texture_variance < 10:
                 print("  -> Detected by: Very high saturation or very low texture")
                 return True
             
@@ -974,7 +1045,8 @@ def index():
             'status': 'success',
             'message': 'Butterfly and Bird Identification API is running',
             'model_loaded': model is not None,
-            'bird_sound_model_loaded': bird_sound_model is not None
+            'bird_sound_model_loaded': bird_sound_model is not None,
+            'general_model_loaded': general_model is not None
         }), 200
     except Exception as e:
         # Even if there's an error, return a response (not 500)
@@ -1075,14 +1147,69 @@ def predict():
             is_cartoon = False  # 出错时假设不是卡通，继续处理
         
         is_likely_not_target = is_cartoon
+        general_prediction = None
+        
+        # 計算前3個預測的總置信度
+        top3_total_confidence = sum(p['confidence'] for p in top_predictions[:3])
         
         # 方法1: 如果置信度低於30%，可能是其他類型的圖片
         LOW_CONFIDENCE_THRESHOLD = 0.30
         is_likely_not_target = is_likely_not_target or confidence < LOW_CONFIDENCE_THRESHOLD
         
         # 方法2: 計算前3個預測的總置信度，如果都很低，更可能是非目標圖片
-        top3_total_confidence = sum(p['confidence'] for p in top_predictions[:3])
         is_likely_not_target = is_likely_not_target or top3_total_confidence < 0.50
+        
+        # 如果置信度很低（<30%）或中等置信度（30-80%），嘗試使用通用模型識別進行驗證
+        # 這樣可以捕獲誤識別的情況（如人被識別為鳥類）
+        should_use_general_model = (confidence < LOW_CONFIDENCE_THRESHOLD) or (0.30 <= confidence < 0.80)
+        
+        if should_use_general_model and general_model is not None and not is_cartoon:
+            print(f"🔄 Verifying with general model (confidence: {confidence:.2%})...")
+            try:
+                # Preprocess for ImageNet
+                imagenet_image = preprocess_image_for_imagenet(filepath)
+                if imagenet_image is not None:
+                    # Make prediction with general model
+                    general_predictions = general_model.predict(imagenet_image, verbose=0)
+                    general_results = decode_imagenet_predictions(general_predictions, top=3)
+                    
+                    if general_results and len(general_results) > 0:
+                        general_top_class = general_results[0]['class'].lower()
+                        general_confidence = general_results[0]['confidence']
+                        
+                        # 檢查通用模型識別出的類別是否明顯不是鳥類/蝴蝶
+                        # 定義明顯不是目標類別的關鍵詞
+                        non_target_keywords = [
+                            'person', 'people', 'human', 'man', 'woman', 'child', 'adult',
+                            'table', 'chair', 'furniture', 'desk', 'room', 'indoor',
+                            'car', 'vehicle', 'building', 'house', 'street', 'road',
+                            'dog', 'cat', 'pet', 'animal', 'mammal',
+                            'food', 'dish', 'meal', 'plate', 'cup', 'bottle',
+                            'phone', 'computer', 'screen', 'device', 'electronic'
+                        ]
+                        
+                        # 如果通用模型識別出明顯不是鳥類/蝴蝶的類別，且置信度較高
+                        is_non_target = any(keyword in general_top_class for keyword in non_target_keywords)
+                        
+                        if is_non_target and general_confidence > 0.50:
+                            general_prediction = {
+                                'class': general_results[0]['class'],
+                                'confidence': general_confidence,
+                                'top_predictions': general_results
+                            }
+                            print(f"✅ General model identified non-target: {general_prediction['class']} ({general_prediction['confidence']:.2%})")
+                            is_likely_not_target = True  # Mark as non-butterfly/bird
+                        elif confidence < LOW_CONFIDENCE_THRESHOLD:
+                            # 即使不是明顯的非目標類別，如果置信度很低，也使用通用識別結果
+                            general_prediction = {
+                                'class': general_results[0]['class'],
+                                'confidence': general_confidence,
+                                'top_predictions': general_results
+                            }
+                            print(f"✅ General model identified: {general_prediction['class']} ({general_prediction['confidence']:.2%})")
+                            is_likely_not_target = True
+            except Exception as e:
+                print(f"⚠️ Error in general model prediction: {e}")
         
         # 方法3: 即使置信度高，如果預測的類別不在已知類別列表中，也可能是錯誤識別
         # 檢查預測的類別是否在 class_names 列表中
@@ -1106,7 +1233,7 @@ def predict():
             if confidence_ratio > 0.90:
                 is_likely_not_target = True
         
-        # 生成警告信息
+        # 生成警告信息或通用識別結果
         warning_message = None
         if is_likely_not_target:
             # 如果是卡通/插畫圖片，使用特殊的警告消息
@@ -1123,7 +1250,23 @@ def predict():
                     'confidence': confidence,
                     'top3_total_confidence': top3_total_confidence
                 }
+            elif general_prediction:
+                # 使用通用模型識別結果
+                warning_message = {
+                    'type': 'general_identification',
+                    'title': '🔍 General Image Recognition',
+                    'message': f'This image appears to be: {general_prediction["class"]} (not a butterfly or bird).',
+                    'suggestions': [
+                        'This system is designed for butterfly and bird identification',
+                        'The image has been identified using general image recognition',
+                        'For better results, please upload a clear photo of a butterfly or bird'
+                    ],
+                    'confidence': general_prediction['confidence'],
+                    'top3_total_confidence': sum(p['confidence'] for p in general_prediction['top_predictions'][:3]),
+                    'general_prediction': general_prediction
+                }
             else:
+                # 低置信度警告
                 warning_message = {
                     'type': 'low_confidence',
                     'title': '⚠️ Low Identification Confidence',
@@ -1267,6 +1410,87 @@ def get_classes():
     return jsonify({
         'classes': class_names if class_names else []
     })
+
+
+@app.route('/api/feedback', methods=['POST', 'OPTIONS'])
+def submit_feedback():
+    """Handle user feedback on identification results"""
+    # Handle preflight OPTIONS request for CORS
+    if request.method == 'OPTIONS':
+        response = jsonify({'status': 'ok'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        return response
+    
+    try:
+        feedback_data = request.get_json()
+        
+        # Validate required fields
+        if not feedback_data:
+            return jsonify({'error': 'No feedback data provided'}), 400
+        
+        required_fields = ['prediction_id', 'predicted_species', 'predicted_confidence', 'feedback_type']
+        for field in required_fields:
+            if field not in feedback_data:
+                return jsonify({'error': f'Missing required field: {field}'}), 400
+        
+        # Add timestamp if not provided
+        if 'timestamp' not in feedback_data:
+            feedback_data['timestamp'] = datetime.now().isoformat()
+        
+        # Save feedback to file (JSON format for easy analysis)
+        feedback_dir = 'feedback'
+        os.makedirs(feedback_dir, exist_ok=True)
+        
+        feedback_file = os.path.join(feedback_dir, 'feedback.json')
+        
+        # Load existing feedback
+        existing_feedback = []
+        if os.path.exists(feedback_file):
+            try:
+                with open(feedback_file, 'r', encoding='utf-8') as f:
+                    existing_feedback = json.load(f)
+            except Exception as e:
+                print(f"Warning: Failed to load existing feedback: {e}")
+                existing_feedback = []
+        
+        # Add new feedback
+        existing_feedback.append(feedback_data)
+        
+        # Save updated feedback (keep last 1000 entries to prevent file from growing too large)
+        if len(existing_feedback) > 1000:
+            existing_feedback = existing_feedback[-1000:]
+        
+        with open(feedback_file, 'w', encoding='utf-8') as f:
+            json.dump(existing_feedback, f, indent=2, ensure_ascii=False)
+        
+        print(f"✅ Feedback received: {feedback_data['feedback_type']} for {feedback_data['predicted_species']}")
+        if feedback_data.get('correct_species'):
+            print(f"   Correct species: {feedback_data['correct_species']}")
+        
+        response = jsonify({
+            'success': True,
+            'message': 'Feedback submitted successfully',
+            'feedback_id': feedback_data.get('prediction_id')
+        })
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        return response, 200
+    
+    except Exception as e:
+        print(f"Error processing feedback: {e}")
+        import traceback
+        traceback.print_exc()
+        response = jsonify({
+            'success': False,
+            'error': str(e)
+        })
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        return response, 500
 
 
 @app.route('/api/predict-sound', methods=['POST', 'OPTIONS'])
@@ -1762,25 +1986,49 @@ def get_species_image(image_path):
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
-    """AI Chat Assistant endpoint - Supports Chinese input but always responds in English"""
+    """
+    Enhanced AI Chat Assistant endpoint with advanced features:
+    - Context Memory: Remembers conversation history
+    - Sentiment Analysis: Adapts response style based on user emotion
+    - Personalization: Provides personalized recommendations
+    - Multi-turn Conversation: Maintains context across messages
+    """
     try:
         data = request.get_json()
-        message = data.get('message', '').strip()  # Keep original case for Chinese detection
+        message = data.get('message', '').strip()
         context = data.get('context', {})
+        user_id = data.get('user_id', 'default')  # Get user ID for personalization
         
         if not message:
             return jsonify({'error': 'Message is required'}), 400
         
-        # Generate response (supports Chinese input, always responds in English)
-        response = generate_chat_response(message, context)
+        # Use enhanced AI assistant
+        try:
+            from enhanced_ai_assistant import get_enhanced_assistant
+            assistant = get_enhanced_assistant()
+            response = assistant.generate_response(message, context, user_id)
+            print(f"✅ Using enhanced AI assistant, response length: {len(response)}")
+        except Exception as e:
+            # Fallback to original if enhanced assistant not available
+            print(f"⚠️ Enhanced assistant error: {e}, using fallback")
+            import traceback
+            traceback.print_exc()
+            response = generate_chat_response(message, context)
         
         return jsonify({
-            'response': response,  # Always in English
-            'success': True
+            'response': response,
+            'success': True,
+            'features': {
+                'context_memory': True,
+                'sentiment_analysis': True,
+                'personalization': True
+            }
         })
     
     except Exception as e:
         print(f"Error in chat: {e}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 
@@ -2580,13 +2828,13 @@ def calculate_match_score(description, species_info):
                         if re.search(pattern, field_text, re.IGNORECASE):
                             field_match_count += 1
                             matched_keywords_list.append(keyword)
-            else:
-                # For other fields, use word boundary matching for better accuracy
-                for keyword in keywords:
-                    # Use word boundary for exact word matching
-                    pattern = r'\b' + re.escape(keyword) + r'\b'
-                    if re.search(pattern, field_text, re.IGNORECASE):
-                        field_match_count += 1
+                else:
+                    # For other fields, use word boundary matching for better accuracy
+                    for keyword in keywords:
+                        # Use word boundary for exact word matching
+                        pattern = r'\b' + re.escape(keyword) + r'\b'
+                        if re.search(pattern, field_text, re.IGNORECASE):
+                            field_match_count += 1
                         matched_keywords_list.append(keyword)
             
             if field_match_count > 0:
@@ -3359,6 +3607,10 @@ if __name__ == '__main__':
         load_model()
         print("Loading bird sound model...")
         load_bird_sound_model()
+        print("Loading general image recognition model...")
+        load_general_model()
+        print("Loading general image recognition model...")
+        load_general_model()
         
         # Get port from environment variable (Koyeb uses PORT=8080)
         port = int(os.environ.get('PORT', 8080))

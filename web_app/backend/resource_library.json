@@ -1,0 +1,149 @@
+{
+  "resources": [
+    {
+      "id": 1,
+      "name": "eBird",
+      "name_zh": "eBird",
+      "description": "Global bird observation platform with millions of sightings and photos",
+      "description_zh": "全球鸟类观察平台，包含数百万条观察记录和照片",
+      "url": "https://ebird.org",
+      "category": "observation_platform",
+      "language_support": ["en", "zh"],
+      "keywords": ["bird", "observation", "sightings", "bird watching", "鸟类", "观察", "观鸟", "观测"],
+      "tags": ["birds", "platform", "global", "鸟类", "平台", "全球"]
+    },
+    {
+      "id": 2,
+      "name": "iNaturalist",
+      "name_zh": "iNaturalist",
+      "description": "Community-driven nature observation platform for identifying and sharing wildlife",
+      "description_zh": "社区驱动的自然观察平台，用于识别和分享野生动物",
+      "url": "https://www.inaturalist.org",
+      "category": "observation_platform",
+      "language_support": ["en", "zh"],
+      "keywords": ["nature", "wildlife", "identification", "community", "自然", "野生动物", "识别", "社区"],
+      "tags": ["platform", "community", "wildlife", "平台", "社区", "野生动物"]
+    },
+    {
+      "id": 3,
+      "name": "Butterflies of America",
+      "name_zh": "美洲蝴蝶图鉴",
+      "description": "Comprehensive butterfly identification guide with photos and distribution maps",
+      "description_zh": "全面的蝴蝶识别指南，包含照片和分布地图",
+      "url": "https://www.butterfliesofamerica.com",
+      "category": "field_guide",
+      "language_support": ["en"],
+      "keywords": ["butterfly", "identification", "guide", "field guide", "蝴蝶", "识别", "图鉴", "指南"],
+      "tags": ["butterflies", "guide", "identification", "蝴蝶", "指南", "识别"]
+    },
+    {
+      "id": 4,
+      "name": "All About Birds (Cornell Lab)",
+      "name_zh": "康奈尔鸟类实验室",
+      "description": "Comprehensive bird guide with photos, sounds, and identification tips",
+      "description_zh": "全面的鸟类指南，包含照片、声音和识别技巧",
+      "url": "https://www.allaboutbirds.org",
+      "category": "field_guide",
+      "language_support": ["en"],
+      "keywords": ["bird", "guide", "identification", "sounds", "鸟类", "指南", "识别", "声音"],
+      "tags": ["birds", "guide", "cornell", "鸟类", "指南", "康奈尔"]
+    },
+    {
+      "id": 5,
+      "name": "Nature Photography Tips",
+      "name_zh": "自然摄影技巧",
+      "description": "Expert tips for photographing birds and butterflies in the wild",
+      "description_zh": "野外拍摄鸟类和蝴蝶的专业技巧",
+      "url": "https://www.naturephotographytips.com",
+      "category": "photography",
+      "language_support": ["en"],
+      "keywords": ["photography", "tips", "techniques", "camera", "摄影", "技巧", "技术", "相机"],
+      "tags": ["photography", "tips", "wildlife", "摄影", "技巧", "野生动物"]
+    },
+    {
+      "id": 6,
+      "name": "Audubon Bird Guide",
+      "name_zh": "奥杜邦鸟类指南",
+      "description": "Free bird identification app with photos, sounds, and range maps",
+      "description_zh": "免费的鸟类识别应用，包含照片、声音和分布地图",
+      "url": "https://www.audubon.org/app",
+      "category": "mobile_app",
+      "language_support": ["en"],
+      "keywords": ["bird", "app", "mobile", "identification", "鸟类", "应用", "手机", "识别"],
+      "tags": ["birds", "app", "mobile", "鸟类", "应用", "手机"]
+    },
+    {
+      "id": 7,
+      "name": "Butterfly Conservation",
+      "name_zh": "蝴蝶保护组织",
+      "description": "UK-based organization with butterfly identification guides and conservation information",
+      "description_zh": "英国组织，提供蝴蝶识别指南和保护信息",
+      "url": "https://butterfly-conservation.org",
+      "category": "conservation",
+      "language_support": ["en"],
+      "keywords": ["butterfly", "conservation", "guide", "蝴蝶", "保护", "指南"],
+      "tags": ["butterflies", "conservation", "uk", "蝴蝶", "保护", "英国"]
+    },
+    {
+      "id": 8,
+      "name": "Macau Biodiversity Database",
+      "name_zh": "澳门生物多样性数据库",
+      "description": "Local biodiversity database with species information and observation records",
+      "description_zh": "本地生物多样性数据库，包含物种信息和观察记录",
+      "url": "https://www.macaubiodiversity.org",
+      "category": "local_database",
+      "language_support": ["zh", "en"],
+      "keywords": ["biodiversity", "macau", "local", "species", "生物多样性", "澳门", "本地", "物种"],
+      "tags": ["local", "macau", "biodiversity", "本地", "澳门", "生物多样性"]
+    },
+    {
+      "id": 9,
+      "name": "Hong Kong Bird Watching Society",
+      "name_zh": "香港观鸟会",
+      "description": "Local bird watching organization with guides and observation sites",
+      "description_zh": "本地观鸟组织，提供指南和观察地点",
+      "url": "https://www.hkbws.org.hk",
+      "category": "local_organization",
+      "language_support": ["zh", "en"],
+      "keywords": ["bird", "hong kong", "local", "watching", "鸟类", "香港", "本地", "观鸟"],
+      "tags": ["local", "hong kong", "birds", "本地", "香港", "鸟类"]
+    },
+    {
+      "id": 10,
+      "name": "National Geographic Photography",
+      "name_zh": "国家地理摄影",
+      "description": "Professional wildlife photography tips and techniques",
+      "description_zh": "专业的野生动物摄影技巧和技术",
+      "url": "https://www.nationalgeographic.com/photography",
+      "category": "photography",
+      "language_support": ["en"],
+      "keywords": ["photography", "wildlife", "tips", "professional", "摄影", "野生动物", "技巧", "专业"],
+      "tags": ["photography", "wildlife", "national geographic", "摄影", "野生动物", "国家地理"]
+    },
+    {
+      "id": 11,
+      "name": "Xeno-canto",
+      "name_zh": "Xeno-canto",
+      "description": "Database of bird sounds from around the world",
+      "description_zh": "全球鸟类声音数据库",
+      "url": "https://www.xeno-canto.org",
+      "category": "sound_database",
+      "language_support": ["en"],
+      "keywords": ["bird", "sounds", "calls", "audio", "鸟类", "声音", "叫声", "音频"],
+      "tags": ["birds", "sounds", "audio", "鸟类", "声音", "音频"]
+    },
+    {
+      "id": 12,
+      "name": "Butterfly Identification Guide",
+      "name_zh": "蝴蝶识别指南",
+      "description": "Comprehensive guide to identifying butterflies by region and characteristics",
+      "description_zh": "按地区和特征识别蝴蝶的综合指南",
+      "url": "https://www.butterflyidentification.org",
+      "category": "field_guide",
+      "language_support": ["en"],
+      "keywords": ["butterfly", "identification", "guide", "region", "蝴蝶", "识别", "指南", "地区"],
+      "tags": ["butterflies", "guide", "identification", "蝴蝶", "指南", "识别"]
+    }
+  ]
+}
+
