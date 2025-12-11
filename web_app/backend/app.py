@@ -1049,23 +1049,8 @@ def predict():
             })
         
         # 檢測是否為非蝴蝶/鳥類圖片
-        # 方法0: 優先檢測是否為卡通/插畫圖片（所有卡通圖片都歸類為 others）
-        # 優化：提高跳過閾值，減少檢測時間
-        is_cartoon = False
-        try:
-            # 如果置信度已经很高，可以跳过详细检测以节省时间
-            if confidence > 0.70:
-                # 高置信度时，假设不是卡通（快速路径）
-                is_cartoon = False
-                print("⏱️ Cartoon detection skipped (high confidence)")
-            else:
-                # 低置信度时，进行快速检测（限制处理时间）
-                is_cartoon = is_cartoon_or_illustration(filepath)
-        except Exception as cartoon_error:
-            print(f"⚠️ Cartoon detection error (continuing): {cartoon_error}")
-            is_cartoon = False  # 出错时假设不是卡通，继续处理
-        
-        is_likely_not_target = is_cartoon
+        # 卡通檢測已取消
+        is_likely_not_target = False
         
         # 方法1: 如果置信度低於30%，可能是其他類型的圖片
         LOW_CONFIDENCE_THRESHOLD = 0.30
@@ -1100,34 +1085,19 @@ def predict():
         # 生成警告信息
         warning_message = None
         if is_likely_not_target:
-            # 如果是卡通/插畫圖片，使用特殊的警告消息
-            if is_cartoon:
-                warning_message = {
-                    'type': 'cartoon',
-                    'title': '⚠️ Cartoon/Illustration Detected',
-                    'message': 'This appears to be a cartoon, illustration, or non-photographic image. This system is designed to identify real butterflies and birds from photographs.',
-                    'suggestions': [
-                        'Please upload a real photograph of a butterfly or bird',
-                        'Cartoon or illustrated images cannot be accurately identified',
-                        'Try using a clear photo taken with a camera'
-                    ],
-                    'confidence': confidence,
-                    'top3_total_confidence': top3_total_confidence
-                }
-            else:
-                warning_message = {
-                    'type': 'low_confidence',
-                    'title': '⚠️ Low Identification Confidence',
-                    'message': 'This image may not be a butterfly or bird, or the image quality is insufficient for accurate identification.',
-                    'suggestions': [
-                        'Please ensure you upload a clear photo of a butterfly or bird',
-                        'Try taking photos from different angles to ensure the subject is clearly visible',
-                        'Ensure the photo has sufficient lighting, avoid blurry or too dark images',
-                        'If it is indeed a butterfly or bird, please try taking a clearer photo'
-                    ],
-                    'confidence': confidence,
-                    'top3_total_confidence': top3_total_confidence
-                }
+            warning_message = {
+                'type': 'low_confidence',
+                'title': '⚠️ Low Identification Confidence',
+                'message': 'This image may not be a butterfly or bird, or the image quality is insufficient for accurate identification.',
+                'suggestions': [
+                    'Please ensure you upload a clear photo of a butterfly or bird',
+                    'Try taking photos from different angles to ensure the subject is clearly visible',
+                    'Ensure the photo has sufficient lighting, avoid blurry or too dark images',
+                    'If it is indeed a butterfly or bird, please try taking a clearer photo'
+                ],
+                'confidence': confidence,
+                'top3_total_confidence': top3_total_confidence
+            }
         
         # Get similar species - pass predictions to avoid re-computing
         # This saves memory by not calling model.predict again
