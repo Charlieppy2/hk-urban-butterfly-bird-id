@@ -498,7 +498,7 @@ def load_bird_sound_model():
 
 
 def preprocess_image(image_path, target_size=(224, 224)):
-    """Preprocess image for model prediction - Memory optimized"""
+    """Preprocess image for model prediction - Optimized for speed"""
     try:
         img = Image.open(image_path)
         
@@ -506,8 +506,9 @@ def preprocess_image(image_path, target_size=(224, 224)):
         if img.mode != 'RGB':
             img = img.convert('RGB')
         
-        # Resize image to reduce memory usage
-        img = img.resize(target_size, Image.Resampling.LANCZOS)
+        # 優化：使用更快的resize方法（NEAREST比LANCZOS快，但質量稍差）
+        # 對於224x224的輸入，質量差異可以接受
+        img = img.resize(target_size, Image.Resampling.NEAREST)
         
         # Convert to array and normalize
         img_array = np.array(img, dtype=np.float32) / 255.0
