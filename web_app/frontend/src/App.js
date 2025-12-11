@@ -1913,6 +1913,18 @@ function App() {
         <p>AI-Powered Species Identification System</p>
         <div className="main-navigation">
           <button 
+            className={`nav-btn ${showBirdsPage ? 'active' : ''}`}
+            onClick={() => { handleShowBirds(); setShowDescriptionMode(false); setSoundMode(false); }}
+          >
+            🐦 Birds (200)
+          </button>
+          <button 
+            className={`nav-btn ${showButterfliesPage ? 'active' : ''}`}
+            onClick={() => { handleShowButterflies(); setShowDescriptionMode(false); setSoundMode(false); }}
+          >
+            🦋 Butterflies (100)
+          </button>
+          <button 
             className={`nav-btn ${!showBirdsPage && !showButterfliesPage && !showDescriptionMode && !soundMode ? 'active' : ''}`}
             onClick={() => { handleShowMain(); setShowDescriptionMode(false); setSoundMode(false); }}
           >
@@ -1935,18 +1947,6 @@ function App() {
             }}
           >
             🎵 Bird Sound ID
-          </button>
-          <button 
-            className={`nav-btn ${showBirdsPage ? 'active' : ''}`}
-            onClick={() => { handleShowBirds(); setShowDescriptionMode(false); setSoundMode(false); }}
-          >
-            🐦 Birds (200)
-          </button>
-          <button 
-            className={`nav-btn ${showButterfliesPage ? 'active' : ''}`}
-            onClick={() => { handleShowButterflies(); setShowDescriptionMode(false); setSoundMode(false); }}
-          >
-            🦋 Butterflies (100)
           </button>
           <button 
             className={`nav-btn ${showCollection ? 'active' : ''}`}
