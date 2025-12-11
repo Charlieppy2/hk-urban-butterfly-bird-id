@@ -650,20 +650,28 @@ def is_cartoon_or_illustration(image_path):
         img_array = np.array(img)
         
         if CV2_AVAILABLE:
+            # 優化：縮小圖像尺寸以加快處理速度
+            # Resize image to smaller size for faster processing (保持比例)
+            h, w = img_array.shape[:2]
+            if h > 400 or w > 400:
+                scale = min(400 / h, 400 / w)
+                new_h, new_w = int(h * scale), int(w * scale)
+                img_array = cv2.resize(img_array, (new_w, new_h), interpolation=cv2.INTER_AREA)
+            
             # Convert to grayscale for edge detection
             gray = cv2.cvtColor(img_array, cv2.COLOR_RGB2GRAY)
             
-            # 1. Edge detection - cartoons have very sharp, clear edges
+            # 1. Edge detection - cartoons have very sharp, clear edges (優化：使用更快的參數)
             edges = cv2.Canny(gray, 50, 150)
             edge_density = np.sum(edges > 0) / (edges.shape[0] * edges.shape[1])
             
-            # 2. Color uniformity - cartoons have large uniform color regions
-            # Calculate color variance in small patches
+            # 2. Color uniformity - cartoons have large uniform color regions (優化：減少patch數量)
             h, w = gray.shape
-            patch_size = min(32, h // 8, w // 8)
+            patch_size = min(64, h // 4, w // 4)  # 增大patch size，減少計算量
             patches = []
-            for i in range(0, h - patch_size, patch_size):
-                for j in range(0, w - patch_size, patch_size):
+            step = patch_size  # 跳過更多patch以加快速度
+            for i in range(0, h - patch_size, step):
+                for j in range(0, w - patch_size, step):
                     patch = gray[i:i+patch_size, j:j+patch_size]
                     patches.append(np.std(patch))
             texture_variance = np.mean(patches) if patches else 0
@@ -672,26 +680,20 @@ def is_cartoon_or_illustration(image_path):
             hsv = cv2.cvtColor(img_array, cv2.COLOR_RGB2HSV)
             saturation = np.mean(hsv[:, :, 1]) / 255.0
             
-            # 4. Color count - cartoons typically have fewer distinct colors
-            # Resize for faster processing
-            small_img = cv2.resize(img_array, (100, 100))
+            # 4. Color count - cartoons typically have fewer distinct colors (優化：使用更小的圖像)
+            small_img = cv2.resize(img_array, (64, 64))  # 從100x100減小到64x64
             unique_colors = len(np.unique(small_img.reshape(-1, 3), axis=0))
-            color_diversity = unique_colors / (100 * 100)  # Normalize
+            color_diversity = unique_colors / (64 * 64)  # Normalize
             
-            # 5. Color histogram analysis - cartoons have distinct color peaks
-            # Calculate histogram for each channel
-            hist_b = cv2.calcHist([img_array], [0], None, [256], [0, 256])
-            hist_g = cv2.calcHist([img_array], [1], None, [256], [0, 256])
-            hist_r = cv2.calcHist([img_array], [2], None, [256], [0, 256])
-            # Find peaks in histogram (cartoons have fewer but stronger peaks)
-            hist_peaks_b = len([x for x in hist_b if x > np.max(hist_b) * 0.1])
+            # 5. Color histogram analysis - 優化：跳過詳細的histogram分析以加快速度
+            # 簡化：只檢查一個通道的histogram
+            hist_g = cv2.calcHist([img_array], [1], None, [128], [0, 256])  # 減少bins從256到128
             hist_peaks_g = len([x for x in hist_g if x > np.max(hist_g) * 0.1])
-            hist_peaks_r = len([x for x in hist_r if x > np.max(hist_r) * 0.1])
-            avg_peaks = (hist_peaks_b + hist_peaks_g + hist_peaks_r) / 3
-            # Cartoons typically have fewer histogram peaks (< 30)
+            avg_peaks = hist_peaks_g  # 只使用一個通道
             has_cartoon_histogram = avg_peaks < 30
             
-            # 6. Gradient analysis - cartoons have sharp transitions
+            # 6. Gradient analysis - 優化：跳過詳細的gradient分析以加快速度
+            # 簡化：只計算簡單的梯度
             grad_x = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
             grad_y = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
             gradient_magnitude = np.sqrt(grad_x**2 + grad_y**2)
@@ -1021,9 +1023,8 @@ def predict():
             return jsonify({'error': 'Failed to process image'}), 500
         
         # Make prediction - use batch_size=1 to reduce memory usage
-        # Clear TensorFlow session cache before prediction to free memory
-        tf.keras.backend.clear_session()
-        predictions = model.predict(processed_image, verbose=0, batch_size=1)
+        # Optimize prediction: use smaller batch and faster processing
+        predictions = model.predict(processed_image, verbose=0, batch_size=1, workers=1, use_multiprocessing=False)
         predicted_class_idx = np.argmax(predictions[0])
         confidence = float(predictions[0][predicted_class_idx])
         
@@ -1048,11 +1049,11 @@ def predict():
         
         # 檢測是否為非蝴蝶/鳥類圖片
         # 方法0: 優先檢測是否為卡通/插畫圖片（所有卡通圖片都歸類為 others）
-        # 添加超时保护，避免卡通检测耗时过长导致服务不健康
+        # 優化：提高跳過閾值，減少檢測時間
         is_cartoon = False
         try:
             # 如果置信度已经很高，可以跳过详细检测以节省时间
-            if confidence > 0.80:
+            if confidence > 0.70:
                 # 高置信度时，假设不是卡通（快速路径）
                 is_cartoon = False
                 print("⏱️ Cartoon detection skipped (high confidence)")
@@ -1168,12 +1169,10 @@ def predict():
         # If needed, users can call /api/analyze-quality endpoint separately
         quality_analysis = None
         
-        # Aggressive memory cleanup for Koyeb (free tier has limited memory)
-        # Clear TensorFlow session cache
-        tf.keras.backend.clear_session()
-        # Force garbage collection multiple times to ensure memory is freed
-        for _ in range(2):
-            gc.collect()
+        # 優化：減少內存清理次數以加快速度（只在必要時清理）
+        # 只在內存壓力大時才進行深度清理
+        # 輕量級清理：只清理一次
+        gc.collect()
         
         # Debug: Log similar species before returning
         print(f"Returning {len(similar_species)} similar species")
