@@ -1,0 +1,13 @@
+# 訓練解讀生成模型所需的額外依賴
+# 這些依賴需要添加到現有的 requirements.txt 中
+
+torch>=1.9.0
+transformers>=4.20.0
+pandas>=1.3.0
+numpy>=1.21.0
+tqdm>=4.62.0
+nltk>=3.6.0
+
+# 注意：如果使用GPU，還需要安裝對應的CUDA版本的PyTorch
+# 例如：pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
