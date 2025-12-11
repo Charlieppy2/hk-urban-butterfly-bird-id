@@ -581,15 +581,11 @@ function App() {
         setHistory([historyItem, ...history].slice(0, 20));
       }
     } catch (err) {
-      console.error('Error predicting sound:', err);
-      console.error('Error response:', err.response);
-      console.error('Error data:', err.response?.data);
+      console.error('Error analyzing sound:', err);
       
-      // Get detailed error message
-      let errorMessage = 'Failed to identify bird sound. Please try again.';
-      if (err.response?.data?.error) {
-        errorMessage = err.response.data.error;
-      } else if (err.message) {
+      // Pure frontend implementation - no API calls
+      let errorMessage = 'Failed to analyze audio file. Please try again.';
+      if (err.message) {
         errorMessage = `Error: ${err.message}`;
       }
       
@@ -1977,6 +1973,7 @@ function App() {
               <p>Upload an audio file to identify bird species by their sounds</p>
               <div className="sound-header-hint">
                 <span>📋 Supported formats: WAV, MP3, M4A, FLAC, OGG, AAC</span>
+                <span style={{ marginLeft: '15px', fontSize: '0.9rem', opacity: 0.8 }}>✨ Pure frontend - no backend required</span>
               </div>
             </div>
             
