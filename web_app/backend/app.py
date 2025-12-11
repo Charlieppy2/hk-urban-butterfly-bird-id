@@ -1050,37 +1050,17 @@ def predict():
         
         # 檢測是否為非蝴蝶/鳥類圖片
         # 卡通檢測已取消
+        # 只保留最基本的低置信度檢測，避免誤判訓練圖片
         is_likely_not_target = False
         
-        # 方法1: 如果置信度低於30%，可能是其他類型的圖片
-        LOW_CONFIDENCE_THRESHOLD = 0.30
-        is_likely_not_target = is_likely_not_target or confidence < LOW_CONFIDENCE_THRESHOLD
-        
-        # 方法2: 計算前3個預測的總置信度，如果都很低，更可能是非目標圖片
+        # 計算前3個預測的總置信度
         top3_total_confidence = sum(p['confidence'] for p in top_predictions[:3])
-        is_likely_not_target = is_likely_not_target or top3_total_confidence < 0.50
         
-        # 方法3: 即使置信度高，如果預測的類別不在已知類別列表中，也可能是錯誤識別
-        # 檢查預測的類別是否在 class_names 列表中
-        if class_names and predicted_class not in class_names:
+        # 只檢查：如果置信度非常低（<20%），才顯示警告
+        # 對於高置信度的圖片（如訓練圖片），不應該顯示警告
+        LOW_CONFIDENCE_THRESHOLD = 0.20  # 降低閾值，只對非常低的置信度顯示警告
+        if confidence < LOW_CONFIDENCE_THRESHOLD and top3_total_confidence < 0.40:
             is_likely_not_target = True
-        
-        # 方法4: 如果置信度雖然高（>70%），但前3個預測的類別都不在已知類別列表中，也可能是錯誤識別
-        if confidence > 0.70 and class_names:
-            all_top3_invalid = all(p['class'] not in class_names for p in top_predictions[:3])
-            if all_top3_invalid:
-                is_likely_not_target = True
-        
-        # 方法5: 如果置信度高但前3個預測的總置信度異常低（說明模型不確定），也可能是錯誤識別
-        # 例如：置信度92%但前3個總和只有95%（正常應該接近100%）
-        # 如果前3個總置信度 < 98%，即使單個置信度高，也可能是錯誤識別
-        if confidence > 0.70 and top3_total_confidence < 0.98:
-            # 如果最高置信度很高，但前3個總和較低，說明模型可能錯誤地給某個類別很高的分數
-            # 這種情況下，即使置信度高，也可能是錯誤識別
-            confidence_ratio = confidence / top3_total_confidence if top3_total_confidence > 0 else 1.0
-            # 如果最高預測佔了前3個總和的90%以上，且總和 < 98%，可能是錯誤識別
-            if confidence_ratio > 0.90:
-                is_likely_not_target = True
         
         # 生成警告信息
         warning_message = None
