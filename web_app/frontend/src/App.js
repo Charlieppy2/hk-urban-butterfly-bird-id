@@ -171,6 +171,12 @@ function App() {
   const [descriptionLoading, setDescriptionLoading] = useState(false);
   const [descriptionConversation, setDescriptionConversation] = useState([]);
   const [currentMatches, setCurrentMatches] = useState([]);
+  // Conversation history management
+  const [conversationHistory, setConversationHistory] = useState([]);
+  const [currentConversationId, setCurrentConversationId] = useState(null);
+  const [swipedItemId, setSwipedItemId] = useState(null);
+  const [touchStartX, setTouchStartX] = useState(null);
+  const [touchEndX, setTouchEndX] = useState(null);
   
   // Species Detail Modal State
   const [selectedSpeciesDetail, setSelectedSpeciesDetail] = useState(null);
@@ -1728,6 +1734,11 @@ function App() {
   const handleDescriptionSubmit = async () => {
     if (!descriptionInput.trim() || descriptionLoading) return;
 
+    // Create new conversation if none exists
+    if (!currentConversationId) {
+      createNewConversation();
+    }
+
     const userMessage = {
       role: 'user',
       content: descriptionInput,
@@ -1777,20 +1788,167 @@ function App() {
     }
   };
 
-  const handleStartNewDescriptionChat = () => {
+  // Load conversation history from localStorage on mount
+  useEffect(() => {
+    const savedHistory = localStorage.getItem('descriptionConversationHistory');
+    if (savedHistory) {
+      try {
+        const history = JSON.parse(savedHistory);
+        setConversationHistory(history);
+        // If there's history, load the most recent conversation
+        if (history.length > 0) {
+          const mostRecent = history[history.length - 1];
+          setCurrentConversationId(mostRecent.id);
+          setDescriptionConversation(mostRecent.messages || []);
+          setCurrentMatches(mostRecent.matches || []);
+          setDescriptionCategory(mostRecent.category || 'all');
+        }
+      } catch (e) {
+        console.error('Error loading conversation history:', e);
+      }
+    }
+  }, []);
+
+  // Save conversation history to localStorage whenever it changes
+  useEffect(() => {
+    if (conversationHistory.length > 0) {
+      localStorage.setItem('descriptionConversationHistory', JSON.stringify(conversationHistory));
+    }
+  }, [conversationHistory]);
+
+  // Save current conversation whenever it changes
+  useEffect(() => {
+    if (currentConversationId && descriptionConversation.length > 0) {
+      setConversationHistory(prev => {
+        const updated = prev.map(conv => 
+          conv.id === currentConversationId
+            ? { ...conv, messages: descriptionConversation, matches: currentMatches, updatedAt: new Date().toISOString() }
+            : conv
+        );
+        return updated;
+      });
+    }
+  }, [descriptionConversation, currentMatches, currentConversationId]);
+
+  const createNewConversation = (category = descriptionCategory) => {
+    const newId = Date.now().toString();
+    const newConversation = {
+      id: newId,
+      category: category,
+      messages: [],
+      matches: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    
+    setConversationHistory(prev => [...prev, newConversation]);
+    setCurrentConversationId(newId);
     setDescriptionConversation([]);
     setCurrentMatches([]);
     setDescriptionResults(null);
     setDescriptionInput('');
+    setDescriptionCategory(category);
+  };
+
+  const loadConversation = (conversationId) => {
+    const conversation = conversationHistory.find(conv => conv.id === conversationId);
+    if (conversation) {
+      setCurrentConversationId(conversationId);
+      setDescriptionConversation(conversation.messages || []);
+      setCurrentMatches(conversation.matches || []);
+      setDescriptionCategory(conversation.category || 'all');
+      setDescriptionResults(null);
+      setDescriptionInput('');
+    }
+  };
+
+  const deleteConversation = (conversationId) => {
+    setConversationHistory(prev => prev.filter(conv => conv.id !== conversationId));
+    if (currentConversationId === conversationId) {
+      // If deleting current conversation, create a new one
+      createNewConversation();
+    }
+    setSwipedItemId(null);
+  };
+
+  // Handle touch events for swipe to delete
+  const handleTouchStart = (e, itemId) => {
+    setTouchStartX(e.touches[0].clientX);
+    setSwipedItemId(itemId);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEndX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (itemId) => {
+    if (!touchStartX || !touchEndX) return;
+    
+    const distance = touchStartX - touchEndX;
+    const isLeftSwipe = distance > 50; // Swipe threshold: 50px
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      // Swipe left to reveal delete button
+      setSwipedItemId(itemId);
+    } else if (isRightSwipe) {
+      // Swipe right to hide delete button
+      setSwipedItemId(null);
+    }
+    
+    setTouchStartX(null);
+    setTouchEndX(null);
+  };
+
+  // Handle mouse events for desktop swipe
+  const handleMouseDown = (e, itemId) => {
+    setTouchStartX(e.clientX);
+    setSwipedItemId(itemId);
+  };
+
+  const handleMouseMove = (e) => {
+    if (touchStartX !== null) {
+      setTouchEndX(e.clientX);
+    }
+  };
+
+  const handleMouseUp = (itemId) => {
+    if (!touchStartX || touchEndX === null) {
+      setTouchStartX(null);
+      setTouchEndX(null);
+      return;
+    }
+    
+    const distance = touchStartX - touchEndX;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      setSwipedItemId(itemId);
+    } else if (isRightSwipe) {
+      setSwipedItemId(null);
+    }
+    
+    setTouchStartX(null);
+    setTouchEndX(null);
+  };
+
+  const handleStartNewDescriptionChat = () => {
+    // Only create new conversation if current conversation has messages
+    if (descriptionConversation.length > 0) {
+      createNewConversation();
+    }
+    // If current conversation is empty, do nothing
   };
 
   const handleCategoryChange = (newCategory) => {
-    // Clear conversation and results when switching categories
-    setDescriptionCategory(newCategory);
-    setDescriptionConversation([]);
-    setCurrentMatches([]);
-    setDescriptionResults(null);
-    setDescriptionInput('');
+    // Only create a new conversation when switching categories if current conversation has messages
+    if (descriptionConversation.length > 0) {
+      createNewConversation(newCategory);
+    } else {
+      // If current conversation is empty, just change the category
+      setDescriptionCategory(newCategory);
+    }
   };
 
   const handleQuickQuestion = (question) => {
@@ -2197,6 +2355,82 @@ function App() {
               <p>Describe what you saw - habitat, colors, behavior, features - and I'll help identify the species!</p>
             </div>
 
+            <div className="description-layout">
+              {/* Conversation History Sidebar */}
+              <div className="conversation-history-sidebar">
+                <div className="history-header">
+                  <h3>📝 History</h3>
+                  <button 
+                    className="new-conversation-btn"
+                    onClick={handleStartNewDescriptionChat}
+                    title="Create new conversation"
+                  >
+                    ➕
+                  </button>
+                </div>
+                <div className="history-list">
+                  {conversationHistory.length === 0 ? (
+                    <div className="no-history">
+                      <p>No conversation history yet</p>
+                      <p className="hint">Start a new conversation to begin!</p>
+                    </div>
+                  ) : (
+                    conversationHistory.map((conv) => (
+                      <div
+                        key={conv.id}
+                        className="history-item-wrapper"
+                        onTouchStart={(e) => handleTouchStart(e, conv.id)}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={() => handleTouchEnd(conv.id)}
+                        onMouseDown={(e) => handleMouseDown(e, conv.id)}
+                        onMouseMove={handleMouseMove}
+                        onMouseUp={() => handleMouseUp(conv.id)}
+                        onMouseLeave={() => {
+                          if (swipedItemId === conv.id) {
+                            setSwipedItemId(null);
+                            setTouchStartX(null);
+                            setTouchEndX(null);
+                          }
+                        }}
+                      >
+                        <div
+                          className={`history-item ${currentConversationId === conv.id ? 'active' : ''} ${swipedItemId === conv.id ? 'swiped' : ''}`}
+                          onClick={() => {
+                            if (swipedItemId !== conv.id) {
+                              loadConversation(conv.id);
+                            }
+                          }}
+                        >
+                          <div className="history-item-header">
+                            <span className="history-category">
+                              {conv.category === 'bird' ? '🐦' : conv.category === 'butterfly' ? '🦋' : '🔍'}
+                            </span>
+                          </div>
+                          <div className="history-item-content">
+                            <p className="history-preview">
+                              {conv.messages && conv.messages.length > 0
+                                ? conv.messages[0].content.substring(0, 50) + (conv.messages[0].content.length > 50 ? '...' : '')
+                                : 'Empty conversation'}
+                            </p>
+                            <span className="history-time">
+                              {new Date(conv.updatedAt || conv.createdAt).toLocaleDateString()}
+                            </span>
+                          </div>
+                        </div>
+                        <div 
+                          className="history-item-delete"
+                          onClick={() => deleteConversation(conv.id)}
+                        >
+                          🗑️ Delete
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              {/* Main Content Area */}
+              <div className="description-main-content">
             {/* Category Selection */}
             <div className="description-category-selector">
               <label>Looking for:</label>
@@ -2248,8 +2482,8 @@ function App() {
                     <button onClick={() => handleQuickQuestion("Large black bird with a hooked beak, seen near the coast")}>
                       "Large black bird with hooked beak"
                     </button>
-                    <button onClick={() => handleQuickQuestion("Yellow and black striped butterfly in a meadow")}>
-                      "Yellow and black striped butterfly"
+                    <button onClick={() => handleQuickQuestion("Small white butterfly with black spots in a garden")}>
+                      "Small white butterfly with black spots"
                     </button>
                       </>
                     )}
@@ -2271,8 +2505,8 @@ function App() {
                         <button onClick={() => handleQuickQuestion("I saw a small blue butterfly with orange spots near a garden")}>
                           "Small blue butterfly with orange spots"
                         </button>
-                        <button onClick={() => handleQuickQuestion("Yellow and black striped butterfly in a meadow")}>
-                          "Yellow and black striped butterfly"
+                        <button onClick={() => handleQuickQuestion("Small white butterfly with black spots in a garden")}>
+                          "Small white butterfly with black spots"
                         </button>
                         <button onClick={() => handleQuickQuestion("Large orange butterfly with black veins on its wings")}>
                           "Large orange butterfly with black veins"
@@ -2401,9 +2635,9 @@ function App() {
               <button 
                 className="new-chat-btn"
                 onClick={handleStartNewDescriptionChat}
-                title="Start new identification"
+                title="Create new conversation"
               >
-                🔄
+                ➕
               </button>
               <textarea
                 value={descriptionInput}
@@ -2420,6 +2654,8 @@ function App() {
               >
                 {descriptionLoading ? '🔄' : '🔍'}
               </button>
+            </div>
+              </div>
             </div>
 
             {error && (
