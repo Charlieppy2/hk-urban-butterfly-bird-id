@@ -99,6 +99,17 @@ function App() {
   const [smoothedResult, setSmoothedResult] = useState(null);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [shareMessage, setShareMessage] = useState('');
+  const [showPreprocessTool, setShowPreprocessTool] = useState(false);
+  const [preprocessedImage, setPreprocessedImage] = useState(null);
+  const [cropArea, setCropArea] = useState(null);
+  const [rotation, setRotation] = useState(0);
+  const [brightness, setBrightness] = useState(100);
+  const [contrast, setContrast] = useState(100);
+  const [saturation, setSaturation] = useState(100);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const preprocessCanvasRef = useRef(null);
+  const preprocessImageRef = useRef(null);
   const audioContextRef = useRef(null);
   const isAnalyzingRef = useRef(false);
   const [chatMessages, setChatMessages] = useState([
@@ -2027,6 +2038,190 @@ function App() {
     setShowSpeciesModal(true);
   };
 
+  // 圖片預處理工具函數
+  const loadImageToCanvas = (imageSrc, canvas) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        resolve(img);
+      };
+      img.src = imageSrc;
+    });
+  };
+
+  const applyImageFilters = (canvas, brightness, contrast, saturation, rotation) => {
+    const ctx = canvas.getContext('2d');
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+    
+    // Apply brightness and contrast
+    const brightnessFactor = brightness / 100;
+    const contrastFactor = contrast / 100;
+    const intercept = 128 * (1 - contrastFactor);
+    
+    for (let i = 0; i < data.length; i += 4) {
+      // Brightness
+      data[i] = Math.min(255, Math.max(0, data[i] * brightnessFactor));
+      data[i + 1] = Math.min(255, Math.max(0, data[i + 1] * brightnessFactor));
+      data[i + 2] = Math.min(255, Math.max(0, data[i + 2] * brightnessFactor));
+      
+      // Contrast
+      data[i] = Math.min(255, Math.max(0, data[i] * contrastFactor + intercept));
+      data[i + 1] = Math.min(255, Math.max(0, data[i + 1] * contrastFactor + intercept));
+      data[i + 2] = Math.min(255, Math.max(0, data[i + 2] * contrastFactor + intercept));
+      
+      // Saturation
+      const gray = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+      const satFactor = saturation / 100;
+      data[i] = Math.min(255, Math.max(0, gray + (data[i] - gray) * satFactor));
+      data[i + 1] = Math.min(255, Math.max(0, gray + (data[i + 1] - gray) * satFactor));
+      data[i + 2] = Math.min(255, Math.max(0, gray + (data[i + 2] - gray) * satFactor));
+    }
+    
+    ctx.putImageData(imageData, 0, 0);
+    
+    // Apply rotation if needed
+    if (rotation !== 0) {
+      const rotatedCanvas = document.createElement('canvas');
+      const rotatedCtx = rotatedCanvas.getContext('2d');
+      const rad = (rotation * Math.PI) / 180;
+      const cos = Math.abs(Math.cos(rad));
+      const sin = Math.abs(Math.sin(rad));
+      rotatedCanvas.width = canvas.width * cos + canvas.height * sin;
+      rotatedCanvas.height = canvas.width * sin + canvas.height * cos;
+      
+      rotatedCtx.translate(rotatedCanvas.width / 2, rotatedCanvas.height / 2);
+      rotatedCtx.rotate(rad);
+      rotatedCtx.drawImage(canvas, -canvas.width / 2, -canvas.height / 2);
+      
+      canvas.width = rotatedCanvas.width;
+      canvas.height = rotatedCanvas.height;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(rotatedCanvas, 0, 0);
+    }
+  };
+
+  const updatePreprocessedImage = () => {
+    if (!preview || !preprocessCanvasRef.current) return;
+    
+    const canvas = preprocessCanvasRef.current;
+    loadImageToCanvas(preview, canvas).then(() => {
+      applyImageFilters(canvas, brightness, contrast, saturation, rotation);
+      
+      // Apply crop if cropArea is set
+      if (cropArea) {
+        const croppedCanvas = document.createElement('canvas');
+        const croppedCtx = croppedCanvas.getContext('2d');
+        croppedCanvas.width = cropArea.width;
+        croppedCanvas.height = cropArea.height;
+        croppedCtx.drawImage(
+          canvas,
+          cropArea.x, cropArea.y, cropArea.width, cropArea.height,
+          0, 0, cropArea.width, cropArea.height
+        );
+        setPreprocessedImage(croppedCanvas.toDataURL('image/jpeg', 0.95));
+      } else {
+        setPreprocessedImage(canvas.toDataURL('image/jpeg', 0.95));
+      }
+    });
+  };
+
+  const handleOpenPreprocessTool = () => {
+    setShowPreprocessTool(true);
+    setPreprocessedImage(null);
+    setCropArea(null);
+    setRotation(0);
+    setBrightness(100);
+    setContrast(100);
+    setSaturation(100);
+    setTimeout(() => {
+      if (preview && preprocessCanvasRef.current) {
+        updatePreprocessedImage();
+      }
+    }, 100);
+  };
+
+  const handleApplyPreprocess = () => {
+    if (preprocessedImage) {
+      // Convert data URL to blob and update preview
+      fetch(preprocessedImage)
+        .then(res => res.blob())
+        .then(blob => {
+          const newPreview = URL.createObjectURL(blob);
+          setPreview(newPreview);
+          setShowPreprocessTool(false);
+          setPreprocessedImage(null);
+        });
+    }
+  };
+
+  const handleResetPreprocess = () => {
+    setRotation(0);
+    setBrightness(100);
+    setContrast(100);
+    setSaturation(100);
+    setCropArea(null);
+    setTimeout(() => updatePreprocessedImage(), 100);
+  };
+
+  const handleRotate = (degrees) => {
+    setRotation((prev) => (prev + degrees) % 360);
+    setTimeout(() => updatePreprocessedImage(), 50);
+  };
+
+  const handleAutoCrop = () => {
+    // Simple auto-crop: detect edges and crop to content
+    if (!preprocessCanvasRef.current) return;
+    
+    const canvas = preprocessCanvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+    
+    let minX = canvas.width, minY = canvas.height, maxX = 0, maxY = 0;
+    
+    // Find bounding box of non-transparent/non-white content
+    for (let y = 0; y < canvas.height; y++) {
+      for (let x = 0; x < canvas.width; x++) {
+        const idx = (y * canvas.width + x) * 4;
+        const r = data[idx];
+        const g = data[idx + 1];
+        const b = data[idx + 2];
+        const a = data[idx + 3];
+        
+        // Check if pixel is not white/transparent (simple threshold)
+        if (a > 10 && (r < 250 || g < 250 || b < 250)) {
+          minX = Math.min(minX, x);
+          minY = Math.min(minY, y);
+          maxX = Math.max(maxX, x);
+          maxY = Math.max(maxY, y);
+        }
+      }
+    }
+    
+    if (minX < maxX && minY < maxY) {
+      setCropArea({
+        x: Math.max(0, minX - 10),
+        y: Math.max(0, minY - 10),
+        width: Math.min(canvas.width, maxX - minX + 20),
+        height: Math.min(canvas.height, maxY - minY + 20)
+      });
+      setTimeout(() => updatePreprocessedImage(), 50);
+    }
+  };
+
+  // Update preprocessed image when filters change
+  useEffect(() => {
+    if (showPreprocessTool && preview) {
+      const timer = setTimeout(() => updatePreprocessedImage(), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [brightness, contrast, saturation, rotation, cropArea, showPreprocessTool, preview]);
+
   // 處理識別結果分享
   const handleShare = async (method = 'copy') => {
     if (!prediction || !preview) return;
@@ -3324,12 +3519,259 @@ function App() {
               <div className="image-preview">
                 <img src={preview} alt="Preview" />
                 <div className="preview-actions">
+                  <button 
+                    className="btn btn-secondary" 
+                    onClick={handleOpenPreprocessTool}
+                    style={{ marginRight: '10px' }}
+                  >
+                    ✂️ Edit Image
+                  </button>
                   <button className="btn btn-primary" onClick={handlePredict} disabled={loading}>
                     {loading ? '🔍 Analyzing...' : '🔍 Identify'}
                   </button>
                   <button className="btn btn-secondary" onClick={handleReset}>
                     Reset
                   </button>
+                </div>
+              </div>
+            )}
+
+            {/* 圖片預處理工具 */}
+            {showPreprocessTool && preview && (
+              <div className="preprocess-modal" style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'rgba(0,0,0,0.9)',
+                zIndex: 2000,
+                display: 'flex',
+                flexDirection: 'column',
+                padding: '20px',
+                overflow: 'auto'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                  <h2 style={{ color: 'white', margin: 0 }}>✂️ Image Preprocessing Tool</h2>
+                  <button
+                    onClick={() => setShowPreprocessTool(false)}
+                    style={{
+                      background: 'rgba(255,255,255,0.2)',
+                      border: '1px solid rgba(255,255,255,0.3)',
+                      borderRadius: '8px',
+                      padding: '8px 16px',
+                      color: 'white',
+                      cursor: 'pointer',
+                      fontSize: '1rem'
+                    }}
+                  >
+                    ✕ Close
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', gap: '20px', flex: 1, flexWrap: 'wrap' }}>
+                  {/* 左側：圖片預覽 */}
+                  <div style={{ flex: 1, minWidth: '300px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                    <div style={{ 
+                      background: 'rgba(255,255,255,0.1)', 
+                      borderRadius: '12px', 
+                      padding: '15px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      minHeight: '400px'
+                    }}>
+                      {preprocessedImage ? (
+                        <img 
+                          src={preprocessedImage} 
+                          alt="Processed" 
+                          style={{ maxWidth: '100%', maxHeight: '500px', borderRadius: '8px' }}
+                        />
+                      ) : (
+                        <div style={{ color: 'white', opacity: 0.7 }}>Loading preview...</div>
+                      )}
+                    </div>
+                    <canvas ref={preprocessCanvasRef} style={{ display: 'none' }} />
+                  </div>
+
+                  {/* 右側：控制面板 */}
+                  <div style={{ 
+                    flex: '0 0 350px', 
+                    background: 'rgba(255,255,255,0.1)', 
+                    borderRadius: '12px', 
+                    padding: '20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '20px'
+                  }}>
+                    <h3 style={{ color: 'white', margin: 0, fontSize: '1.2rem' }}>Adjustments</h3>
+
+                    {/* 旋轉 */}
+                    <div>
+                      <label style={{ color: 'white', display: 'block', marginBottom: '8px' }}>
+                        Rotation: {rotation}°
+                      </label>
+                      <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                        <button
+                          onClick={() => handleRotate(-90)}
+                          style={{
+                            padding: '8px 12px',
+                            background: 'rgba(255,255,255,0.2)',
+                            border: '1px solid rgba(255,255,255,0.3)',
+                            borderRadius: '6px',
+                            color: 'white',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          ↺ -90°
+                        </button>
+                        <button
+                          onClick={() => handleRotate(90)}
+                          style={{
+                            padding: '8px 12px',
+                            background: 'rgba(255,255,255,0.2)',
+                            border: '1px solid rgba(255,255,255,0.3)',
+                            borderRadius: '6px',
+                            color: 'white',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          ↻ +90°
+                        </button>
+                        <button
+                          onClick={() => setRotation(0)}
+                          style={{
+                            padding: '8px 12px',
+                            background: 'rgba(255,255,255,0.2)',
+                            border: '1px solid rgba(255,255,255,0.3)',
+                            borderRadius: '6px',
+                            color: 'white',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          Reset
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* 亮度 */}
+                    <div>
+                      <label style={{ color: 'white', display: 'block', marginBottom: '8px' }}>
+                        Brightness: {brightness}%
+                      </label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="200"
+                        value={brightness}
+                        onChange={(e) => setBrightness(parseInt(e.target.value))}
+                        style={{ width: '100%' }}
+                      />
+                    </div>
+
+                    {/* 對比度 */}
+                    <div>
+                      <label style={{ color: 'white', display: 'block', marginBottom: '8px' }}>
+                        Contrast: {contrast}%
+                      </label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="200"
+                        value={contrast}
+                        onChange={(e) => setContrast(parseInt(e.target.value))}
+                        style={{ width: '100%' }}
+                      />
+                    </div>
+
+                    {/* 飽和度 */}
+                    <div>
+                      <label style={{ color: 'white', display: 'block', marginBottom: '8px' }}>
+                        Saturation: {saturation}%
+                      </label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="200"
+                        value={saturation}
+                        onChange={(e) => setSaturation(parseInt(e.target.value))}
+                        style={{ width: '100%' }}
+                      />
+                    </div>
+
+                    {/* 裁剪 */}
+                    <div>
+                      <label style={{ color: 'white', display: 'block', marginBottom: '8px' }}>
+                        Crop
+                      </label>
+                      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <button
+                          onClick={handleAutoCrop}
+                          style={{
+                            padding: '8px 16px',
+                            background: 'rgba(76, 175, 80, 0.3)',
+                            border: '1px solid rgba(76, 175, 80, 0.5)',
+                            borderRadius: '6px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            flex: 1
+                          }}
+                        >
+                          ✂️ Auto Crop
+                        </button>
+                        <button
+                          onClick={() => setCropArea(null)}
+                          style={{
+                            padding: '8px 16px',
+                            background: 'rgba(255,255,255,0.2)',
+                            border: '1px solid rgba(255,255,255,0.3)',
+                            borderRadius: '6px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            flex: 1
+                          }}
+                        >
+                          Clear Crop
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* 操作按鈕 */}
+                    <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+                      <button
+                        onClick={handleResetPreprocess}
+                        style={{
+                          padding: '12px 20px',
+                          background: 'rgba(255,255,255,0.2)',
+                          border: '1px solid rgba(255,255,255,0.3)',
+                          borderRadius: '8px',
+                          color: 'white',
+                          cursor: 'pointer',
+                          flex: 1,
+                          fontWeight: 600
+                        }}
+                      >
+                        ↺ Reset All
+                      </button>
+                      <button
+                        onClick={handleApplyPreprocess}
+                        disabled={!preprocessedImage}
+                        style={{
+                          padding: '12px 20px',
+                          background: preprocessedImage ? 'rgba(76, 175, 80, 0.8)' : 'rgba(255,255,255,0.2)',
+                          border: '1px solid rgba(76, 175, 80, 0.5)',
+                          borderRadius: '8px',
+                          color: 'white',
+                          cursor: preprocessedImage ? 'pointer' : 'not-allowed',
+                          flex: 1,
+                          fontWeight: 600,
+                          opacity: preprocessedImage ? 1 : 0.6
+                        }}
+                      >
+                        ✓ Apply Changes
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
