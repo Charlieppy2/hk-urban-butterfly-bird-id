@@ -1,0 +1,11 @@
+[
+  {
+    "prediction_id": 1765445050132,
+    "predicted_species": "AFRICAN GIANT SWALLOWTAIL",
+    "predicted_confidence": 0.9998307228088379,
+    "feedback_type": "correct",
+    "correct_species": "AFRICAN GIANT SWALLOWTAIL",
+    "timestamp": "2025-12-11T09:24:10.132Z",
+    "image_path": "blob:http://localhost:3000/2cda21bb-907a-4ab0-93a3-295a3e1ad0c7"
+  }
+]

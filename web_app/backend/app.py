@@ -73,6 +73,14 @@ class_names = []
 bird_sound_model = None
 bird_sound_class_names = []
 
+# Global variable for general image recognition model (ImageNet)
+general_model = None
+imagenet_class_names = []
+
+# Global variable for general image recognition model (ImageNet)
+general_model = None
+imagenet_class_names = []
+
 
 def allowed_file(filename):
     """Check if file extension is allowed"""
@@ -495,6 +503,69 @@ def load_bird_sound_model():
     else:
         print(f"⚠️ Bird sound class names not found at {class_names_path}")
         bird_sound_class_names = []
+
+
+def load_general_model():
+    """Load ImageNet pre-trained model for general image recognition"""
+    global general_model, imagenet_class_names
+    
+    try:
+        # Load MobileNetV2 pre-trained on ImageNet
+        print("Loading ImageNet pre-trained model for general image recognition...")
+        general_model = tf.keras.applications.MobileNetV2(
+            weights='imagenet',
+            input_shape=(224, 224, 3),
+            include_top=True
+        )
+        print("✅ General image recognition model loaded successfully")
+        
+        # Load ImageNet class names
+        # ImageNet has 1000 classes, we'll use a simplified mapping
+        # For now, we'll use a basic list of common categories
+        imagenet_class_names = []
+        # We'll generate class names on-the-fly using tf.keras.applications.imagenet_utils
+        print("✅ General model ready (1000 ImageNet classes)")
+        return True
+    except Exception as e:
+        print(f"❌ Error loading general model: {e}")
+        general_model = None
+        imagenet_class_names = []
+        return False
+
+
+def preprocess_image_for_imagenet(image_path, target_size=(224, 224)):
+    """Preprocess image for ImageNet model (uses different normalization)"""
+    try:
+        img = Image.open(image_path)
+        if img.mode != 'RGB':
+            img = img.convert('RGB')
+        img = img.resize(target_size, Image.Resampling.LANCZOS)
+        img_array = np.array(img, dtype=np.float32)
+        img.close()
+        
+        # ImageNet preprocessing: normalize to [-1, 1] range
+        img_array = tf.keras.applications.mobilenet_v2.preprocess_input(img_array)
+        img_array = np.expand_dims(img_array, axis=0)
+        return img_array
+    except Exception as e:
+        print(f"Error preprocessing image for ImageNet: {e}")
+        return None
+
+
+def decode_imagenet_predictions(predictions, top=3):
+    """Decode ImageNet predictions to human-readable labels"""
+    try:
+        decoded = tf.keras.applications.imagenet_utils.decode_predictions(predictions, top=top)
+        results = []
+        for (imagenet_id, label, score) in decoded[0]:
+            results.append({
+                'class': label.replace('_', ' ').title(),
+                'confidence': float(score)
+            })
+        return results
+    except Exception as e:
+        print(f"Error decoding ImageNet predictions: {e}")
+        return []
 
 
 def preprocess_image(image_path, target_size=(224, 224)):
@@ -966,7 +1037,8 @@ def index():
             'status': 'success',
             'message': 'Butterfly and Bird Identification API is running',
             'model_loaded': model is not None,
-            'bird_sound_model_loaded': bird_sound_model is not None
+            'bird_sound_model_loaded': bird_sound_model is not None,
+            'general_model_loaded': general_model is not None
         }), 200
     except Exception as e:
         # Even if there's an error, return a response (not 500)
@@ -1049,35 +1121,73 @@ def predict():
             })
         
         # 檢測是否為非蝴蝶/鳥類圖片
-        # 卡通檢測已取消
-        # 只保留最基本的低置信度檢測，避免誤判訓練圖片
+        # 如果置信度很低，嘗試使用通用模型識別
         is_likely_not_target = False
+        general_prediction = None
         
         # 計算前3個預測的總置信度
         top3_total_confidence = sum(p['confidence'] for p in top_predictions[:3])
         
-        # 只檢查：如果置信度非常低（<20%），才顯示警告
-        # 對於高置信度的圖片（如訓練圖片），不應該顯示警告
-        LOW_CONFIDENCE_THRESHOLD = 0.20  # 降低閾值，只對非常低的置信度顯示警告
-        if confidence < LOW_CONFIDENCE_THRESHOLD and top3_total_confidence < 0.40:
+        # 如果置信度很低（<30%），嘗試使用通用模型識別
+        LOW_CONFIDENCE_THRESHOLD = 0.30
+        if confidence < LOW_CONFIDENCE_THRESHOLD and general_model is not None:
+            print("🔄 Low confidence in butterfly/bird model, trying general image recognition...")
+            try:
+                # Preprocess for ImageNet
+                imagenet_image = preprocess_image_for_imagenet(filepath)
+                if imagenet_image is not None:
+                    # Make prediction with general model
+                    general_predictions = general_model.predict(imagenet_image, verbose=0)
+                    general_results = decode_imagenet_predictions(general_predictions, top=3)
+                    
+                    if general_results and len(general_results) > 0:
+                        general_prediction = {
+                            'class': general_results[0]['class'],
+                            'confidence': general_results[0]['confidence'],
+                            'top_predictions': general_results
+                        }
+                        print(f"✅ General model identified: {general_prediction['class']} ({general_prediction['confidence']:.2%})")
+                        is_likely_not_target = True  # Mark as non-butterfly/bird
+            except Exception as e:
+                print(f"⚠️ Error in general model prediction: {e}")
+        
+        # 如果置信度非常低（<20%），也顯示警告
+        if confidence < 0.20 and top3_total_confidence < 0.40:
             is_likely_not_target = True
         
-        # 生成警告信息
+        # 生成警告信息或通用識別結果
         warning_message = None
         if is_likely_not_target:
-            warning_message = {
-                'type': 'low_confidence',
-                'title': '⚠️ Low Identification Confidence',
-                'message': 'This image may not be a butterfly or bird, or the image quality is insufficient for accurate identification.',
-                'suggestions': [
-                    'Please ensure you upload a clear photo of a butterfly or bird',
-                    'Try taking photos from different angles to ensure the subject is clearly visible',
-                    'Ensure the photo has sufficient lighting, avoid blurry or too dark images',
-                    'If it is indeed a butterfly or bird, please try taking a clearer photo'
-                ],
-                'confidence': confidence,
-                'top3_total_confidence': top3_total_confidence
-            }
+            if general_prediction:
+                # 使用通用模型識別結果
+                warning_message = {
+                    'type': 'general_identification',
+                    'title': '🔍 General Image Recognition',
+                    'message': f'This image appears to be: {general_prediction["class"]} (not a butterfly or bird).',
+                    'suggestions': [
+                        'This system is designed for butterfly and bird identification',
+                        'The image has been identified using general image recognition',
+                        'For better results, please upload a clear photo of a butterfly or bird'
+                    ],
+                    'confidence': general_prediction['confidence'],
+                    'top3_total_confidence': sum(p['confidence'] for p in general_prediction['top_predictions'][:3]),
+                    'general_prediction': general_prediction
+                }
+            else:
+                # 低置信度警告
+                warning_message = {
+                    'type': 'low_confidence',
+                    'title': '⚠️ Low Identification Confidence',
+                    'message': 'This image may not be a butterfly or bird, or the image quality is insufficient for accurate identification.',
+                    'suggestions': [
+                        'Please ensure you upload a clear photo of a butterfly or bird',
+                        'Try taking photos from different angles to ensure the subject is clearly visible',
+                        'Ensure the photo has sufficient lighting, avoid blurry or too dark images',
+                        'If it is indeed a butterfly or bird, please try taking a clearer photo'
+                    ],
+                    'confidence': confidence,
+                    'top3_total_confidence': top3_total_confidence
+                }
         
         # Get similar species - pass predictions to avoid re-computing
         # This saves memory by not calling model.predict again
@@ -2545,7 +2655,7 @@ def calculate_match_score(description, species_info):
                 
                 # Also check for general keywords in distribution (only if no location matches)
                 if field_match_count == 0:
-                    for keyword in keywords:
+            for keyword in keywords:
                         # Skip ambiguous words that could cause false matches
                         if keyword.lower() in ['central', 'west', 'east', 'north', 'south', 'western', 'eastern', 
                                              'northern', 'southern']:
@@ -2553,7 +2663,7 @@ def calculate_match_score(description, species_info):
                         # Use word boundary for exact word matching (not substring)
                         pattern = r'\b' + re.escape(keyword) + r'\b'
                         if re.search(pattern, field_text, re.IGNORECASE):
-                            field_match_count += 1
+                    field_match_count += 1
                             matched_keywords_list.append(keyword)
                 else:
                     # For other fields, use word boundary matching for better accuracy
@@ -3334,6 +3444,10 @@ if __name__ == '__main__':
         load_model()
         print("Loading bird sound model...")
         load_bird_sound_model()
+        print("Loading general image recognition model...")
+        load_general_model()
+        print("Loading general image recognition model...")
+        load_general_model()
         
         # Get port from environment variable (Koyeb uses PORT=8080)
         port = int(os.environ.get('PORT', 8080))
