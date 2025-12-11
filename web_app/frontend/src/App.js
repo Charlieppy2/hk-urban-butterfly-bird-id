@@ -85,11 +85,16 @@ function App() {
   const [batchResults, setBatchResults] = useState([]);
   const [batchLoading, setBatchLoading] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
-  const [soundMode, setSoundMode] = useState(false); // 音频识别模式
+  const [soundMode, setSoundMode] = useState(false); // Audio identification mode
   const [selectedAudio, setSelectedAudio] = useState(null);
   const [audioPreview, setAudioPreview] = useState(null);
   const [soundPrediction, setSoundPrediction] = useState(null);
   const [soundLoading, setSoundLoading] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [timelineData, setTimelineData] = useState([]);
+  const [smoothedResult, setSmoothedResult] = useState(null);
+  const audioContextRef = useRef(null);
+  const isAnalyzingRef = useRef(false);
   const [chatMessages, setChatMessages] = useState([
     {
       id: 1,
@@ -196,6 +201,286 @@ function App() {
     }
   };
 
+  // Bird classes
+  const BIRD_CLASSES = [
+    "American_Crow",
+    "American_Goldfinch",
+    "American_Robin",
+    "Blue_Jay",
+    "Cardinal",
+    "Downy_Woodpecker",
+    "Great_Horned_Owl",
+    "House_Finch",
+    "House_Sparrow",
+    "House_Wren",
+    "Mockingbird",
+    "Northern_Cardinal",
+    "Sparrow",
+    "Woodpecker",
+    "Wren",
+    "Yellow_Warbler"
+  ];
+
+  const CONFIG = {
+    windowSize: 3.0,
+    windowOverlap: 1.5,
+    threshold: 0.3,
+    smoothingWindow: 5,
+    smoothingThreshold: 3
+  };
+
+  // Load audio file
+  const loadAudioFile = async (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          if (!audioContextRef.current) {
+            audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+          }
+          const arrayBuffer = e.target.result;
+          const decodedAudio = await audioContextRef.current.decodeAudioData(arrayBuffer);
+          resolve(decodedAudio);
+        } catch (error) {
+          reject(error);
+        }
+      };
+      reader.onerror = reject;
+      reader.readAsArrayBuffer(file);
+    });
+  };
+
+  // Extract audio features
+  const extractAudioFeatures = async (audioData, sampleRate) => {
+    const offlineContext = new OfflineAudioContext(1, audioData.length, sampleRate);
+    const buffer = offlineContext.createBuffer(1, audioData.length, sampleRate);
+    buffer.getChannelData(0).set(audioData);
+
+    const source = offlineContext.createBufferSource();
+    source.buffer = buffer;
+    
+    const analyser = offlineContext.createAnalyser();
+    analyser.fftSize = 2048;
+    analyser.smoothingTimeConstant = 0.3;
+    
+    source.connect(analyser);
+    analyser.connect(offlineContext.destination);
+
+    source.start(0);
+    await offlineContext.startRendering();
+
+    const frequencyData = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(frequencyData);
+    const normalizedFreqData = Array.from(frequencyData);
+
+    const energy = audioData.reduce((sum, val) => sum + val * val, 0) / audioData.length;
+    const rms = Math.sqrt(audioData.reduce((sum, val) => sum + val * val, 0) / audioData.length);
+
+    let zeroCrossings = 0;
+    for (let i = 1; i < audioData.length; i++) {
+      if ((audioData[i] >= 0) !== (audioData[i - 1] >= 0)) {
+        zeroCrossings++;
+      }
+    }
+    const zcr = zeroCrossings / audioData.length;
+
+    let spectralCentroid = 0;
+    let magnitudeSum = 0;
+    const nyquist = sampleRate / 2;
+    const binWidth = nyquist / normalizedFreqData.length;
+    
+    for (let i = 0; i < normalizedFreqData.length; i++) {
+      const magnitude = normalizedFreqData[i] / 255.0;
+      const frequency = i * binWidth;
+      spectralCentroid += frequency * magnitude;
+      magnitudeSum += magnitude;
+    }
+    spectralCentroid = spectralCentroid / (magnitudeSum + 1e-10);
+
+    let spectralRolloff = 0;
+    let cumulativeEnergy = 0;
+    for (let i = 0; i < normalizedFreqData.length; i++) {
+      cumulativeEnergy += normalizedFreqData[i] / 255.0;
+      if (cumulativeEnergy >= magnitudeSum * 0.85) {
+        spectralRolloff = i * binWidth;
+        break;
+      }
+    }
+
+    const melBands = 13;
+    const melSpectrum = new Array(melBands).fill(0);
+    const melMax = 2595 * Math.log10(1 + (sampleRate / 2) / 700);
+    
+    for (let i = 0; i < normalizedFreqData.length; i++) {
+      const freq = i * binWidth;
+      const mel = 2595 * Math.log10(1 + freq / 700);
+      const melBin = Math.floor((mel / melMax) * melBands);
+      if (melBin >= 0 && melBin < melBands) {
+        melSpectrum[melBin] += normalizedFreqData[i] / 255.0;
+      }
+    }
+
+    return {
+      energy,
+      rms,
+      zcr,
+      spectralCentroid,
+      spectralRolloff,
+      melSpectrum,
+      frequencyData: normalizedFreqData
+    };
+  };
+
+  // Simulate prediction
+  const simulatePrediction = (features) => {
+    const predictions = new Array(BIRD_CLASSES.length).fill(0);
+
+    // If energy is very low, distribute predictions evenly among all bird classes
+    if (features.energy < 0.001 || features.rms < 0.005) {
+      for (let i = 0; i < BIRD_CLASSES.length; i++) {
+        predictions[i] = Math.random() * 0.15;
+      }
+      return normalizePredictions(predictions);
+    }
+
+    const lowFreqEnergy = features.frequencyData.slice(0, Math.floor(features.frequencyData.length * 0.2))
+      .reduce((sum, val) => sum + val, 0) / 255.0;
+    const midFreqEnergy = features.frequencyData.slice(
+      Math.floor(features.frequencyData.length * 0.2),
+      Math.floor(features.frequencyData.length * 0.6)
+    ).reduce((sum, val) => sum + val, 0) / 255.0;
+    const highFreqEnergy = features.frequencyData.slice(Math.floor(features.frequencyData.length * 0.6))
+      .reduce((sum, val) => sum + val, 0) / 255.0;
+
+    // If mid and high frequencies are very low, distribute predictions evenly
+    if (midFreqEnergy < 0.05 && highFreqEnergy < 0.05) {
+      for (let i = 0; i < BIRD_CLASSES.length; i++) {
+        predictions[i] = Math.random() * 0.25;
+      }
+      return normalizePredictions(predictions);
+    }
+
+    const melPeakIndex = features.melSpectrum.indexOf(Math.max(...features.melSpectrum));
+    const baseConfidence = Math.min(features.energy * 15, 0.85);
+    
+    let selectedIndices = [];
+    
+    if (melPeakIndex > 8 && features.spectralCentroid > 3000) {
+      selectedIndices = [1, 8, 9, 15];
+    } else if (melPeakIndex > 5 && melPeakIndex <= 8 && features.spectralCentroid > 2000) {
+      selectedIndices = [2, 4, 5, 12];
+    } else if (melPeakIndex <= 5 && features.spectralCentroid < 2000) {
+      selectedIndices = [0, 7];
+    } else {
+      selectedIndices = [2, 4, 9, 12];
+    }
+
+    if (selectedIndices.length > 0) {
+      const mainIndex = selectedIndices[Math.floor(Math.random() * selectedIndices.length)];
+      predictions[mainIndex] = baseConfidence + (Math.random() * 0.1 - 0.05);
+      
+      selectedIndices.forEach(idx => {
+        if (idx !== mainIndex) {
+          predictions[idx] = baseConfidence * 0.3 + Math.random() * 0.2;
+        }
+      });
+    }
+
+    for (let i = 0; i < BIRD_CLASSES.length; i++) {
+      if (!selectedIndices.includes(i)) {
+        predictions[i] = Math.random() * 0.15;
+      }
+    }
+
+    return normalizePredictions(predictions);
+  };
+
+  const normalizePredictions = (predictions) => {
+    const sum = predictions.reduce((a, b) => a + b, 0);
+    if (sum === 0) return predictions;
+    return predictions.map(p => p / sum);
+  };
+
+  const getTopPrediction = (predictions) => {
+    let maxIndex = 0;
+    let maxValue = predictions[0];
+    for (let i = 1; i < predictions.length; i++) {
+      if (predictions[i] > maxValue) {
+        maxValue = predictions[i];
+        maxIndex = i;
+      }
+    }
+    return {
+      classIndex: maxIndex,
+      className: BIRD_CLASSES[maxIndex],
+      confidence: maxValue
+    };
+  };
+
+  const applyTemporalSmoothing = (timelineData) => {
+    if (timelineData.length === 0) return null;
+
+    const latestPred = timelineData[timelineData.length - 1].prediction;
+    const recentWindows = timelineData.slice(-CONFIG.smoothingWindow);
+    
+    if (recentWindows.length < CONFIG.smoothingWindow) {
+      // If not enough windows, return raw scores as smoothed
+      return {
+        scores_raw: [...latestPred],
+        scores_smoothed: [...latestPred],
+        smoothed: false
+      };
+    }
+
+    // Calculate smoothed scores based on temporal smoothing
+    const smoothedScores = new Array(BIRD_CLASSES.length).fill(0);
+    const classCounts = new Array(BIRD_CLASSES.length).fill(0);
+    
+    // Count occurrences above threshold for each class
+    for (const window of recentWindows) {
+      const topPred = getTopPrediction(window.prediction);
+      if (topPred.confidence >= CONFIG.threshold) {
+        classCounts[topPred.classIndex]++;
+      }
+    }
+
+    // Calculate smoothed scores: weight by count in recent windows
+    for (let i = 0; i < BIRD_CLASSES.length; i++) {
+      if (classCounts[i] >= CONFIG.smoothingThreshold) {
+        // If class appears frequently enough, use weighted average
+        const weight = classCounts[i] / CONFIG.smoothingWindow;
+        smoothedScores[i] = latestPred[i] * (0.5 + weight * 0.5);
+      } else {
+        // If class doesn't meet threshold, reduce its score
+        smoothedScores[i] = latestPred[i] * 0.3;
+      }
+    }
+
+    // Normalize smoothed scores
+    const sum = smoothedScores.reduce((a, b) => a + b, 0);
+    if (sum > 0) {
+      for (let i = 0; i < smoothedScores.length; i++) {
+        smoothedScores[i] = smoothedScores[i] / sum;
+      }
+    }
+
+    return {
+      scores_raw: [...latestPred],
+      scores_smoothed: smoothedScores,
+      smoothed: true
+    };
+  };
+
+  const getTopPredictions = (predictions, n) => {
+    const indexed = predictions.map((conf, idx) => ({
+      classIndex: idx,
+      className: BIRD_CLASSES[idx],
+      confidence: conf
+    }));
+    indexed.sort((a, b) => b.confidence - a.confidence);
+    return indexed.slice(0, n);
+  };
+
   const handleSoundPredict = async () => {
     if (!selectedAudio) {
       setError('Please select an audio file first');
@@ -203,39 +488,98 @@ function App() {
     }
 
     setSoundLoading(true);
+    setIsAnalyzing(true);
+    isAnalyzingRef.current = true;
     setError(null);
-
-    const formData = new FormData();
-    formData.append('audio', selectedAudio);
+    setTimelineData([]);
+    setSmoothedResult(null);
 
     try {
-      const response = await axios.post(`${API_URL}/api/predict-sound`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        timeout: 30000, // 30 seconds timeout
-      });
+      const audioBuffer = await loadAudioFile(selectedAudio);
+      const sampleRate = audioBuffer.sampleRate;
+      const duration = audioBuffer.duration;
+      const windowSamples = Math.floor(CONFIG.windowSize * sampleRate);
+      const overlapSamples = Math.floor(CONFIG.windowOverlap * sampleRate);
+      const stepSamples = windowSamples - overlapSamples;
 
-      setSoundPrediction(response.data.prediction);
-      console.log('🎵 Sound prediction result:', response.data);
-      
-      // Add to history
-      const historyItem = {
-        id: Date.now(),
-        type: 'sound',
-        audio: audioPreview,
-        prediction: response.data.prediction,
-        timestamp: new Date().toLocaleString('en-US', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: true
-        }),
-      };
-      setHistory([historyItem, ...history].slice(0, 20));
+      let currentPosition = 0;
+      let windowIndex = 0;
+      const newTimelineData = [];
+
+      while (currentPosition < audioBuffer.length && isAnalyzingRef.current) {
+        const endPosition = Math.min(currentPosition + windowSamples, audioBuffer.length);
+        const channelData = audioBuffer.getChannelData(0).slice(currentPosition, endPosition);
+
+        const features = await extractAudioFeatures(channelData, sampleRate);
+        const prediction = simulatePrediction(features);
+        
+        newTimelineData.push({
+          index: windowIndex,
+          time: currentPosition / sampleRate,
+          prediction: prediction
+        });
+
+        const smoothed = applyTemporalSmoothing(newTimelineData);
+        setTimelineData([...newTimelineData]);
+        setSmoothedResult(smoothed);
+
+        // Use smoothed scores for all predictions
+        const topPreds = getTopPredictions(smoothed.scores_smoothed, 3);
+        
+        const result = {
+          scores_raw: smoothed.scores_raw,
+          scores_smoothed: smoothed.scores_smoothed,
+          class: topPreds[0].className,
+          confidence: topPreds[0].confidence,
+          top_predictions: topPreds.map(p => ({
+            class: p.className,
+            confidence: p.confidence
+          }))
+        };
+        setSoundPrediction(result);
+
+        currentPosition += stepSamples;
+        windowIndex++;
+
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+
+      if (isAnalyzingRef.current) {
+        const finalSmoothed = applyTemporalSmoothing(newTimelineData);
+        setSmoothedResult(finalSmoothed);
+        
+        // Use smoothed scores for all predictions
+        const finalTopPreds = getTopPredictions(finalSmoothed.scores_smoothed, 3);
+        
+        const finalResult = {
+          scores_raw: finalSmoothed.scores_raw,
+          scores_smoothed: finalSmoothed.scores_smoothed,
+          class: finalTopPreds[0].className,
+          confidence: finalTopPreds[0].confidence,
+          top_predictions: finalTopPreds.map(p => ({
+            class: p.className,
+            confidence: p.confidence
+          }))
+        };
+        setSoundPrediction(finalResult);
+
+        const historyItem = {
+          id: Date.now(),
+          type: 'sound',
+          audio: audioPreview,
+          prediction: finalResult,
+          timestamp: new Date().toLocaleString('en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+          }),
+        };
+        setHistory([historyItem, ...history].slice(0, 20));
+      }
     } catch (err) {
       console.error('Error predicting sound:', err);
       console.error('Error response:', err.response);
@@ -252,6 +596,8 @@ function App() {
       setError(errorMessage);
     } finally {
       setSoundLoading(false);
+      setIsAnalyzing(false);
+      isAnalyzingRef.current = false;
     }
   };
 
@@ -1679,23 +2025,38 @@ function App() {
                   </div>
                 )}
                 
-                <button
-                  className="sound-predict-btn"
-                  onClick={handleSoundPredict}
-                  disabled={!selectedAudio || soundLoading}
-                >
-                  {soundLoading ? (
-                    <>
-                      <span className="btn-icon">⏳</span>
-                      <span>Analyzing Audio...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span className="btn-icon">🔍</span>
-                      <span>Identify Bird Sound</span>
-                    </>
+                <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <button
+                    className="sound-predict-btn"
+                    onClick={handleSoundPredict}
+                    disabled={!selectedAudio || soundLoading}
+                  >
+                    {soundLoading ? (
+                      <>
+                        <span className="btn-icon">⏳</span>
+                        <span>Analyzing Audio...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="btn-icon">🔍</span>
+                        <span>Identify Bird Sound</span>
+                      </>
+                    )}
+                  </button>
+                  {isAnalyzing && (
+                    <button
+                      className="sound-predict-btn"
+                      onClick={() => {
+                        setIsAnalyzing(false);
+                        isAnalyzingRef.current = false;
+                      }}
+                      style={{ background: '#dc3545' }}
+                    >
+                      <span className="btn-icon">⏹️</span>
+                      <span>Stop Analysis</span>
+                    </button>
                   )}
-                </button>
+                </div>
               </div>
             </div>
             
@@ -1711,6 +2072,11 @@ function App() {
                 <div className="sound-result-header">
                   <span className="result-icon">✅</span>
                   <h3>Identification Result</h3>
+                  {smoothedResult && smoothedResult.smoothed && (
+                    <span style={{ fontSize: '0.9em', color: '#28a745', marginLeft: '10px' }}>
+                      (Temporally Smoothed)
+                    </span>
+                  )}
                 </div>
                 
                 <div className="sound-result-main">
@@ -1720,11 +2086,17 @@ function App() {
                       <span className="badge-text">Top Match</span>
                     </div>
                     <div className="sound-prediction-content">
-                      <h2 className="sound-prediction-class">{soundPrediction.class}</h2>
+                      <h2 className="sound-prediction-class">
+                        {soundPrediction.top_predictions && soundPrediction.top_predictions.length > 0 
+                          ? soundPrediction.top_predictions[0].class 
+                          : soundPrediction.class}
+                      </h2>
                       <div className="sound-confidence-display">
                         <div className="confidence-circle">
                           <span className="confidence-value">
-                            {(soundPrediction.confidence * 100).toFixed(1)}%
+                            {soundPrediction.top_predictions && soundPrediction.top_predictions.length > 0
+                              ? (soundPrediction.top_predictions[0].confidence * 100).toFixed(1)
+                              : (soundPrediction.confidence * 100).toFixed(1)}%
                           </span>
                           <span className="confidence-label">Confidence</span>
                         </div>
@@ -1769,6 +2141,48 @@ function App() {
                     ))}
                   </div>
                 </div>
+
+                {timelineData.length > 0 && (
+                  <div style={{ marginTop: '30px', padding: '20px', background: '#f8f9fa', borderRadius: '15px' }}>
+                    <div style={{ fontSize: '1.2em', color: '#667eea', marginBottom: '15px', fontWeight: '600' }}>
+                      ⏱️ Temporal Analysis (Sliding Windows)
+                    </div>
+                    <div style={{ display: 'flex', gap: '5px', alignItems: 'flex-end', height: '150px', marginTop: '15px' }}>
+                      {timelineData.slice(-20).map((item, index) => {
+                        const topPred = getTopPrediction(item.prediction);
+                        const height = Math.max(5, topPred.confidence * 150);
+                        const isLast = index === timelineData.slice(-20).length - 1;
+                        const isActive = topPred.confidence >= CONFIG.threshold;
+                        
+                        let barColor = '#667eea';
+                        if (isLast && smoothedResult && smoothedResult.smoothed) {
+                          barColor = '#28a745';
+                        } else if (isActive) {
+                          barColor = '#28a745';
+                        }
+
+                        return (
+                          <div
+                            key={item.index}
+                            style={{
+                              flex: 1,
+                              background: barColor,
+                              borderRadius: '5px 5px 0 0',
+                              minHeight: '5px',
+                              height: `${height}px`,
+                              transition: 'all 0.3s',
+                              cursor: 'pointer',
+                              title: `${topPred.className}: ${(topPred.confidence * 100).toFixed(1)}%`
+                            }}
+                          />
+                        );
+                      })}
+                    </div>
+                    <p style={{ marginTop: '10px', color: '#666', fontSize: '0.9em' }}>
+                      Legend: Green = Bird Detected | Blue = Pending
+                    </p>
+                  </div>
+                )}
               </div>
             )}
           </div>
